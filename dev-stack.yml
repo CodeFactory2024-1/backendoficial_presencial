@@ -1,0 +1,9 @@
+version: '3.3'
+services:
+  oracle:
+    image: truevoly/oracle-12c 
+    container_name: oracledb    
+    ports:    
+      - 1521:1521
+    environment:      
+      - "ORACLE_PASSWORD=oracle"
