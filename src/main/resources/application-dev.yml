@@ -1,12 +1,4 @@
-server:
-  port: 8080
-  servlet:
-    context-path: /sitas
-
 spring:
-  output:
-    ansi:
-      enabled: always
   jpa:
     show-sql: true
     hibernate:
@@ -14,30 +6,30 @@ spring:
     properties:
       hibernate:
         order_inserts: true
-        dialect: org.hibernate.dialect.OracleDialect
+        dialect: org.hibernate.dialect.Oracle12cDialect
         jdbc:
           batch_size: 50
           lob:
             non_contextual_creation: true
-        default_schema: ${ORACLE_USR}
+        default_schema: public
         temp:
           use_jdbc_metadata_defaults: false
 
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:oracle:thin:@localhost:1521/xe
-    username: ${ORACLE_USR}
-    password: ${ORACLE_PWD}
+    url: jdbc:oracle:thin://localhost:1521/airline-dev?serverTimezone=America/Bogota
+    username: username
+    password: password
     hikari:
       idle-timeout: 10000
       maximum-pool-size: 5
     driver-class-name: oracle.jdbc.driver.OracleDriver
 airline-api:
   openapi:
-    dev-url: http://localhost:8080/sitas
+    dev-url: http://localhost:8080/airline-api
     prod-url: https://airline-api.com
 
 logging:
   level:
-    root: debug
-    org.springframework: debug
+    root: DEBUG
+    org.springframework: DEBUG

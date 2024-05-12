@@ -1,4 +1,4 @@
-package co.udea.airline.api.filter;
+package co.udea.airline.api.utils.config;
 
 import jakarta.servlet.Filter;
 import org.springframework.stereotype.Component;

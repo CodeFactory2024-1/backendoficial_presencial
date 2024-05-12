@@ -84,7 +84,7 @@ public class StandardResponse<T> {
         OK(0),
         ERROR(1);
 
-        private final int status;
+        private int status;
 
         StatusStandardResponse(int status) {
             this.status = status;
