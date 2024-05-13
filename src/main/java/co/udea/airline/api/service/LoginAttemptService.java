@@ -2,7 +2,6 @@ package co.udea.airline.api.service;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import co.udea.airline.api.model.jpa.model.security.Person;
@@ -13,12 +12,15 @@ public class LoginAttemptService {
 
     private final int MAX_ATTEMPTS = 3;
 
-    @Autowired
-    PersonRepository personRepository;
+    final PersonRepository personRepository;
+
+    public LoginAttemptService(PersonRepository personRepository) {
+        this.personRepository = personRepository;
+    }
 
     public void loginFailedFor(String email) {
         Optional<Person> op = personRepository.findByEmail(email);
-        
+
         if (op.isEmpty())
             return;
 

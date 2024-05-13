@@ -5,7 +5,6 @@ import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -22,14 +21,20 @@ import co.udea.airline.api.model.jpa.model.security.Privilege;
 @Component
 public class JwtUtils {
 
-    @Autowired
-    JwtEncoder jwtEncoder;
+    private static final String ROLES_IDENTIFIER = "roles";
+    private static final String PRIVILEGES_IDENTIFIER = "privileges";
 
-    @Autowired
-    JwtDecoder jwtDecoder;
+    final JwtEncoder jwtEncoder;
 
-    @Autowired
-    KeyPair keyPair;
+    final JwtDecoder jwtDecoder;
+
+    final KeyPair keyPair;
+
+    public JwtUtils(JwtEncoder jwtEncoder, JwtDecoder jwtDecoder, KeyPair keyPair) {
+        this.jwtEncoder = jwtEncoder;
+        this.jwtDecoder = jwtDecoder;
+        this.keyPair = keyPair;
+    }
 
     private final Long EXPIRATION = 8 * 60 * 60L; // in seconds
 
@@ -46,9 +51,9 @@ public class JwtUtils {
 
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .subject(person.getEmail())
-                .claim("roles", person.getPositions().stream()
+                .claim(ROLES_IDENTIFIER, person.getPositions().stream()
                         .map(Position::getName).collect(Collectors.toList()))
-                .claim("privileges", person.getPrivileges().stream()
+                .claim(PRIVILEGES_IDENTIFIER, person.getPrivileges().stream()
                         .map(Privilege::getName).collect(Collectors.toList()))
                 .issuer("https://airline-api.com")
                 .issuedAt(now)
@@ -79,8 +84,8 @@ public class JwtUtils {
      *         privileges of a person/user
      */
     public List<GrantedAuthority> getAuthorities(Jwt jwt) {
-        List<String> roles = jwt.getClaimAsStringList("roles");
-        List<String> privileges = jwt.getClaimAsStringList("privileges");
+        List<String> roles = jwt.getClaimAsStringList(ROLES_IDENTIFIER);
+        List<String> privileges = jwt.getClaimAsStringList(PRIVILEGES_IDENTIFIER);
 
         List<GrantedAuthority> authorities = roles.stream()
                 .map(roleStr -> new SimpleGrantedAuthority("ROLE_".concat(roleStr)))
@@ -88,9 +93,16 @@ public class JwtUtils {
 
         authorities.addAll(privileges.stream()
                 .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList()));
+                .toList());
 
         return authorities;
+    }
+
+    public List<String> getRoles(Jwt jwt) {
+        return jwt.getClaimAsStringList(ROLES_IDENTIFIER)
+                .stream()
+                .map(role -> role.replace("ROLE_", ""))
+                .toList();
     }
 
     /**
@@ -101,10 +113,7 @@ public class JwtUtils {
      * @return {@code true} if the token is valid, {@code false} otherwise
      */
     public boolean validateToken(Jwt jwt) {
-        if (Instant.now().isAfter(jwt.getExpiresAt())) {
-            return false;
-        }
-        return false;
+        return Instant.now().isAfter(jwt.getExpiresAt());
     }
 
 }

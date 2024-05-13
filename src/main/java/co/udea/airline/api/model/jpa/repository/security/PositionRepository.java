@@ -9,5 +9,7 @@ import co.udea.airline.api.model.jpa.model.security.Position;
 
 @Repository
 public interface PositionRepository extends JpaRepository<Position, Long> {
+
     List<Position> findByName(String name);
+
 }

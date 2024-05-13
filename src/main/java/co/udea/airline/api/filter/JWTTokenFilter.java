@@ -2,7 +2,6 @@ package co.udea.airline.api.filter;
 
 import java.io.IOException;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -22,8 +21,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class JWTTokenFilter extends OncePerRequestFilter {
 
-    @Autowired
-    JwtUtils jwtUtils;
+    final JwtUtils jwtUtils;
+
+    public JWTTokenFilter(JwtUtils jwtUtils) {
+        this.jwtUtils = jwtUtils;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)

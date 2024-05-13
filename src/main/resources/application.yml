@@ -5,6 +5,9 @@ spring:
     active: dev
   application:
     name: SITAS
+  data:
+    rest:
+      detection-strategy: annotated
 management:
   endpoints:
     web:
@@ -17,4 +20,4 @@ management:
       enabled: true
   metrics:
     tags:
-      application: AirlineApiApplication
+      application: SITAS-API
