@@ -18,8 +18,8 @@
 	<description>airline-api</description>
 	<properties>
 		<java.version>17</java.version>
-		<sonar.projectKey>CodeFactory2024_back</sonar.projectKey>
-		<sonar.organization>codefactory2024</sonar.organization>
+		<sonar.projectKey>CodeFactory2024-1_backendoficial_presencial</sonar.projectKey>
+		<sonar.organization>codefactory2024-1</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 		<!-- other properties here compas-->
 	</properties>
