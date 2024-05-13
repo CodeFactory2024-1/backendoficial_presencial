@@ -18,7 +18,7 @@ import co.udea.airline.api.utils.exception.RegisterException;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
-@Tag(name = "Signup", description = "Users creation endpoint")
+@Tag(name = "Signup", description = "Users creation adn verification endpoints")
 public class RegisterController {
     @Autowired
     private final RegisterService authService;
@@ -28,30 +28,12 @@ public class RegisterController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<StandardResponse<JWTResponseDTO>> register(@RequestBody RegisterRequestDTO request,HttpServletRequest http) {
-
-        StandardResponse<JWTResponseDTO> sr = new StandardResponse<>();
-        try {
-            Jwt jwt = authService.register(request,getSiteURL(http));
-            sr.setStatus(StandardResponse.StatusStandardResponse.OK.getStatus());
-            sr.setMessage("success");
-            sr.setBody(new JWTResponseDTO(jwt.getSubject(), jwt.getExpiresAt().atZone(ZoneId.systemDefault()),
-                    jwt.getTokenValue()));
-
-            return ResponseEntity.ok().body(sr);
-        } catch (RegisterException | MessagingException | UnsupportedEncodingException exception) {
-            sr.setStatus(StandardResponse.StatusStandardResponse.ERROR.getStatus());
-            sr.setMessage("can't register user");
-            sr.setDevMesssage(exception.getMessage());
-            sr.setBody(null);
-
-            return ResponseEntity.badRequest().body(sr);
-        }
+    public ResponseEntity<String> register(@RequestBody RegisterRequestDTO request,HttpServletRequest http) throws MessagingException, UnsupportedEncodingException {
+    return ResponseEntity.ok(authService.register(request,getSiteURL(http)));
     }
     @GetMapping("/verify")
     public String verifyUser(@RequestParam("code") String code) {
-        RegisterService registerService = new RegisterService();
-        if (registerService.verify(code)) {
+        if (authService.verify(code)) {
             return "verify_success";
         } else {
             return "verify_fail";

@@ -48,7 +48,7 @@ public class RegisterService {
             return false;
         } else {
             user.setVerificationCode(null);
-            user.setEnabled(true);
+            user.setVerified(true);
             personRepository.save(user);
 
             return true;
@@ -59,13 +59,13 @@ public class RegisterService {
             throws MessagingException, UnsupportedEncodingException {
         String toAddress = user.getEmail();
         String fromAddress = "andresdario.2001@gmail.com";
-        String senderName = "Your company name";
+        String senderName = "Sitas airline";
         String subject = "Please verify your registration";
         String content = "Dear [[name]],<br>"
                 + "Please click the link below to verify your registration:<br>"
                 + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
                 + "Thank you,<br>"
-                + "Your company name.";
+                + "Sitas.";
 
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
@@ -74,7 +74,9 @@ public class RegisterService {
         helper.setTo(toAddress);
         helper.setSubject(subject);
         String fullName=user.getFirstName() + " " + user.getLastName();
+
         content = content.replace("[[name]]", (fullName));
+
         String verifyURL = siteURL + "/verify?code=" + user.getVerificationCode();
 
         content = content.replace("[[URL]]", verifyURL);
@@ -105,7 +107,7 @@ public class RegisterService {
         user.setLastName(idToken.getClaimAsString("family_name"));
         user.setExternalLoginSource(loginSource);
         user.setPositions(positionRepository.findByName("USER"));
-        user.setVerified(false);
+        user.setVerified(true);
         user.setFailedLoginAttempts(0);
         user.setEnabled(true);
         personRepository.save(user);
@@ -120,7 +122,7 @@ public class RegisterService {
      * @return A {@link Jwt} on success
      * @throws RegisterException if the user is already registered
      */
-    public Jwt register(RegisterRequestDTO request,String siteURL) throws RegisterException, MessagingException, UnsupportedEncodingException {
+    public String register(RegisterRequestDTO request,String siteURL) throws RegisterException, MessagingException, UnsupportedEncodingException {
 
         // check if user already exist. if exist than authenticate the user
         if (personRepository.findByEmail(request.getEmail()).isPresent()) {
@@ -146,7 +148,7 @@ public class RegisterService {
         user.setEnabled(false);
         user = personRepository.save(user);
         sendVerificationEmail(user, siteURL);
-        return jwtUtils.createToken(user);
+        return ("User registration was successful");
     }
 
 }
