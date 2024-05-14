@@ -40,7 +40,7 @@ class RegisterServiceTest {
 
         // Assert
         RegisterException thrown = assertThrowsExactly(RegisterException.class, () -> {
-            authenticationService.register(request);
+            authenticationService.register(request, null);
         });
 
         assertTrue(thrown.getMessage().equalsIgnoreCase("user already exist"));

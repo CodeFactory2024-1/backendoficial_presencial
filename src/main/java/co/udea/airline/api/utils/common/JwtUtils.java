@@ -23,7 +23,6 @@ public class JwtUtils {
 
     private static final String ROLES_IDENTIFIER = "roles";
     private static final String PRIVILEGES_IDENTIFIER = "privileges";
-    private static final String EMAIL_IDENTIFIER = "email";
 
     final JwtEncoder jwtEncoder;
 
