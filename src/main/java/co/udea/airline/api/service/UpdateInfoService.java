@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
+
 @Service
 public class UpdateInfoService {
     @Autowired
@@ -18,6 +20,13 @@ public class UpdateInfoService {
 
     @Autowired
     JwtUtils jwtUtils;
+        /**
+     * Finds the person information for updating based on the JWT.
+     *
+     * @param jwt the JSON Web Token containing the user's email.
+     * @return an UpdateInfoDTO containing the user's current information.
+     * @throws NoSuchElementException if no user is found with the provided email.
+     */
     public UpdateInfoDTO findPersonForUpdate(Jwt jwt){
         Person person = personRepository.findByEmail(jwt.getSubject()).orElseThrow();
         String identificationType = person.getIdentificationType() != null ? person.getIdentificationType().getIdentificationType() : null;
@@ -37,6 +46,14 @@ public class UpdateInfoService {
         );
     return updateInfoDTO;
     }
+        /**
+     * Updates the user information based on the provided UpdateInfoDTO and JWT.
+     *
+     * @param request the UpdateInfoDTO containing the new information for the user.
+     * @param jwt the JSON Web Token containing the user's email.
+     * @return a success message indicating the user update was successful.
+     * @throws NoSuchElementException if no user is found with the provided email.
+     */
     public String updateInfo(UpdateInfoDTO request,Jwt jwt) {
         Person user=personRepository.findByEmail(jwt.getSubject()).orElseThrow();
         user.setFirstName(request.getFirstName());
