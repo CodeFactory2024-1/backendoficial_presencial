@@ -145,7 +145,7 @@ public class RegisterService {
         user.setFailedLoginAttempts(0);
         String randomCode = RandomString.make(64);
         user.setVerificationCode(randomCode);
-        user.setEnabled(false);
+        user.setEnabled(true);
         user = personRepository.save(user);
         sendVerificationEmail(user, siteURL);
         return ("User registration was successful");

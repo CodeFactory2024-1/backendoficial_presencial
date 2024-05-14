@@ -18,7 +18,7 @@ import co.udea.airline.api.utils.exception.RegisterException;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
-@Tag(name = "Signup", description = "Users creation adn verification endpoints")
+@Tag(name = "Signup", description = "Users creation and verification endpoints")
 public class RegisterController {
     @Autowired
     private final RegisterService authService;
