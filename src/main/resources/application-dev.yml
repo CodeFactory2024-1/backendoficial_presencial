@@ -4,6 +4,7 @@ server:
     context-path: /sitas
 
 spring:
+
   output:
     ansi:
       enabled: always

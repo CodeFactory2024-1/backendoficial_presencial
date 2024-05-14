@@ -16,7 +16,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Repository
 @RepositoryRestResource(path = "roles", excerptProjection = WithPrivilegesAndId.class)
-@Tag(name = "4. Roles Management", description = "CRUD operations for roles (only for admins)")
+@Tag(name = "5. Roles Management", description = "CRUD operations for roles (only for admins)")
 @SecurityRequirement(name = "JWT")
 @PreAuthorize("hasRole('ADMIN')")
 public interface PositionRepository extends JpaRepository<Position, Long> {

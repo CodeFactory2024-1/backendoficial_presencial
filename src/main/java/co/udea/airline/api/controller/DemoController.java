@@ -15,7 +15,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
-@Tag(name = "3. Authorization demos", description = "Basic authorization filter for user and admin roles")
+@Tag(name = "4. Authorization demos", description = "Basic authorization filter for user and admin roles")
 public class DemoController {
 
     final JwtUtils jwtUtils;

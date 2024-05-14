@@ -44,6 +44,9 @@ public class Person implements UserDetails {
     @JoinColumn(name = "ID_IDENTIFICATION_TYPE")
     private IdentificationType identificationType;
 
+    @Column(name = "verification_code", length = 64)
+    private String verificationCode;
+
     @Column(name = "IDENTIFICATION_NUMBER")
     private String identificationNumber;
 
