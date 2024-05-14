@@ -14,8 +14,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import co.udea.airline.api.model.jpa.model.security.Person;
-import co.udea.airline.api.model.jpa.model.security.Position;
+import co.udea.airline.api.model.jpa.model.Person;
+import co.udea.airline.api.model.jpa.model.Position;
 import co.udea.airline.api.utils.common.JwtUtils;
 
 @SpringBootTest
@@ -60,11 +60,11 @@ public class DemoControllerTest {
     @Test
     void testDemoWithoutAuthorization() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/demo"))
-                .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
-    void testDemoWithoAuthorization() throws Exception {
+    void testDemoWithAuthorization() throws Exception {
         Jwt jwt = jwtUtils.createToken(person);
 
         mockMvc.perform(MockMvcRequestBuilders

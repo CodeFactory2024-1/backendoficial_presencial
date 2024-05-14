@@ -17,7 +17,7 @@ import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
-@Tag(name = "Signup", description = "Users creation and verification endpoints")
+@Tag(name = "1. Signup", description = "Users creation endpoint")
 public class RegisterController {
     @Autowired
     private final RegisterService authService;

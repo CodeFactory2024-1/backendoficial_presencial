@@ -23,7 +23,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
-@Tag(name = "Login", description = "Basic login and google login")
+@Tag(name = "2. Login", description = "Basic login and google login")
 @RequestMapping(path = "/login", consumes = { MediaType.APPLICATION_JSON_VALUE })
 public class LoginController {
 

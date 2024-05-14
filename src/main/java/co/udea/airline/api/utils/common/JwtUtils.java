@@ -14,9 +14,9 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Component;
 
-import co.udea.airline.api.model.jpa.model.security.Person;
-import co.udea.airline.api.model.jpa.model.security.Position;
-import co.udea.airline.api.model.jpa.model.security.Privilege;
+import co.udea.airline.api.model.jpa.model.Person;
+import co.udea.airline.api.model.jpa.model.Position;
+import co.udea.airline.api.model.jpa.model.Privilege;
 
 @Component
 public class JwtUtils {
@@ -115,7 +115,12 @@ public class JwtUtils {
      * @return {@code true} if the token is valid, {@code false} otherwise
      */
     public boolean validateToken(Jwt jwt) {
-        return Instant.now().isAfter(jwt.getExpiresAt());
+        try {
+            jwtDecoder.decode(jwt.getTokenValue());
+        } catch (Exception e) {
+            return false;
+        }
+        return Instant.now().isBefore(jwt.getExpiresAt());
     }
 
 }

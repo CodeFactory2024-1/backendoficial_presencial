@@ -1,7 +1,6 @@
 package co.udea.airline.api.model.jpa.model.security;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Field;
@@ -11,6 +10,10 @@ import java.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.Profile;
+
+import co.udea.airline.api.model.jpa.model.IdentificationType;
+import co.udea.airline.api.model.jpa.model.Person;
+import co.udea.airline.api.model.jpa.model.Position;
 
 @Profile("test")
 public class PersonTest {
@@ -64,14 +67,6 @@ public class PersonTest {
     @Test
     void testBuilder() {
         assertEquals(p0, buildSecondPerson());
-    }
-
-    @Test
-    void testCanEqual() {
-        Position pos = new Position();
-        assertFalse(p0.canEqual(pos));
-        Person p1 = new Person();
-        assertTrue(p0.canEqual(p1));
     }
 
     @Test

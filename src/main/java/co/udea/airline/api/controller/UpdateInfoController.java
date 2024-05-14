@@ -16,7 +16,7 @@ import co.udea.airline.api.service.UpdateInfoService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
-@Tag(name = "UpdateInfo", description = "Update info of user")
+@Tag(name = "3. UpdateInfo", description = "Update info of user")
 @RequestMapping("/userinfo")
 public class UpdateInfoController {
     @Autowired

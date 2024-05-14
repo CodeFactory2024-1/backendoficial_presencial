@@ -7,6 +7,7 @@ import co.udea.airline.api.utils.exception.DataDuplicatedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -47,7 +48,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(
                 new StandardResponse<>(StandardResponse.StatusStandardResponse.ERROR,
                         "Insufficient permissions to access resource."),
-                HttpStatus.UNAUTHORIZED);
+                HttpStatus.FORBIDDEN);
+
+    }
+
+    @ExceptionHandler(AuthenticationCredentialsNotFoundException.class)
+    protected ResponseEntity<?> handleAccessDeniedException(AuthenticationCredentialsNotFoundException ex) {
+        return new ResponseEntity<>(
+                new StandardResponse<>(StandardResponse.StatusStandardResponse.ERROR,
+                        "Insufficient permissions to access resource."),
+                HttpStatus.FORBIDDEN);
 
     }
 

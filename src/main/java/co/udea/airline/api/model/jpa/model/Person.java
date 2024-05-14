@@ -1,4 +1,4 @@
-package co.udea.airline.api.model.jpa.model.security;
+package co.udea.airline.api.model.jpa.model;
 
 import java.time.LocalDate;
 import java.util.Collection;
@@ -33,11 +33,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name="PERSON")
+@Table(name = "PERSON")
 public class Person implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "PERSON_ID") // TODO: create name conversion strategy
+    @Column(name = "PERSON_ID")
     private Integer personId;
 
     @ManyToOne
@@ -71,11 +71,11 @@ public class Person implements UserDetails {
     private String city;
     @Column(name = "ADDRESS")
     private String address;
-    
+
     @NotBlank
     @Email
     private String email;
-    
+
     @Column(name = "PASSWORD")
     private String password;
 

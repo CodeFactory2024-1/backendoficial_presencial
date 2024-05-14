@@ -1,6 +1,5 @@
 package co.udea.airline.api.utils.listener;
 
-import co.udea.airline.api.model.jpa.model.security.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -8,6 +7,7 @@ import org.springframework.security.authentication.event.AbstractAuthenticationF
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
 import org.springframework.stereotype.Component;
 
+import co.udea.airline.api.model.jpa.model.Person;
 import co.udea.airline.api.service.LoginAttemptService;
 
 @Component

@@ -1,16 +1,16 @@
 package co.udea.airline.api.service;
 
+import java.util.NoSuchElementException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import co.udea.airline.api.dto.UpdateInfoDTO;
-import co.udea.airline.api.model.jpa.model.security.Person;
-import co.udea.airline.api.model.jpa.repository.security.IdentificationTypeRepository;
-import co.udea.airline.api.model.jpa.repository.security.PersonRepository;
+import co.udea.airline.api.model.jpa.model.Person;
+import co.udea.airline.api.model.jpa.repository.IdentificationTypeRepository;
+import co.udea.airline.api.model.jpa.repository.PersonRepository;
 import co.udea.airline.api.utils.common.JwtUtils;
-
-import java.util.NoSuchElementException;
 
 @Service
 public class UpdateInfoService {
@@ -32,7 +32,7 @@ public class UpdateInfoService {
     public UpdateInfoDTO getInfo(Jwt jwt) {
         Person person = personRepository.findByEmail(jwt.getSubject()).orElseThrow();
         String identificationType = person.getIdentificationType() != null
-                ? person.getIdentificationType().getIdentificationType()
+                ? person.getIdentificationType().getIdentificationTypeName()
                 : null;
 
         UpdateInfoDTO updateInfoDTO = new UpdateInfoDTO(
@@ -63,7 +63,7 @@ public class UpdateInfoService {
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setIdentificationNumber(request.getIdNumber());
-        user.setIdentificationType(idRepository.findByIdentificationType(request.getIdType()));
+        user.setIdentificationType(idRepository.findByIdentificationTypeName(request.getIdType()));
         user.setCity(request.getCity());
         user.setCountry(request.getCountry());
         user.setPhoneNumber(request.getPhoneNumber());

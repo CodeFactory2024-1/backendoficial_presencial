@@ -1,10 +1,11 @@
-package co.udea.airline.api.model.jpa.repository.security;
+package co.udea.airline.api.model.jpa.repository;
 
-import co.udea.airline.api.model.jpa.model.security.Person;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import co.udea.airline.api.model.jpa.model.Person;
 @Repository
 public interface PersonRepository extends JpaRepository<Person, Long> {
 

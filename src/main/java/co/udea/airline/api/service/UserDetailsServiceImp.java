@@ -1,10 +1,11 @@
 package co.udea.airline.api.service;
 
-import co.udea.airline.api.model.jpa.repository.security.PersonRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import co.udea.airline.api.model.jpa.repository.PersonRepository;
 
 @Service
 public class UserDetailsServiceImp implements UserDetailsService {

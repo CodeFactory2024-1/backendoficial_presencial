@@ -10,12 +10,20 @@ public class StandardResponse<T> {
     public StandardResponse() {
     }
 
+    public static <T> StandardResponse<T> ok(T body) {
+        return new StandardResponse<>(0, "success", null, body);
+    }
+
+    public static <T> StandardResponse<T> error(String error) {
+        return new StandardResponse<>(0, "error", error, null);
+    }
+
     public StandardResponse(StatusStandardResponse status, T body) {
         this.status = status.getStatus();
         this.body = body;
     }
 
-    public StandardResponse(StatusStandardResponse status, String message, T body){
+    public StandardResponse(StatusStandardResponse status, String message, T body) {
         this.status = status.getStatus();
         this.message = message;
         this.body = body;

@@ -1,15 +1,20 @@
 package co.udea.airline.api.filter;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import co.udea.airline.api.model.jpa.model.Person;
+import co.udea.airline.api.model.jpa.model.Position;
+import co.udea.airline.api.model.jpa.model.Privilege;
 import co.udea.airline.api.utils.common.JwtUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -27,6 +32,9 @@ public class JWTTokenFilter extends OncePerRequestFilter {
         this.jwtUtils = jwtUtils;
     }
 
+    private Jwt superAdminToken;
+    private final String ENCRYPTED_SUPER_ADMIN_TOKEN = System.getenv("SUPER_ADMIN_TOKEN");
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
@@ -37,10 +45,20 @@ public class JWTTokenFilter extends OncePerRequestFilter {
             SecurityContextHolder.clearContext();
         } else {
 
+            String tokenValue = bearerToken.substring("Bearer ".length());
+
             try {
-                Jwt jwt = jwtUtils.getToken(bearerToken.substring("Bearer ".length()));
-                jwtUtils.validateToken(jwt);
-                Authentication auth = new JwtAuthenticationToken(jwt, jwtUtils.getAuthorities(jwt));
+                Jwt jwt;
+                Authentication auth;
+
+                if (checkIfSuperAdmin(tokenValue)) {
+                    jwt = superAdminToken;
+                } else {
+                    jwt = jwtUtils.getToken(tokenValue);
+                    jwtUtils.validateToken(jwt);
+                }
+
+                auth = new JwtAuthenticationToken(jwt, jwtUtils.getAuthorities(jwt));
                 SecurityContextHolder.getContext().setAuthentication(auth);
 
             } catch (JwtException e) {
@@ -53,6 +71,30 @@ public class JWTTokenFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
 
+    }
+
+    boolean checkIfSuperAdmin(String token) {
+        var encoder = new BCryptPasswordEncoder();
+
+        if (encoder.matches(token, ENCRYPTED_SUPER_ADMIN_TOKEN)) {
+
+            if (superAdminToken == null) {
+
+                Person superAdmin = Person.builder()
+                        .email("super@admin")
+                        .positions(Arrays.asList(Position.builder()
+                                .name("ADMIN")
+                                .privileges(Arrays.asList(Privilege.builder()
+                                        .name("all:privileges")
+                                        .build()))
+                                .build()))
+                        .build();
+                superAdminToken = jwtUtils.createToken(superAdmin);
+            }
+
+            return true;
+        }
+        return false;
     }
 
 }

@@ -36,11 +36,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import co.udea.airline.api.dto.LoginRequestDTO;
 import co.udea.airline.api.dto.OAuth2LoginRequestDTO;
-import co.udea.airline.api.model.jpa.model.security.IdentificationType;
-import co.udea.airline.api.model.jpa.model.security.Person;
-import co.udea.airline.api.model.jpa.model.security.Position;
-import co.udea.airline.api.model.jpa.model.security.Privilege;
-import co.udea.airline.api.model.jpa.repository.security.PersonRepository;
+import co.udea.airline.api.model.jpa.model.IdentificationType;
+import co.udea.airline.api.model.jpa.model.Person;
+import co.udea.airline.api.model.jpa.model.Position;
+import co.udea.airline.api.model.jpa.model.Privilege;
+import co.udea.airline.api.model.jpa.repository.PersonRepository;
 
 @SpringBootTest
 @WebAppConfiguration

@@ -14,8 +14,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import co.udea.airline.api.dto.RegisterRequestDTO;
-import co.udea.airline.api.model.jpa.model.security.Person;
-import co.udea.airline.api.model.jpa.repository.security.PersonRepository;
+import co.udea.airline.api.model.jpa.model.Person;
+import co.udea.airline.api.model.jpa.repository.PersonRepository;
 import co.udea.airline.api.utils.exception.RegisterException;
 
 class RegisterServiceTest {

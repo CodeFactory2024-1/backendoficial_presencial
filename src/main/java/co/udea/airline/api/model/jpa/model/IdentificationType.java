@@ -1,4 +1,6 @@
-package co.udea.airline.api.model.jpa.model.security;
+package co.udea.airline.api.model.jpa.model;
+
+import java.io.Serializable;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,7 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "IDENTIFICATION_TYPE")
-public class IdentificationType {
+public class IdentificationType implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +27,6 @@ public class IdentificationType {
 
     @NotBlank
     @Column(name = "IDENTIFICATION_TYPE")
-    private String identificationType;
+    private String identificationTypeName;
 
 }

@@ -12,8 +12,8 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthenticationToken;
 import org.springframework.stereotype.Service;
 
-import co.udea.airline.api.model.jpa.model.security.Person;
-import co.udea.airline.api.model.jpa.repository.security.PersonRepository;
+import co.udea.airline.api.model.jpa.model.Person;
+import co.udea.airline.api.model.jpa.repository.PersonRepository;
 import co.udea.airline.api.utils.common.JwtUtils;
 
 @Service
