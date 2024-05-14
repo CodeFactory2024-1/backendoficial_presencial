@@ -7,5 +7,5 @@ import co.udea.airline.api.model.jpa.model.IdentificationType;
 
 @Repository
 public interface IdentificationTypeRepository extends JpaRepository<IdentificationType, Integer> {
-    IdentificationType findByIdentificationType(String identificationType);
+    IdentificationType findByIdentificationTypeName(String identificationTypeName);
 }

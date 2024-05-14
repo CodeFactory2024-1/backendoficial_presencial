@@ -82,7 +82,7 @@ public class RegisterService {
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setIdentificationNumber(request.getIdNumber());
-        user.setIdentificationType(idRepository.findByIdentificationType(request.getIdType()));
+        user.setIdentificationType(idRepository.findByIdentificationTypeName(request.getIdType()));
         user.setCity(request.getCity());
         user.setCountry(request.getCountry());
         user.setPhoneNumber(request.getPhoneNumber());

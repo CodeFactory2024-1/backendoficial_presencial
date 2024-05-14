@@ -3,6 +3,8 @@ package co.udea.airline.api.model.jpa.model;
 import java.io.Serializable;
 import java.util.List;
 
+import org.springframework.data.rest.core.annotation.RestResource;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
@@ -44,6 +46,7 @@ public class Position implements Serializable { // == Role
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "POSITION_PRIVILEGE", joinColumns = @JoinColumn(name = "POSITION_ID"), inverseJoinColumns = @JoinColumn(name = "PRIVILEGE_ID"))
+    @RestResource(exported = false)
     private List<Privilege> privileges;
 
 }

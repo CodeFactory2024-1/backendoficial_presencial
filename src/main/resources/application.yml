@@ -8,6 +8,8 @@ spring:
   data:
     rest:
       detection-strategy: annotated
+      default-media-type:
+        type: application/json
 management:
   endpoints:
     web:

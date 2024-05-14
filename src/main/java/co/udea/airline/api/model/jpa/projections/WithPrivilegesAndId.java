@@ -8,8 +8,10 @@ import co.udea.airline.api.model.jpa.model.Position;
 import co.udea.airline.api.model.jpa.model.Privilege;
 
 @Projection(name = "withPrivileges", types = { Position.class })
-public interface WithPrivileges {
+public interface WithPrivilegesAndId {
 
+    Long getPositionId();
+    
     String getName();
 
     String getDescription();
