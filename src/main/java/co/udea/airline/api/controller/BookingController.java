@@ -27,8 +27,8 @@ public class BookingController {
     }
 
     @GetMapping("/{flightId}")
-    public Optional<Booking> getBookingByFlightId(@PathVariable Long flightId) {
-        return  bookingService.getBookingByFilghtId(flightId);
+    public List<Booking> getBookingByFlightId(@PathVariable Long flightId) {
+        return bookingService.getBookingByFlightId(flightId);
     }
 
     @PostMapping("/booking")
@@ -37,7 +37,7 @@ public class BookingController {
     }
 
     @DeleteMapping("/{bookingId}")
-    public void deleteBooking(@PathVariable Long bookingId){
+    public void deleteBooking(@PathVariable Long bookingId) {
         bookingService.delete(bookingId);
     }
 }

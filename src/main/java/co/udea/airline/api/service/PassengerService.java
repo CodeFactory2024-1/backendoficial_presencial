@@ -1,9 +1,7 @@
 package co.udea.airline.api.service;
 
 import co.udea.airline.api.model.jpa.model.Passenger;
-import co.udea.airline.api.model.jpa.model.Person;
 import co.udea.airline.api.model.jpa.repository.PassengerRepository;
-import co.udea.airline.api.model.jpa.repository.PersonRepository;
 import co.udea.airline.api.utils.exception.DataDuplicatedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,8 +13,6 @@ import java.util.Optional;
 public class PassengerService {
     @Autowired
     PassengerRepository passengerRepository;
-    @Autowired
-    private PersonRepository personRepository;
 
     public List<Passenger> getPassengers() {
         return passengerRepository.findAll();
@@ -26,20 +22,21 @@ public class PassengerService {
         return passengerRepository.findById(id);
     }
 
-    public void saveOrUpdate(Passenger passenger){
+    public void saveOrUpdate(Passenger passenger) {
 
         Long passengerExistence = passenger.getPersonId();
-        if(passengerExistence > 0){
+        if (passengerExistence > 0) {
             Optional<Passenger> passengerFound = passengerRepository.findById(passengerExistence);
-                    if(passengerFound.isPresent()){
-                        throw new DataDuplicatedException("The Person Id has already exists");
-                    };
+            if (passengerFound.isPresent()) {
+                throw new DataDuplicatedException("The Person Id has already exists");
+            }
+            ;
         }
 
         passengerRepository.save(passenger);
     }
 
-    public void delete(Long id){
+    public void delete(Long id) {
         passengerRepository.deleteById(id);
     }
 }
