@@ -1,8 +1,7 @@
 package co.udea.airline.api.service;
 
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
-import net.bytebuddy.utility.RandomString;
+import java.io.UnsupportedEncodingException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -17,8 +16,9 @@ import co.udea.airline.api.model.jpa.repository.PersonRepository;
 import co.udea.airline.api.model.jpa.repository.PositionRepository;
 import co.udea.airline.api.utils.common.JwtUtils;
 import co.udea.airline.api.utils.exception.RegisterException;
-
-import java.io.UnsupportedEncodingException;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
+import net.bytebuddy.utility.RandomString;
 
 @Service
 public class RegisterService {
@@ -40,7 +40,6 @@ public class RegisterService {
     @Autowired
     private JavaMailSender mailSender;
 
-
     public boolean verify(String verificationCode) {
         Person user = personRepository.findByVerificationCode(verificationCode);
 
@@ -54,7 +53,8 @@ public class RegisterService {
             return true;
         }
 
-}
+    }
+
     private void sendVerificationEmail(Person user, String siteURL)
             throws MessagingException, UnsupportedEncodingException {
         String toAddress = user.getEmail();
@@ -73,7 +73,7 @@ public class RegisterService {
         helper.setFrom(fromAddress, senderName);
         helper.setTo(toAddress);
         helper.setSubject(subject);
-        String fullName=user.getFirstName() + " " + user.getLastName();
+        String fullName = user.getFirstName() + " " + user.getLastName();
 
         content = content.replace("[[name]]", (fullName));
 
@@ -122,7 +122,8 @@ public class RegisterService {
      * @return A {@link Jwt} on success
      * @throws RegisterException if the user is already registered
      */
-    public String register(RegisterRequestDTO request,String siteURL) throws RegisterException, MessagingException, UnsupportedEncodingException {
+    public String register(RegisterRequestDTO request, String siteURL)
+            throws RegisterException, MessagingException, UnsupportedEncodingException {
 
         // check if user already exist. if exist than authenticate the user
         if (personRepository.findByEmail(request.getEmail()).isPresent()) {

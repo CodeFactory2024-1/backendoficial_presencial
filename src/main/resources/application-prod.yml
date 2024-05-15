@@ -20,15 +20,15 @@ spring:
       ddl-auto: update
     properties:
       hibernate:
-        order_inserts: true
+        "[order_inserts]": true
         dialect: org.hibernate.dialect.OracleDialect
         jdbc:
-          batch_size: 50
+          "[batch_size]": 50
           lob:
-            non_contextual_creation: true
-        default_schema: ${ORACLE_USR}
+            "[non_contextual_creation]": true
+        "[default_schema]": ${ORACLE_USR}
         temp:
-          use_jdbc_metadata_defaults: false
+          "[use_jdbc_metadata_defaults]": false
 
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
@@ -37,6 +37,20 @@ spring:
     password: ${ORACLE_PWD}
     driver-class-name: oracle.jdbc.driver.OracleDriver
 airline-api:
+  dev:
+    super-admin-token: ${SUPER_ADMIN_TOKEN}
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${GMAIL_USR}
+    password: ${GMAIL_PWD}
+    transport:
+      protocol: smtp
+    smtp:
+      use-auth: true
+      use-tls: true
+  jwt:
+    expiration: 28800
   openapi:
     dev-url: https://codefact.udea.edu.co/modulo-02/
     prod-url: https://codefact.udea.edu.co/modulo-02/
@@ -44,4 +58,4 @@ airline-api:
 logging:
   level:
     root: debug
-    org.springframework: debug
+    "[org.springframework]": debug

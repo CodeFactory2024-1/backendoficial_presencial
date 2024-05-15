@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import co.udea.airline.api.model.jpa.model.Position;
 import co.udea.airline.api.model.jpa.projections.WithPrivilegesAndId;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -21,8 +20,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @PreAuthorize("hasRole('ADMIN')")
 public interface PositionRepository extends JpaRepository<Position, Long> {
 
-    @RestResource(path = "name")
-    @Operation(description = "Search roles by name")
+    @RestResource(exported = false)
+    @PreAuthorize("permitAll()")
     List<Position> findByName(String name);
+
+    @RestResource(path = "byName")
+    List<Position> findByNameContainingIgnoreCase(String name);
 
 }

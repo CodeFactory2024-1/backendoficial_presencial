@@ -27,9 +27,11 @@ public class RegisterController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegisterRequestDTO request,HttpServletRequest http) throws MessagingException, UnsupportedEncodingException {
-    return ResponseEntity.ok(authService.register(request,getSiteURL(http)));
+    public ResponseEntity<String> register(@RequestBody RegisterRequestDTO request, HttpServletRequest http)
+            throws MessagingException, UnsupportedEncodingException {
+        return ResponseEntity.ok(authService.register(request, getSiteURL(http)));
     }
+
     @GetMapping("/verify")
     public String verifyUser(@RequestParam("code") String code) {
         if (authService.verify(code)) {
@@ -37,8 +39,9 @@ public class RegisterController {
         } else {
             return "verify_fail";
         }
-}
-        private String getSiteURL(HttpServletRequest request) {
+    }
+
+    private String getSiteURL(HttpServletRequest request) {
         String siteURL = request.getRequestURL().toString();
         return siteURL.replace(request.getServletPath(), "");
     }

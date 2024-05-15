@@ -4,7 +4,6 @@ server:
     context-path: /sitas
 
 spring:
-
   output:
     ansi:
       enabled: always
@@ -14,15 +13,15 @@ spring:
       ddl-auto: update
     properties:
       hibernate:
-        order_inserts: true
+        "[order_inserts]": true
         dialect: org.hibernate.dialect.OracleDialect
         jdbc:
-          batch_size: 50
+          "[batch_size]": 50
           lob:
-            non_contextual_creation: true
-        default_schema: ${ORACLE_USR}
+            "[non_contextual_creation]": true
+        "[default_schema]": ${ORACLE_USR}
         temp:
-          use_jdbc_metadata_defaults: false
+          "[use_jdbc_metadata_defaults]": false
 
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
@@ -34,6 +33,20 @@ spring:
       maximum-pool-size: 5
     driver-class-name: oracle.jdbc.driver.OracleDriver
 airline-api:
+  dev:
+    super-admin-token: ${SUPER_ADMIN_TOKEN}
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: email
+    password: password
+    transport:
+      protocol: smtp
+    smtp:
+      use-auth: true
+      use-tls: true
+  jwt:
+    expiration: 28800
   openapi:
     dev-url: http://localhost:8080/sitas
     prod-url: https://sitas-api.com

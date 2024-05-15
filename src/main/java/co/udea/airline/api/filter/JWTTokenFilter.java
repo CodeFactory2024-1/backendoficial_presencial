@@ -3,6 +3,7 @@ package co.udea.airline.api.filter;
 import java.io.IOException;
 import java.util.Arrays;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -22,18 +23,24 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Class for intercepting request and validating the 'Authorization' header to
+ * set the SecurityContext appropiately
+ */
 @Component
 @Slf4j
 public class JWTTokenFilter extends OncePerRequestFilter {
+
+    private Jwt superAdminToken;
+
+    @Value("${airline-api.dev.super-admin-token}")
+    private String ENCRYPTED_SUPER_ADMIN_TOKEN;
 
     final JwtUtils jwtUtils;
 
     public JWTTokenFilter(JwtUtils jwtUtils) {
         this.jwtUtils = jwtUtils;
     }
-
-    private Jwt superAdminToken;
-    private final String ENCRYPTED_SUPER_ADMIN_TOKEN = System.getenv("SUPER_ADMIN_TOKEN");
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -73,6 +80,16 @@ public class JWTTokenFilter extends OncePerRequestFilter {
 
     }
 
+    /**
+     * For testing purposes. Checks if the raw token provided is the configured
+     * super admin token matching against the BCrypt encrypted token
+     * {@link #ENCRYPTED_SUPER_ADMIN_TOKEN}.
+     * 
+     * @param token The raw token, doesn't need to be JWT like token, it's like a
+     *              password
+     * @return {@code true} if token matches against the encrypted super admin
+     *         token, {@code false} otherwise
+     */
     boolean checkIfSuperAdmin(String token) {
         var encoder = new BCryptPasswordEncoder();
 
