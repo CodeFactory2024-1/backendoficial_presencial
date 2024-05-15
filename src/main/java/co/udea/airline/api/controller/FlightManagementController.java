@@ -36,8 +36,8 @@ public class FlightManagementController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @GetMapping("/searchsflights")
-    @Operation(summary = "Search all flights with all details")
+    @GetMapping("/searchFlights")
+    @Operation(summary = "Search all flights with all information")
     @ApiResponse(responseCode = "200", content = {
             @Content(schema = @Schema(implementation = Flight.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
     }, description = "List of flights")
@@ -50,7 +50,7 @@ public class FlightManagementController {
         return flightsDTO;
     }
 
-    @GetMapping("/searchflight")
+    @GetMapping("/searchFlightsGeneral")
     @Operation(summary = "Search all flights with general information")
     @ApiResponse(responseCode = "200", content = {
             @Content(schema = @Schema(implementation = Flight.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
@@ -60,8 +60,8 @@ public class FlightManagementController {
         return flightService.searchFlightGeneral();
     }
 
-    @GetMapping("/searchdetails")
-    @Operation(summary = "Search various flights with details by flight Number")
+    @GetMapping("/searchDetails")
+    @Operation(summary = "Search one flight with details by flight Number")
     @ApiResponse(responseCode = "200", content = {
             @Content(schema = @Schema(implementation = Flight.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
     }, description = "List of flights")
@@ -70,6 +70,24 @@ public class FlightManagementController {
     public List<IFlightDetailsProjection> searchFlightDetailsByFlightNumber(@RequestParam String flightNumber) {
         return flightService.searchFlightDetailsByFlightNumber(flightNumber);
     }
+
+    @GetMapping("/search/{flightNumber}")
+    @Operation(summary = "Search one flight with all information by flight Number")
+    @ApiResponse(responseCode = "200", content = {
+            @Content(schema = @Schema(implementation = Flight.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
+    }, description = "List of flights")
+    @ApiResponse(responseCode = "400", description = "Invalid")
+    @ApiResponse(responseCode = "500", description = "Internal error")
+    public ResponseEntity<FlightDTO> searchFlightById(@RequestParam String flightNumber) {
+        Flight flight = flightService.getFlightByFlightNumber(flightNumber);
+        if (flight == null) {
+            throw new DataNotFoundException("Flight with ID: " + flightNumber + " not found");
+        }
+        return ResponseEntity.ok(modelMapper.map(flight, FlightDTO.class));
+    }
+
+
+
     /**
      * Add a new flight
      *
@@ -102,10 +120,6 @@ public class FlightManagementController {
 
 
 
-    @GetMapping("/search/{id}")
-    public List<Flight> searchFlight(@PathVariable Long id) {
-        return flightService.searchFlight(id);
-    }
 
 
     @PutMapping("/update")
