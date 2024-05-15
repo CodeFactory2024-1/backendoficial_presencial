@@ -107,6 +107,7 @@ public class FlightManagementController {
         return flightService.searchFlight(id);
     }
 
+
     @PutMapping("/update")
     public Flight updateFlight(@RequestBody Flight flight) {
         return flightService.updateFlight(flight);
