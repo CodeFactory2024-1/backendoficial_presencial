@@ -14,7 +14,7 @@ COPY --from=build /app/target/airline-api-0.0.1-SNAPSHOT.jar /app/application.ja
 
 EXPOSE 8019
 
-CMD ["java", "-jar", "application.jar"]
+CMD ["java","-Dspring.profiles.active=prod", "-jar", "application.jar"]
 
 
 

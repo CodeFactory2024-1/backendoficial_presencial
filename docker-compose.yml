@@ -14,3 +14,4 @@ services:
       DB_URL: jdbc:oracle:thin:@db:1521/XEPDB1
       DB_USERNAME: AIRLINE_ADMIN_B
       DB_PASSWORD: SITAS
+      KEY_STORE_PASSWORD: 123456
