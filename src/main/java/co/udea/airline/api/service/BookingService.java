@@ -1,4 +1,5 @@
 package co.udea.airline.api.service;
+
 import co.udea.airline.api.model.jpa.model.Booking;
 import co.udea.airline.api.model.jpa.repository.BookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +21,15 @@ public class BookingService {
         return bookingRepository.findById(id);
     }
 
-    public Optional<Booking> getBookingByFilghtId(Long flightId){return bookingRepository.findById(flightId);}
+    public List<Booking> getBookingByFlightId(Long flightId) {
+        return bookingRepository.findBookinByFlightId(flightId);
+    }
 
-    public void saveOrUpdate(Booking booking){
+    public void saveOrUpdate(Booking booking) {
         bookingRepository.save(booking);
     }
 
-    public void delete(Long id){
+    public void delete(Long id) {
         bookingRepository.deleteById(id);
     }
 }
