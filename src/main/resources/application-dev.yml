@@ -33,6 +33,8 @@ spring:
       maximum-pool-size: 5
     driver-class-name: oracle.jdbc.driver.OracleDriver
 airline-api:
+  cors:
+    allow-origins: "*"
   dev:
     super-admin-token: ${SUPER_ADMIN_TOKEN:}
   mail:

@@ -18,6 +18,8 @@ spring:
     driverClassName: org.h2.Driver
 
 airline-api:
+  cors:
+    allow-origins: "*"
   dev:
     super-admin-token: none
   mail:
