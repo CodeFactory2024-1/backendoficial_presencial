@@ -16,7 +16,7 @@ import co.udea.airline.api.model.jpa.model.Person;
 import co.udea.airline.api.model.jpa.model.Position;
 
 @Profile("test")
-public class PersonTest {
+class PersonTest {
 
     Person p0;
 
@@ -73,7 +73,7 @@ public class PersonTest {
     void testEquals() {
         Person p1 = buildSecondPerson();
 
-        assertTrue(p0.equals(p1));
+        assertEquals(p0, (p1));
     }
 
     @Test

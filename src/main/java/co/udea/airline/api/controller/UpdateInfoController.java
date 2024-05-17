@@ -1,6 +1,5 @@
 package co.udea.airline.api.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,7 +18,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "3. UpdateInfo", description = "Update info of user")
 @RequestMapping("/userinfo")
 public class UpdateInfoController {
-    @Autowired
+    
     private UpdateInfoService updateInfoService;
 
     public UpdateInfoController(UpdateInfoService updateInfoService) {

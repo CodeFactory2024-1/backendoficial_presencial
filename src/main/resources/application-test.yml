@@ -23,8 +23,8 @@ airline-api:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ${GMAIL_USR}
-    password: ${GMAIL_PWD}
+    username: email
+    password: password
     transport:
       protocol: smtp
     smtp:

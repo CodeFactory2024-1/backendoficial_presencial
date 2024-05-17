@@ -26,7 +26,7 @@ import co.udea.airline.api.utils.common.JwtUtils;
 @Profile("test")
 // @AutoConfigureMockMvc
 @WebAppConfiguration
-public class DemoControllerTest {
+class DemoControllerTest {
 
     @Autowired
     WebApplicationContext context;

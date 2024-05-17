@@ -1,6 +1,11 @@
 package co.udea.airline.api.model.dto;
 
+import java.time.Instant;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Optional;
+
+import org.springframework.security.oauth2.jwt.Jwt;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
@@ -27,5 +32,14 @@ public class JWTResponseDTO {
     @NotBlank
     @Schema(description = "The Json Web Token")
     String token;
+
+    public static JWTResponseDTO of(Jwt jwt) {
+
+        String email = jwt.getSubject();
+        Instant expiresAt = Optional.ofNullable(jwt.getExpiresAt()).orElse(Instant.MAX);
+        String token = jwt.getTokenValue();
+        return new JWTResponseDTO(email, expiresAt.atZone(ZoneId.systemDefault()), token);
+
+    }
 
 }

@@ -32,7 +32,7 @@ public class JWTTokenFilter extends OncePerRequestFilter {
     private Jwt superAdminToken;
 
     @Value("${airline-api.dev.super-admin-token}")
-    private String ENCRYPTED_SUPER_ADMIN_TOKEN;
+    private String encryptedSuperAdminToken;
 
     public JWTTokenFilter(JwtUtils jwtUtils) {
         this.jwtUtils = jwtUtils;
@@ -79,7 +79,7 @@ public class JWTTokenFilter extends OncePerRequestFilter {
     boolean checkIfSuperAdmin(String token) {
         var encoder = new BCryptPasswordEncoder();
 
-        if (encoder.matches(token, ENCRYPTED_SUPER_ADMIN_TOKEN)) {
+        if (encoder.matches(token, encryptedSuperAdminToken)) {
 
             if (superAdminToken == null) {
 

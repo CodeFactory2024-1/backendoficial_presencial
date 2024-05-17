@@ -1,7 +1,5 @@
 package co.udea.airline.api.controller;
 
-import java.time.ZoneId;
-
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,6 +16,7 @@ import co.udea.airline.api.service.LoginService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 @RestController
 @Tag(name = "2. Login", description = "Basic login and google login")
@@ -38,12 +37,10 @@ public class LoginController {
     @ApiResponse(responseCode = "200", description = "login succeded")
     @ApiResponse(responseCode = "400", description = "incorrect email or password")
     @ApiResponse(responseCode = "500", description = "an internal exception ocurred when processing the request")
-    public ResponseEntity<JWTResponseDTO> login(@RequestBody LoginRequestDTO loginRequest) {
+    public ResponseEntity<JWTResponseDTO> login(@Valid @RequestBody LoginRequestDTO loginRequest) {
 
         Jwt jwt = loginService.authenticateUser(loginRequest.getEmail(), loginRequest.getPassword());
-        JWTResponseDTO responseDTO = new JWTResponseDTO(jwt.getSubject(),
-                jwt.getExpiresAt().atZone(ZoneId.systemDefault()),
-                jwt.getTokenValue());
+        JWTResponseDTO responseDTO = JWTResponseDTO.of(jwt);
 
         return ResponseEntity.ok().body(responseDTO);
 
@@ -54,12 +51,10 @@ public class LoginController {
     @ApiResponse(responseCode = "200", description = "the user was authenticated or registerd using the google idToken")
     @ApiResponse(responseCode = "400", description = "if the idToken is not valid")
     @ApiResponse(responseCode = "500", description = "an internal exception ocurred when processing the request")
-    public ResponseEntity<JWTResponseDTO> loginWithOauth2(@RequestBody OAuth2LoginRequestDTO loginRequest) {
+    public ResponseEntity<JWTResponseDTO> loginWithOauth2(@Valid @RequestBody OAuth2LoginRequestDTO loginRequest) {
 
         Jwt jwt = loginService.authenticateIdToken(loginRequest.getIdToken());
-        JWTResponseDTO responseDTO = new JWTResponseDTO(jwt.getSubject(),
-                jwt.getExpiresAt().atZone(ZoneId.systemDefault()),
-                jwt.getTokenValue());
+        JWTResponseDTO responseDTO = JWTResponseDTO.of(jwt);
 
         return ResponseEntity.ok().body(responseDTO);
 
