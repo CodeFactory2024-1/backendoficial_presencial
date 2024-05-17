@@ -60,15 +60,19 @@ public class UpdateInfoService {
      */
     public String updateInfo(UpdateInfoDTO request, Jwt jwt) {
         Person user = personRepository.findByEmail(jwt.getSubject()).orElseThrow();
+        user.setIdentificationType(idRepository.findByIdentificationTypeName(request.getIdType()));
+        user.setIdentificationNumber(request.getIdNumber());
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
-        user.setIdentificationNumber(request.getIdNumber());
-        user.setIdentificationType(idRepository.findByIdentificationTypeName(request.getIdType()));
-        user.setCity(request.getCity());
-        user.setCountry(request.getCountry());
-        user.setPhoneNumber(request.getPhoneNumber());
         user.setGenre(request.getGenre());
-        user = personRepository.save(user);
+        user.setCity(request.getCity());
+        user.setBirthDate(request.getBirthDate());
+        user.setPhoneNumber(request.getPhoneNumber());
+        user.setCountry(request.getCountry());
+        user.setProvince(request.getProvince());
+        user.setCity(request.getCity());
+        user.setAddress(request.getAddress());
+
         personRepository.save(user);
         return ("User update was successful");
     }

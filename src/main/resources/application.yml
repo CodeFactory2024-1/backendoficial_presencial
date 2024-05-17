@@ -2,7 +2,7 @@
 spring:
   # Dev is active by default. This value can be overwritten by java arg param
   profiles:
-    active: test
+    active: dev
   application:
     name: SITAS
   data:

@@ -22,7 +22,7 @@ import co.udea.airline.api.utils.common.JwtUtils;
 @Profile("test")
 @AutoConfigureMockMvc
 class DemoControllerTest {
-    
+
     @Autowired
     JwtUtils jwtUtils;
 

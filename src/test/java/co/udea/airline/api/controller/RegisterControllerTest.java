@@ -4,15 +4,19 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsStringIgnoringCase;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.io.UnsupportedEncodingException;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.util.Map;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
@@ -27,12 +31,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 
+import co.udea.airline.api.model.dto.OAuth2LoginRequestDTO;
 import co.udea.airline.api.model.dto.RegisterRequestDTO;
 import co.udea.airline.api.model.jpa.model.Person;
 import co.udea.airline.api.model.jpa.repository.PersonRepository;
@@ -54,8 +61,10 @@ class RegisterControllerTest {
     @SpyBean
     JavaMailSender mailSender;
 
-    ObjectMapper om;
+    @SpyBean(name = "googleJwtDecoder")
+    JwtDecoder googleJwtDecoder;
 
+    ObjectMapper om;
     RegisterRequestDTO registerRequestDTO;
 
     @BeforeAll
@@ -141,6 +150,21 @@ class RegisterControllerTest {
                         containsStringIgnoringCase("invalid"),
                         containsStringIgnoringCase("code"))));
 
+    }
+
+    @Test
+    void testExternalRegister() throws JsonProcessingException, Exception {
+
+        Jwt customJwt = new Jwt("any.token.value", Instant.now(), Instant.MAX,
+                Map.of("alg", "RS256"),
+                Map.of("email", "user@test.com", "given_name", "Juan", "family_name", "Lopez"));
+
+        doReturn(customJwt).when(googleJwtDecoder).decode(anyString());
+
+        mockMvc.perform(post("/login/google")
+                .content(om.writeValueAsString(new OAuth2LoginRequestDTO(customJwt.getTokenValue())))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
 }
