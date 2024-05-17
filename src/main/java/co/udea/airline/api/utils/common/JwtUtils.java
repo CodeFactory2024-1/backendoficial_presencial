@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -26,6 +27,12 @@ public class JwtUtils {
     private static final String ROLES_IDENTIFIER = "roles";
     private static final String PRIVILEGES_IDENTIFIER = "privileges";
 
+    /**
+     * Json Web Token expiration time in seconds
+     */
+    @Value("${airline-api.jwt.expiration:#{28800}}")
+    private Long EXPIRATION; // in seconds
+
     final JwtEncoder jwtEncoder;
 
     final JwtDecoder jwtDecoder;
@@ -37,8 +44,6 @@ public class JwtUtils {
         this.jwtDecoder = jwtDecoder;
         this.keyPair = keyPair;
     }
-
-    private final Long EXPIRATION = 8 * 60 * 60L; // in seconds
 
     /**
      * Creates a JWT that contains the currently autthenticated user's email, roles,

@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.io.UnsupportedEncodingException;
@@ -115,7 +115,7 @@ class UpdateInfoControllerTest {
 
         Jwt jwt = jwtUtils.createToken(p);
 
-        mockMvc.perform(post("/userinfo")
+        mockMvc.perform(put("/userinfo")
                 .header("Authorization", "Bearer %s".formatted(jwt.getTokenValue()))
                 .content(new ObjectMapper().writeValueAsString(infoDTO))
                 .contentType(MediaType.APPLICATION_JSON))

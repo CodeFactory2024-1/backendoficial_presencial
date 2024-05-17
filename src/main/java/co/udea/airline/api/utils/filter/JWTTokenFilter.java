@@ -23,13 +23,20 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Class for intercepting request and validating the 'Authorization' header to
+ * set the SecurityContext appropiately
+ */
 @Component
 @Slf4j
 public class JWTTokenFilter extends OncePerRequestFilter {
 
-    final JwtUtils jwtUtils;
-
     private Jwt superAdminToken;
+
+    @Value("${airline-api.dev.super-admin-token}")
+    private String ENCRYPTED_SUPER_ADMIN_TOKEN;
+
+    final JwtUtils jwtUtils;
 
     @Value("${airline-api.dev.super-admin-token}")
     private String encryptedSuperAdminToken;
@@ -76,6 +83,16 @@ public class JWTTokenFilter extends OncePerRequestFilter {
 
     }
 
+    /**
+     * For testing purposes. Checks if the raw token provided is the configured
+     * super admin token matching against the BCrypt encrypted token
+     * {@link #ENCRYPTED_SUPER_ADMIN_TOKEN}.
+     * 
+     * @param token The raw token, doesn't need to be JWT like token, it's like a
+     *              password
+     * @return {@code true} if token matches against the encrypted super admin
+     *         token, {@code false} otherwise
+     */
     boolean checkIfSuperAdmin(String token) {
         var encoder = new BCryptPasswordEncoder();
 

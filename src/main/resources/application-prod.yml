@@ -37,6 +37,20 @@ spring:
     password: ${ORACLE_PWD}
     driver-class-name: oracle.jdbc.driver.OracleDriver
 airline-api:
+  dev:
+    super-admin-token: ${SUPER_ADMIN_TOKEN}
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${GMAIL_USR}
+    password: ${GMAIL_PWD}
+    transport:
+      protocol: smtp
+    smtp:
+      use-auth: true
+      use-tls: true
+  jwt:
+    expiration: 28800
   openapi:
     dev-url: https://codefact.udea.edu.co/modulo-02/
     prod-url: https://codefact.udea.edu.co/modulo-02/

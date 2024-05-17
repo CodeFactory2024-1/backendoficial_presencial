@@ -54,11 +54,18 @@ public class RegisterService {
         }
 
     }
-
-    public void sendVerificationEmail(Person user, String siteURL)
+/**
+ * Sends a verification email to the user with a link to verify their registration.
+ *
+ * @param user    The user to whom the verification email will be sent.
+ * @param siteURL The base URL of the site to generate the verification link.
+ * @throws MessagingException            If there is an error while sending the email.
+ * @throws UnsupportedEncodingException  If there is an error with the encoding of the email.
+ */
+    private void sendVerificationEmail(Person user, String siteURL)
             throws MessagingException, UnsupportedEncodingException {
         String toAddress = user.getEmail();
-        String fromAddress = "andresdario.2001@gmail.com";
+        String fromAddress = "sitassingapurairlines@gmail.com";
         String senderName = "Sitas airline";
         String subject = "Please verify your registration";
         String content = "Dear [[name]],<br>"
@@ -147,9 +154,9 @@ public class RegisterService {
         String randomCode = RandomString.make(64);
         user.setVerificationCode(randomCode);
         user.setEnabled(true);
-        user = personRepository.save(user);
 
         sendVerificationEmail(user, siteURL);
+        user = personRepository.save(user);
         return ("User registration was successful");
     }
 

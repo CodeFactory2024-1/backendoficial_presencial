@@ -10,6 +10,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -45,6 +47,7 @@ public class Person implements UserDetails {
     private IdentificationType identificationType;
 
     @Column(name = "verification_code", length = 64)
+    @JsonIgnore
     private String verificationCode;
 
     @Column(name = "IDENTIFICATION_NUMBER")
@@ -77,22 +80,28 @@ public class Person implements UserDetails {
     private String email;
 
     @Column(name = "PASSWORD")
+    @JsonIgnore
     private String password;
 
     @Column(name = "EXTERNAL_LOGIN_SOURCE")
+    @JsonIgnore
     private String externalLoginSource;
 
+    @JsonIgnore
     private Boolean enabled;
-
+    
+    @JsonIgnore
     private Boolean verified;
 
     @Column(name = "FAILED_LOGIN_ATTEMPTS")
+    @JsonIgnore
     private Integer failedLoginAttempts;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "PERSON_POSITION", joinColumns = @JoinColumn(name = "PERSON_ID"), inverseJoinColumns = @JoinColumn(name = "POSITION_ID"))
     private List<Position> positions;
 
+    @JsonIgnore
     public Set<Privilege> getPrivileges() {
         if (getPositions() == null) {
             return Set.of();
@@ -104,6 +113,7 @@ public class Person implements UserDetails {
     }
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // prefix all roles with 'ROLE_' and uppercase them
         Set<GrantedAuthority> authorities = getPositions().stream()
@@ -117,28 +127,37 @@ public class Person implements UserDetails {
     }
 
     @Override
+    @JsonIgnore
     public String getUsername() {
         return getEmail();
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonLocked() {
         return enabled;
     }
 
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isEnabled() {
         return enabled;
+    }
+    @JsonIgnore
+    public boolean isVerified() {
+        return verified;
     }
 
 }

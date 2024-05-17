@@ -16,7 +16,7 @@ spring:
     username: sa
     password: password
     driverClassName: org.h2.Driver
-  
+
 airline-api:
   dev:
     super-admin-token: none
@@ -31,8 +31,8 @@ airline-api:
       use-auth: true
       use-tls: true
   openapi:
-    dev-url: http://localhost:8080/sitas
-    prod-url: https://airline-api.com
+    dev-url: https://codefact.udea.edu.co/modulo-02/
+    prod-url: https://codefact.udea.edu.co/modulo-02/
 
 logging:
   level:

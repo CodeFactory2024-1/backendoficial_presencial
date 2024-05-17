@@ -1,5 +1,6 @@
 package co.udea.airline.api.model.jpa.model;
 
+import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.security.core.GrantedAuthority;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -26,7 +27,7 @@ public class Privilege implements GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PRIVILEGE_ID")
-    @JsonIgnore
+    @RestResource(exported = true)
     private Long privilegeId;
 
     @Column(name = "NAME")
