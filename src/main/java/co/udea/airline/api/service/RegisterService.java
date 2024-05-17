@@ -48,7 +48,7 @@ public class RegisterService {
     public String verify(String verificationCode) {
         Person user = personRepository.findByVerificationCode(verificationCode);
 
-        if (user == null || user.isEnabled()) {
+        if (user == null || user.isVerified() || verificationCode==null) {
             return "verify_fail";
         } else {
             user.setVerificationCode(null);

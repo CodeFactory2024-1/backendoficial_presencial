@@ -43,7 +43,7 @@ public class PasswordManagementService {
     public String passwRecovery(String verificationCode, String password,String email) {
         Person user = personRepository.findByVerificationCode(verificationCode);
 
-        if (user == null || user.isVerified() || user.getEmail()!=email) {
+        if (user == null || !user.isVerified() || user.getEmail()!=email || verificationCode==null) {
             return "recovery_fail";
         } else {
             user.setVerificationCode(null);
