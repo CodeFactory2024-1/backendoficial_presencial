@@ -58,7 +58,7 @@
     {
       "name": "airline-api.cors.allow-origins",
       "type": "java.lang.String",
-      "description": "A description for 'airline-api.cors.allow-origins'"
+      "description": "Allowed origins from where to allow incoming requests"
     }
   ]
 }

@@ -46,9 +46,9 @@ public class Person implements UserDetails {
     @JoinColumn(name = "ID_IDENTIFICATION_TYPE")
     private IdentificationType identificationType;
 
-    @Column(name = "verification_code", length = 64)
+    @Column(name = "RECOVERY_CODE", length = 64)
     @JsonIgnore
-    private String verificationCode;
+    private String recoveryCode;
 
     @Column(name = "IDENTIFICATION_NUMBER")
     private String identificationNumber;
@@ -89,7 +89,7 @@ public class Person implements UserDetails {
 
     @JsonIgnore
     private Boolean enabled;
-    
+
     @JsonIgnore
     private Boolean verified;
 
@@ -141,7 +141,7 @@ public class Person implements UserDetails {
     @Override
     @JsonIgnore
     public boolean isAccountNonLocked() {
-        return enabled;
+        return isEnabled();
     }
 
     @Override
@@ -155,6 +155,7 @@ public class Person implements UserDetails {
     public boolean isEnabled() {
         return enabled;
     }
+
     @JsonIgnore
     public boolean isVerified() {
         return verified;

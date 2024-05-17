@@ -9,6 +9,7 @@ import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -106,10 +107,10 @@ class RegisterControllerTest {
         assertTrue(personRepository.existsByEmail(registerRequestDTO.getEmail()));
 
         Person p = personRepository.findByEmail(registerRequestDTO.getEmail()).get();
-        assertFalse(p.getVerificationCode().isBlank());
+        assertFalse(p.getRecoveryCode().isBlank());
 
         // set custom code for testing
-        p.setVerificationCode("test_code");
+        p.setRecoveryCode("test_code");
         personRepository.save(p);
 
     }
@@ -131,7 +132,7 @@ class RegisterControllerTest {
     @Order(3)
     void testVerifyUser() throws Exception {
 
-        mockMvc.perform(post("/verify")
+        mockMvc.perform(get("/verify")
                 .param("code", "test_code")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -142,7 +143,7 @@ class RegisterControllerTest {
     @Order(4)
     void testVerifyUserWithInvalidCode() throws Exception {
 
-        mockMvc.perform(post("/verify")
+        mockMvc.perform(get("/verify")
                 .param("code", "invalid")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())

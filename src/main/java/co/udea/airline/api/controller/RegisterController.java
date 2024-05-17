@@ -3,6 +3,8 @@ package co.udea.airline.api.controller;
 import java.io.UnsupportedEncodingException;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,13 +31,13 @@ public class RegisterController {
     public ResponseEntity<String> register(@RequestBody RegisterRequestDTO request, HttpServletRequest http)
             throws MessagingException, UnsupportedEncodingException {
         try {
-            return ResponseEntity.ok(authService.register(request, getSiteURL(http)));
+            return ResponseEntity.ok(authService.register(request));
         } catch (AlreadyExistsException e) {
             return ResponseEntity.badRequest().body("user already exists");
         }
     }
 
-    @PostMapping("/verify")
+    @GetMapping("/verify")
     public ResponseEntity<String> verifyUser(@RequestParam("code") String code) {
         try {
 
@@ -44,14 +46,9 @@ public class RegisterController {
             } else {
                 return ResponseEntity.badRequest().body("invalid code");
             }
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
+        } catch (MailException e) {
+            return ResponseEntity.internalServerError().body("can't register, try again later");
         }
-    }
-
-    private String getSiteURL(HttpServletRequest request) {
-        String siteURL = request.getRequestURL().toString();
-        return siteURL.replace(request.getServletPath(), "");
     }
 
 }
