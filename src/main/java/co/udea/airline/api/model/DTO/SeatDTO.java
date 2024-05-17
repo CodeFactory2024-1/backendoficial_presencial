@@ -16,9 +16,11 @@ import lombok.*;
 @NoArgsConstructor
 public class SeatDTO {
 
+    @NotNull
     @Schema(description = "The seat id auto-generated", requiredMode = RequiredMode.NOT_REQUIRED, example = "1")
-    private Long id;
+    private Long id = 0L;
 
+    @NotNull
     @Schema(description = "The status of the seat.", requiredMode = RequiredMode.NOT_REQUIRED, example = "AVAILABLE")
     private SeatStatusEnum seatStatus = SeatStatusEnum.AVAILABLE;
 
