@@ -1,6 +1,5 @@
 package co.udea.airline.api.utils.listener;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.event.AbstractAuthenticationFailureEvent;
@@ -13,17 +12,20 @@ import co.udea.airline.api.service.LoginAttemptService;
 @Component
 public class AuthenticationEventsListener {
 
-    @Autowired
     LoginAttemptService loginAttemptService;
+
+    public AuthenticationEventsListener(LoginAttemptService loginAttemptService) {
+        this.loginAttemptService = loginAttemptService;
+    }
 
     @EventListener
     public void onAuthenticationSuccess(AuthenticationSuccessEvent success) {
         if (success.getAuthentication() instanceof UsernamePasswordAuthenticationToken) {
-                    loginAttemptService
-                            .loginSucceededFor( ((Person) success
-                                    .getAuthentication()
-                                    .getPrincipal()).getEmail());
-                }
+            loginAttemptService
+                    .loginSucceededFor(((Person) success
+                            .getAuthentication()
+                            .getPrincipal()).getEmail());
+        }
     }
 
     @EventListener

@@ -1,57 +1,64 @@
-{"properties": [
-  {
-    "name": "airline-api.dev.super-admin-token",
-    "type": "java.lang.String",
-    "description": "A token for testing purposes in a BCrypt encrypted format"
-  },
-  {
-    "name": "airline-api.mail.host",
-    "type": "java.lang.String",
-    "description": "The host for the email sender"
-  },
-  {
-    "name": "airline-api.mail.port",
-    "type": "java.lang.Integer",
-    "description": "The email sender's port"
-  },
-  {
-    "name": "airline-api.mail.username",
-    "type": "java.lang.String",
-    "description": "The username to login to the email sender server"
-  },
-  {
-    "name": "airline-api.mail.password",
-    "type": "java.lang.String",
-    "description": "The password to login to the email sender server"
-  },
-  {
-    "name": "airline-api.mail.transport.protocol",
-    "type": "java.lang.String",
-    "description": "The email sender's protocol"
-  },
-  {
-    "name": "airline-api.mail.smtp.use-auth",
-    "type": "java.lang.String",
-    "description": "Additional properties for the email sender"
-  },
-  {
-    "name": "airline-api.mail.smtp.use-tls",
-    "type": "java.lang.String",
-    "description": "Additional properties for the email sender"
-  },
-  {
-    "name": "airline-api.openapi.dev-url",
-    "type": "java.lang.String",
-    "description": "Development API server"
-  },
-  {
-    "name": "airline-api.openapi.prod-url",
-    "type": "java.lang.String",
-    "description": "Production API server"
-  },
-  {
-    "name": "airline-api.jwt.expiration",
-    "type": "java.lang.Long",
-    "description": "The expiration time for the generated Json Web Tokens in seconds"
-  }
-]}
+{
+  "properties": [
+    {
+      "name": "airline-api.dev.super-admin-token",
+      "type": "java.lang.String",
+      "description": "A token for testing purposes in a BCrypt encrypted format"
+    },
+    {
+      "name": "airline-api.mail.host",
+      "type": "java.lang.String",
+      "description": "The host for the email sender"
+    },
+    {
+      "name": "airline-api.mail.port",
+      "type": "java.lang.Integer",
+      "description": "The email sender's port"
+    },
+    {
+      "name": "airline-api.mail.username",
+      "type": "java.lang.String",
+      "description": "The username to login to the email sender server"
+    },
+    {
+      "name": "airline-api.mail.password",
+      "type": "java.lang.String",
+      "description": "The password to login to the email sender server"
+    },
+    {
+      "name": "airline-api.mail.transport.protocol",
+      "type": "java.lang.String",
+      "description": "The email sender's protocol"
+    },
+    {
+      "name": "airline-api.mail.smtp.use-auth",
+      "type": "java.lang.String",
+      "description": "Additional properties for the email sender"
+    },
+    {
+      "name": "airline-api.mail.smtp.use-tls",
+      "type": "java.lang.String",
+      "description": "Additional properties for the email sender"
+    },
+    {
+      "name": "airline-api.openapi.dev-url",
+      "type": "java.lang.String",
+      "description": "Development API server"
+    },
+    {
+      "name": "airline-api.openapi.prod-url",
+      "type": "java.lang.String",
+      "description": "Production API server"
+    },
+    {
+      "name": "airline-api.jwt.expiration",
+      "type": "java.lang.Long",
+      "description": "The expiration time for the generated Json Web Tokens in seconds"
+    },
+    {
+      "name": "airline-api.cors.allow-origins",
+      "type": "java.lang.String",
+      "description": "A description for 'airline-api.cors.allow-origins'"
+    }
+  ]
+}

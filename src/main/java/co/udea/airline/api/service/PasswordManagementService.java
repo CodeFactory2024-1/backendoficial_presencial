@@ -1,22 +1,22 @@
 package co.udea.airline.api.service;
 
+import java.io.UnsupportedEncodingException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.stereotype.Service;
+
 import co.udea.airline.api.model.jpa.model.Person;
 import co.udea.airline.api.model.jpa.repository.PersonRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import net.bytebuddy.utility.RandomString;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-
-import java.io.UnsupportedEncodingException;
-import java.util.Optional;
 
 @Service
 public class PasswordManagementService {

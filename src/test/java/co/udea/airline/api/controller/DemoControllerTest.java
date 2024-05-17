@@ -19,14 +19,9 @@ import co.udea.airline.api.model.jpa.model.Position;
 import co.udea.airline.api.utils.common.JwtUtils;
 
 @SpringBootTest
-// @WebAppConfiguration
-// @ContextConfiguration(classes = SecurityConfig.class)
 @Profile("test")
 @AutoConfigureMockMvc
-public class DemoControllerTest {
-
-    // @Autowired
-    // WebApplicationContext context;
+class DemoControllerTest {
 
     @Autowired
     JwtUtils jwtUtils;
@@ -38,14 +33,6 @@ public class DemoControllerTest {
 
     @BeforeEach
     void setup() {
-        // mockMvc = MockMvcBuilders
-        // .webAppContextSetup(context)
-        // .defaultRequest(
-        // MockMvcRequestBuilders
-        // .post("/demo")
-        // .contentType(MediaType.APPLICATION_JSON))
-        // .apply(SecurityMockMvcConfigurers.springSecurity())
-        // .build();
 
         person = Person.builder()
                 .firstName("user")

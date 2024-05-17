@@ -1,15 +1,19 @@
 package co.udea.airline.api.controller;
 
-import co.udea.airline.api.service.PasswordManagementService;
-import jakarta.mail.MessagingException;
-import jakarta.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.io.UnsupportedEncodingException;
+import co.udea.airline.api.service.PasswordManagementService;
+import jakarta.mail.MessagingException;
 
 @RestController
 @RequestMapping("/password")

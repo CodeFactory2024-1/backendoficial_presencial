@@ -2,6 +2,7 @@ package co.udea.airline.api.service;
 
 import java.util.Optional;
 
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import co.udea.airline.api.model.jpa.model.Person;
@@ -14,8 +15,11 @@ public class LoginAttemptService {
 
     final PersonRepository personRepository;
 
-    public LoginAttemptService(PersonRepository personRepository) {
+    final JavaMailSender mailSender;
+
+    public LoginAttemptService(PersonRepository personRepository, JavaMailSender mailSender) {
         this.personRepository = personRepository;
+        this.mailSender = mailSender;
     }
 
     public void loginFailedFor(String email) {

@@ -103,6 +103,9 @@ public class Person implements UserDetails {
 
     @JsonIgnore
     public Set<Privilege> getPrivileges() {
+        if (getPositions() == null) {
+            return Set.of();
+        }
         return getPositions().stream()
                 .map(pos -> pos.getPrivileges())
                 .flatMap(List::stream)

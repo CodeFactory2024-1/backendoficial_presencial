@@ -1,19 +1,20 @@
 package co.udea.airline.api.service;
 
 import java.io.UnsupportedEncodingException;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
-import co.udea.airline.api.dto.RegisterRequestDTO;
+
+import co.udea.airline.api.model.dto.RegisterRequestDTO;
 import co.udea.airline.api.model.jpa.model.Person;
 import co.udea.airline.api.model.jpa.repository.IdentificationTypeRepository;
 import co.udea.airline.api.model.jpa.repository.PersonRepository;
 import co.udea.airline.api.model.jpa.repository.PositionRepository;
 import co.udea.airline.api.utils.common.JwtUtils;
-import co.udea.airline.api.utils.exception.RegisterException;
+import co.udea.airline.api.utils.exception.AlreadyExistsException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import net.bytebuddy.utility.RandomString;
@@ -21,41 +22,35 @@ import net.bytebuddy.utility.RandomString;
 @Service
 public class RegisterService {
 
-    @Autowired
     private PersonRepository personRepository;
-
-    @Autowired
     private PasswordEncoder passwordEncoder;
-
-    @Autowired
     private JwtUtils jwtUtils;
-
-    @Autowired
     private IdentificationTypeRepository idRepository;
-
-    @Autowired
     private PositionRepository positionRepository;
-    @Autowired
     private JavaMailSender mailSender;
-    /**
- * Verifies the user's account using the provided verification code.
- *
- * @param verificationCode The code sent to the user for account verification.
- * @return A string indicating the result of the verification process:
- *         "verify_success" if the verification was successful,
- *         "verify_fail" if the user is not found or is already enabled.
- */
-    public String verify(String verificationCode) {
+
+    public RegisterService(PersonRepository personRepository, PasswordEncoder passwordEncoder, JwtUtils jwtUtils,
+            IdentificationTypeRepository idRepository, PositionRepository positionRepository,
+            JavaMailSender mailSender) {
+        this.personRepository = personRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtUtils = jwtUtils;
+        this.idRepository = idRepository;
+        this.positionRepository = positionRepository;
+        this.mailSender = mailSender;
+    }
+
+    public boolean verify(String verificationCode) {
         Person user = personRepository.findByVerificationCode(verificationCode);
 
-        if (user == null || user.isVerified() || verificationCode==null) {
-            return "verify_fail";
+        if (user == null || user.getVerified()) {
+            return false;
         } else {
             user.setVerificationCode(null);
             user.setVerified(true);
             personRepository.save(user);
 
-            return "verify_success";
+            return true;
         }
 
     }
@@ -132,14 +127,14 @@ public class RegisterService {
      * 
      * @param request The info to register the user
      * @return A {@link Jwt} on success
-     * @throws RegisterException if the user is already registered
+     * @throws AlreadyExistsException if the user is already registered
      */
     public String register(RegisterRequestDTO request, String siteURL)
-            throws RegisterException, MessagingException, UnsupportedEncodingException {
+            throws AlreadyExistsException, MessagingException, UnsupportedEncodingException {
 
         // check if user already exist. if exist than authenticate the user
         if (personRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new RegisterException("User already exist");
+            throw new AlreadyExistsException("User already exist");
         }
 
         Person user = new Person();
@@ -159,6 +154,7 @@ public class RegisterService {
         String randomCode = RandomString.make(64);
         user.setVerificationCode(randomCode);
         user.setEnabled(true);
+
         sendVerificationEmail(user, siteURL);
         user = personRepository.save(user);
         return ("User registration was successful");

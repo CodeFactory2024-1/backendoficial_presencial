@@ -34,8 +34,8 @@ import org.springframework.web.context.WebApplicationContext;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import co.udea.airline.api.dto.LoginRequestDTO;
-import co.udea.airline.api.dto.OAuth2LoginRequestDTO;
+import co.udea.airline.api.model.dto.LoginRequestDTO;
+import co.udea.airline.api.model.dto.OAuth2LoginRequestDTO;
 import co.udea.airline.api.model.jpa.model.IdentificationType;
 import co.udea.airline.api.model.jpa.model.Person;
 import co.udea.airline.api.model.jpa.model.Position;
@@ -107,7 +107,7 @@ class LoginControllerTest {
                 .content(om.writeValueAsString(loginRequest)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers
-                        .jsonPath("$.body.token").exists());
+                        .jsonPath("$.token").exists());
     }
 
     @Test
@@ -154,7 +154,7 @@ class LoginControllerTest {
                 .post("/login/google")
                 .content(om.writeValueAsString(validIdToken)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.body.token").exists());
+                .andExpect(MockMvcResultMatchers.jsonPath("$.token").exists());
 
     }
 

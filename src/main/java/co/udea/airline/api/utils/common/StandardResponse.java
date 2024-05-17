@@ -18,6 +18,10 @@ public class StandardResponse<T> {
         return new StandardResponse<>(0, "error", error, null);
     }
 
+    public static <T> StandardResponse<T> error(String error, String message) {
+        return new StandardResponse<>(0, message, error, null);
+    }
+
     public StandardResponse(StatusStandardResponse status, T body) {
         this.status = status.getStatus();
         this.body = body;

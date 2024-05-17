@@ -3,6 +3,8 @@ package co.udea.airline.api.utils.common;
 import java.security.KeyPair;
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -53,12 +55,14 @@ public class JwtUtils {
     public Jwt createToken(Person person) {
 
         Instant now = Instant.now();
+        List<Position> roles = Optional.ofNullable(person.getPositions()).orElse(List.of());
+        Set<Privilege> privileges = Optional.ofNullable(person.getPrivileges()).orElse(Set.of());
 
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .subject(person.getEmail())
-                .claim(ROLES_IDENTIFIER, person.getPositions().stream()
+                .claim(ROLES_IDENTIFIER, roles.stream()
                         .map(Position::getName).collect(Collectors.toList()))
-                .claim(PRIVILEGES_IDENTIFIER, person.getPrivileges().stream()
+                .claim(PRIVILEGES_IDENTIFIER, privileges.stream()
                         .map(Privilege::getName).collect(Collectors.toList()))
                 .issuer("https://airline-api.com")
                 .issuedAt(now)
