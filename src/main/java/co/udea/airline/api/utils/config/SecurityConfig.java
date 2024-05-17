@@ -10,8 +10,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import co.udea.airline.api.filter.JWTTokenFilter;
 import co.udea.airline.api.service.UserDetailsServiceImp;
+import co.udea.airline.api.utils.filter.JWTTokenFilter;
 
 @Configuration
 @EnableWebSecurity

@@ -4,8 +4,6 @@ import java.time.ZoneId;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationServiceException;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +15,6 @@ import co.udea.airline.api.model.dto.JWTResponseDTO;
 import co.udea.airline.api.model.dto.LoginRequestDTO;
 import co.udea.airline.api.model.dto.OAuth2LoginRequestDTO;
 import co.udea.airline.api.service.LoginService;
-import co.udea.airline.api.utils.common.StandardResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -40,67 +37,32 @@ public class LoginController {
     @Operation(summary = "authenticates a user with its email and raw password")
     @ApiResponse(responseCode = "200", description = "login succeded")
     @ApiResponse(responseCode = "400", description = "incorrect email or password")
-    public ResponseEntity<StandardResponse<JWTResponseDTO>> login(@RequestBody LoginRequestDTO loginRequest) {
+    @ApiResponse(responseCode = "500", description = "an internal exception ocurred when processing the request")
+    public ResponseEntity<JWTResponseDTO> login(@RequestBody LoginRequestDTO loginRequest) {
 
-        StandardResponse<JWTResponseDTO> sr = new StandardResponse<>();
+        Jwt jwt = loginService.authenticateUser(loginRequest.getEmail(), loginRequest.getPassword());
+        JWTResponseDTO responseDTO = new JWTResponseDTO(jwt.getSubject(),
+                jwt.getExpiresAt().atZone(ZoneId.systemDefault()),
+                jwt.getTokenValue());
 
-        try {
+        return ResponseEntity.ok().body(responseDTO);
 
-            Jwt jwt = loginService.authenticateUser(loginRequest.getEmail(), loginRequest.getPassword());
-            sr.setStatus(0);
-            sr.setMessage("success");
-            sr.setBody(new JWTResponseDTO(jwt.getSubject(), jwt.getExpiresAt().atZone(ZoneId.systemDefault()),
-                    jwt.getTokenValue()));
-
-            return ResponseEntity.ok().body(sr);
-
-        } catch (AuthenticationException exception) {
-
-            sr.setStatus(1);
-            sr.setMessage("incorrect email or password");
-            sr.setDevMesssage(exception.getMessage());
-            sr.setBody(null);
-
-            return ResponseEntity.badRequest().body(sr);
-
-        }
     }
 
     @PostMapping("/google")
     @Operation(summary = "through a google idToken allows to authenticate a user, and in case it does not exist, the same is registered")
     @ApiResponse(responseCode = "200", description = "the user was authenticated or registerd using the google idToken")
+    @ApiResponse(responseCode = "400", description = "if the idToken is not valid")
     @ApiResponse(responseCode = "500", description = "an internal exception ocurred when processing the request")
-    public ResponseEntity<StandardResponse<JWTResponseDTO>> loginWithOauth2(
-            @RequestBody OAuth2LoginRequestDTO loginRequest) {
+    public ResponseEntity<JWTResponseDTO> loginWithOauth2(@RequestBody OAuth2LoginRequestDTO loginRequest) {
 
-        StandardResponse<JWTResponseDTO> sr = new StandardResponse<>();
+        Jwt jwt = loginService.authenticateIdToken(loginRequest.getIdToken());
+        JWTResponseDTO responseDTO = new JWTResponseDTO(jwt.getSubject(),
+                jwt.getExpiresAt().atZone(ZoneId.systemDefault()),
+                jwt.getTokenValue());
 
-        try {
+        return ResponseEntity.ok().body(responseDTO);
 
-            Jwt jwt = loginService.authenticateIdToken(loginRequest.getIdToken());
-            sr.setStatus(0);
-            sr.setMessage("success");
-            sr.setBody(new JWTResponseDTO(jwt.getSubject(), jwt.getExpiresAt().atZone(ZoneId.systemDefault()),
-                    jwt.getTokenValue()));
-            return ResponseEntity.ok().body(sr);
-
-        } catch (AuthenticationServiceException exception) {
-
-            sr.setStatus(1);
-            sr.setMessage("authentication error");
-            sr.setDevMesssage(exception.getMessage());
-
-            return ResponseEntity.internalServerError().body(sr);
-
-        } catch (AuthenticationException exception) {
-
-            sr.setStatus(1);
-            sr.setMessage("invalid idToken");
-            sr.setDevMesssage(exception.getMessage());
-
-            return ResponseEntity.badRequest().body(sr);
-
-        }
     }
 
 }

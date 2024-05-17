@@ -1,4 +1,4 @@
-package co.udea.airline.api.filter;
+package co.udea.airline.api.utils.filter;
 
 import java.io.IOException;
 import java.util.Arrays;
