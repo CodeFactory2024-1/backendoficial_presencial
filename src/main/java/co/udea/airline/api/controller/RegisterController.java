@@ -33,12 +33,9 @@ public class RegisterController {
     }
 
     @GetMapping("/verify")
-    public String verifyUser(@RequestParam("code") String code) {
-        if (authService.verify(code)) {
-            return "verify_success";
-        } else {
-            return "verify_fail";
-        }
+    public ResponseEntity<String> verifyUser(@RequestParam("code") String code) {
+        return ResponseEntity.ok(authService.verify(code));
+
     }
 
     private String getSiteURL(HttpServletRequest request) {

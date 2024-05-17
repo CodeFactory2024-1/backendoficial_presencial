@@ -152,5 +152,9 @@ public class Person implements UserDetails {
     public boolean isEnabled() {
         return enabled;
     }
+    @JsonIgnore
+    public boolean isVerified() {
+        return verified;
+    }
 
 }

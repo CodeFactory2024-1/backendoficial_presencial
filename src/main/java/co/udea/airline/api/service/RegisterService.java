@@ -1,14 +1,12 @@
 package co.udea.airline.api.service;
 
 import java.io.UnsupportedEncodingException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
-
 import co.udea.airline.api.dto.RegisterRequestDTO;
 import co.udea.airline.api.model.jpa.model.Person;
 import co.udea.airline.api.model.jpa.repository.IdentificationTypeRepository;
@@ -39,26 +37,40 @@ public class RegisterService {
     private PositionRepository positionRepository;
     @Autowired
     private JavaMailSender mailSender;
-
-    public boolean verify(String verificationCode) {
+    /**
+ * Verifies the user's account using the provided verification code.
+ *
+ * @param verificationCode The code sent to the user for account verification.
+ * @return A string indicating the result of the verification process:
+ *         "verify_success" if the verification was successful,
+ *         "verify_fail" if the user is not found or is already enabled.
+ */
+    public String verify(String verificationCode) {
         Person user = personRepository.findByVerificationCode(verificationCode);
 
         if (user == null || user.isEnabled()) {
-            return false;
+            return "verify_fail";
         } else {
             user.setVerificationCode(null);
             user.setVerified(true);
             personRepository.save(user);
 
-            return true;
+            return "verify_success";
         }
 
     }
-
+/**
+ * Sends a verification email to the user with a link to verify their registration.
+ *
+ * @param user    The user to whom the verification email will be sent.
+ * @param siteURL The base URL of the site to generate the verification link.
+ * @throws MessagingException            If there is an error while sending the email.
+ * @throws UnsupportedEncodingException  If there is an error with the encoding of the email.
+ */
     private void sendVerificationEmail(Person user, String siteURL)
             throws MessagingException, UnsupportedEncodingException {
         String toAddress = user.getEmail();
-        String fromAddress = "andresdario.2001@gmail.com";
+        String fromAddress = "sitassingapurairlines@gmail.com";
         String senderName = "Sitas airline";
         String subject = "Please verify your registration";
         String content = "Dear [[name]],<br>"
@@ -147,8 +159,8 @@ public class RegisterService {
         String randomCode = RandomString.make(64);
         user.setVerificationCode(randomCode);
         user.setEnabled(true);
-        user = personRepository.save(user);
         sendVerificationEmail(user, siteURL);
+        user = personRepository.save(user);
         return ("User registration was successful");
     }
 

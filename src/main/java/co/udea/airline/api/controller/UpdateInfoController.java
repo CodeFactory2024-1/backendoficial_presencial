@@ -5,12 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import co.udea.airline.api.dto.UpdateInfoDTO;
 import co.udea.airline.api.service.UpdateInfoService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -43,7 +38,7 @@ public class UpdateInfoController {
         return ResponseEntity.ok(updateInfoService.getInfo(jwt));
     }
     
-    @PostMapping("")
+    @PutMapping("")
     @Operation(summary = "updates the info of the currently authenticated user with the respective JWT", description = "You should send the JWT as a bearer token in the 'Authorization' header")
     @ApiResponse(responseCode = "401", description = "User isn't authenticated, try again with a JWT")
     @ApiResponse(responseCode = "200", description = "Info updated")
