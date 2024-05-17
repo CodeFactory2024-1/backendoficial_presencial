@@ -6,49 +6,33 @@ import java.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
-import org.springframework.http.MediaType;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 import co.udea.airline.api.model.jpa.model.Person;
 import co.udea.airline.api.model.jpa.model.Position;
 import co.udea.airline.api.utils.common.JwtUtils;
 
 @SpringBootTest
-// @ContextConfiguration(classes = SecurityConfig.class)
 @Profile("test")
-// @AutoConfigureMockMvc
-@WebAppConfiguration
+@AutoConfigureMockMvc
 class DemoControllerTest {
-
-    @Autowired
-    WebApplicationContext context;
-
+    
     @Autowired
     JwtUtils jwtUtils;
 
-    // @Autowired
+    @Autowired
     MockMvc mockMvc;
 
     Person person;
 
     @BeforeEach
     void setup() {
-        mockMvc = MockMvcBuilders
-        .webAppContextSetup(context)
-        .defaultRequest(
-        MockMvcRequestBuilders
-        .post("/demo")
-        .contentType(MediaType.APPLICATION_JSON))
-        // .apply(SecurityMockMvcConfigurers.springSecurity())
-        .build();
 
         person = Person.builder()
                 .firstName("user")

@@ -107,7 +107,7 @@ class LoginControllerTest {
                 .content(om.writeValueAsString(loginRequest)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers
-                        .jsonPath("$.body.token").exists());
+                        .jsonPath("$.token").exists());
     }
 
     @Test
@@ -154,7 +154,7 @@ class LoginControllerTest {
                 .post("/login/google")
                 .content(om.writeValueAsString(validIdToken)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.body.token").exists());
+                .andExpect(MockMvcResultMatchers.jsonPath("$.token").exists());
 
     }
 
