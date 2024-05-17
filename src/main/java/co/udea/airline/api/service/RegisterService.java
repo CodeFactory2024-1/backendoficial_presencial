@@ -1,9 +1,7 @@
 package co.udea.airline.api.service;
 
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
-import net.bytebuddy.utility.RandomString;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.io.UnsupportedEncodingException;
+
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,35 +14,36 @@ import co.udea.airline.api.model.jpa.repository.IdentificationTypeRepository;
 import co.udea.airline.api.model.jpa.repository.PersonRepository;
 import co.udea.airline.api.model.jpa.repository.PositionRepository;
 import co.udea.airline.api.utils.common.JwtUtils;
-import co.udea.airline.api.utils.exception.RegisterException;
-
-import java.io.UnsupportedEncodingException;
+import co.udea.airline.api.utils.exception.AlreadyExistsException;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
+import net.bytebuddy.utility.RandomString;
 
 @Service
 public class RegisterService {
 
-    @Autowired
     private PersonRepository personRepository;
-
-    @Autowired
     private PasswordEncoder passwordEncoder;
-
-    @Autowired
     private JwtUtils jwtUtils;
-
-    @Autowired
     private IdentificationTypeRepository idRepository;
-
-    @Autowired
     private PositionRepository positionRepository;
-    @Autowired
     private JavaMailSender mailSender;
 
+    public RegisterService(PersonRepository personRepository, PasswordEncoder passwordEncoder, JwtUtils jwtUtils,
+            IdentificationTypeRepository idRepository, PositionRepository positionRepository,
+            JavaMailSender mailSender) {
+        this.personRepository = personRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtUtils = jwtUtils;
+        this.idRepository = idRepository;
+        this.positionRepository = positionRepository;
+        this.mailSender = mailSender;
+    }
 
     public boolean verify(String verificationCode) {
         Person user = personRepository.findByVerificationCode(verificationCode);
 
-        if (user == null || user.isEnabled()) {
+        if (user == null || user.getVerified()) {
             return false;
         } else {
             user.setVerificationCode(null);
@@ -54,8 +53,9 @@ public class RegisterService {
             return true;
         }
 
-}
-    private void sendVerificationEmail(Person user, String siteURL)
+    }
+
+    public void sendVerificationEmail(Person user, String siteURL)
             throws MessagingException, UnsupportedEncodingException {
         String toAddress = user.getEmail();
         String fromAddress = "andresdario.2001@gmail.com";
@@ -73,7 +73,7 @@ public class RegisterService {
         helper.setFrom(fromAddress, senderName);
         helper.setTo(toAddress);
         helper.setSubject(subject);
-        String fullName=user.getFirstName() + " " + user.getLastName();
+        String fullName = user.getFirstName() + " " + user.getLastName();
 
         content = content.replace("[[name]]", (fullName));
 
@@ -120,13 +120,14 @@ public class RegisterService {
      * 
      * @param request The info to register the user
      * @return A {@link Jwt} on success
-     * @throws RegisterException if the user is already registered
+     * @throws AlreadyExistsException if the user is already registered
      */
-    public String register(RegisterRequestDTO request,String siteURL) throws RegisterException, MessagingException, UnsupportedEncodingException {
+    public String register(RegisterRequestDTO request, String siteURL)
+            throws AlreadyExistsException, MessagingException, UnsupportedEncodingException {
 
         // check if user already exist. if exist than authenticate the user
         if (personRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new RegisterException("User already exist");
+            throw new AlreadyExistsException("User already exist");
         }
 
         Person user = new Person();
@@ -147,6 +148,7 @@ public class RegisterService {
         user.setVerificationCode(randomCode);
         user.setEnabled(true);
         user = personRepository.save(user);
+
         sendVerificationEmail(user, siteURL);
         return ("User registration was successful");
     }
