@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import co.udea.airline.api.dto.RegisterRequestDTO;
+import co.udea.airline.api.model.dto.RegisterRequestDTO;
 import co.udea.airline.api.service.RegisterService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.mail.MessagingException;

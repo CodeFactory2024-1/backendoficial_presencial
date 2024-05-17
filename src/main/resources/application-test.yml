@@ -18,6 +18,18 @@ spring:
     driverClassName: org.h2.Driver
   
 airline-api:
+  dev:
+    super-admin-token: none
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${GMAIL_USR}
+    password: ${GMAIL_PWD}
+    transport:
+      protocol: smtp
+    smtp:
+      use-auth: true
+      use-tls: true
   openapi:
     dev-url: http://localhost:8080/sitas
     prod-url: https://airline-api.com
@@ -25,4 +37,4 @@ airline-api:
 logging:
   level:
     root: debug
-    org.springframework: debug
+    "[org.springframework]": debug

@@ -10,7 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
-import co.udea.airline.api.dto.RegisterRequestDTO;
+import co.udea.airline.api.model.dto.RegisterRequestDTO;
 import co.udea.airline.api.model.jpa.model.Person;
 import co.udea.airline.api.model.jpa.repository.IdentificationTypeRepository;
 import co.udea.airline.api.model.jpa.repository.PersonRepository;

@@ -1,15 +1,15 @@
-package co.udea.airline.api.dto;
+package co.udea.airline.api.model.dto;
+
+import java.time.LocalDate;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateInfoDTO {
+public class RegisterRequestDTO {
     String idType;
     String idNumber;
     String firstName;
@@ -20,5 +20,8 @@ public class UpdateInfoDTO {
     String country;
     String province;
     String city;
-    String address;
+    String residence;
+    String email;
+    String password;
+
 }

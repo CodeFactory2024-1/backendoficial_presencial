@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import co.udea.airline.api.dto.JWTResponseDTO;
-import co.udea.airline.api.dto.LoginRequestDTO;
-import co.udea.airline.api.dto.OAuth2LoginRequestDTO;
+import co.udea.airline.api.model.dto.JWTResponseDTO;
+import co.udea.airline.api.model.dto.LoginRequestDTO;
+import co.udea.airline.api.model.dto.OAuth2LoginRequestDTO;
 import co.udea.airline.api.service.LoginService;
 import co.udea.airline.api.utils.common.StandardResponse;
 import io.swagger.v3.oas.annotations.Operation;

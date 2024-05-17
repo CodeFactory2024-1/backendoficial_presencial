@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import co.udea.airline.api.dto.UpdateInfoDTO;
+import co.udea.airline.api.model.dto.UpdateInfoDTO;
 import co.udea.airline.api.service.UpdateInfoService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 

@@ -1,4 +1,4 @@
-package co.udea.airline.api.dto;
+package co.udea.airline.api.model.dto;
 
 import java.time.ZonedDateTime;
 

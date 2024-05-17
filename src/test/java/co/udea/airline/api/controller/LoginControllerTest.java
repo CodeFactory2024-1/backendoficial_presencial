@@ -34,8 +34,8 @@ import org.springframework.web.context.WebApplicationContext;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import co.udea.airline.api.dto.LoginRequestDTO;
-import co.udea.airline.api.dto.OAuth2LoginRequestDTO;
+import co.udea.airline.api.model.dto.LoginRequestDTO;
+import co.udea.airline.api.model.dto.OAuth2LoginRequestDTO;
 import co.udea.airline.api.model.jpa.model.IdentificationType;
 import co.udea.airline.api.model.jpa.model.Person;
 import co.udea.airline.api.model.jpa.model.Position;

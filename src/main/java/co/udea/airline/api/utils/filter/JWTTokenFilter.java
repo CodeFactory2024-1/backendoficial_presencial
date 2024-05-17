@@ -3,6 +3,7 @@ package co.udea.airline.api.filter;
 import java.io.IOException;
 import java.util.Arrays;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -28,12 +29,14 @@ public class JWTTokenFilter extends OncePerRequestFilter {
 
     final JwtUtils jwtUtils;
 
+    private Jwt superAdminToken;
+
+    @Value("${airline-api.dev.super-admin-token}")
+    private String ENCRYPTED_SUPER_ADMIN_TOKEN;
+
     public JWTTokenFilter(JwtUtils jwtUtils) {
         this.jwtUtils = jwtUtils;
     }
-
-    private Jwt superAdminToken;
-    private final String ENCRYPTED_SUPER_ADMIN_TOKEN = System.getenv("SUPER_ADMIN_TOKEN");
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
