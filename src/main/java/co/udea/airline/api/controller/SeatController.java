@@ -92,7 +92,7 @@ public class SeatController {
                     @Content(schema = @Schema(implementation = Seat.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
             }, description = "Seat updated successfully."),
             @ApiResponse(responseCode = "400", description = "Invalid Request"),
-            @ApiResponse(responseCode = "40", description = "Seat Not found"),
+            @ApiResponse(responseCode = "404", description = "Seat Not found"),
             @ApiResponse(responseCode = "500", description = "Server internal Error")})
     public ResponseEntity<StandardResponse<Seat>> updateSeatV1(@Valid @RequestBody Seat seat) {
         return ResponseEntity.ok(
@@ -108,9 +108,10 @@ public class SeatController {
             @ApiResponse(responseCode = "200", content = {
                     @Content(schema = @Schema(implementation = SeatDTO.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
             }, description = "Seats generated successfully"),
-            @ApiResponse(responseCode = "400", description = "Invalid Request"),
-            @ApiResponse(responseCode = "404", description = "Seat Not found"),
-            @ApiResponse(responseCode = "500", description = "Server internal Error")})
+            @ApiResponse(responseCode = "400", description = "Invalid Request."),
+            @ApiResponse(responseCode = "404", description = "Flight does not exist."),
+            @ApiResponse(responseCode = "409", description = "Flight already has seats."),
+            @ApiResponse(responseCode = "500", description = "Server internal Error.")})
     public ResponseEntity<StandardResponse<List<SeatDTO>>> generateSeatsByFlightIdV1(@PathVariable("flightId") String flightId) {
         List<Seat> seatList = seatService.generateSeatsByFlightId(Long.valueOf(flightId));
         List<SeatDTO> seatDTOList = seatList.stream()
