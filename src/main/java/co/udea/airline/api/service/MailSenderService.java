@@ -37,8 +37,6 @@ public class MailSenderService {
     public void sendVerificationEmail(Person user)
             throws MessagingException, UnsupportedEncodingException {
 
-        String toAddress = user.getEmail();
-
         String subject = "Please verify your registration";
         String content = "Dear [[name]],<br>"
                 + "Please click the link below to verify your registration:<br>"
@@ -46,24 +44,13 @@ public class MailSenderService {
                 + "Thank you,<br>"
                 + "Sitas.";
 
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message);
-
-        helper.setFrom(fromAddress, senderName);
-        helper.setTo(toAddress);
-        helper.setSubject(subject);
         String fullName = user.getFirstName() + " " + user.getLastName();
-
-        content = content.replace("[[name]]", (fullName));
-
         String verifyURL = frontBaseUrl + "/verify?code=" + user.getRecoveryCode();
 
+        content = content.replace("[[name]]", (fullName));
         content = content.replace("[[URL]]", verifyURL);
 
-        helper.setText(content, true);
-
-        mailSender.send(message);
-
+        send(user.getEmail(), subject, content);
     }
 
     /**
@@ -80,7 +67,6 @@ public class MailSenderService {
      */
     public String sendRecoveryPasswCode(Person user)
             throws MessagingException, UnsupportedEncodingException {
-        String toAddress = user.getEmail();
         String subject = "Recover your password";
         String content = "Dear [[name]],<br>"
                 + "This is the code to recover your password:<br>"
@@ -88,26 +74,17 @@ public class MailSenderService {
                 + "Thank you,<br>"
                 + "Sitas.";
 
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message);
-
-        helper.setFrom(fromAddress, senderName);
-        helper.setTo(toAddress);
-        helper.setSubject(subject);
         String fullName = user.getFirstName() + " " + user.getLastName();
-        content = content.replace("[[name]]", (fullName));
-
         String code = user.getRecoveryCode();
 
+        content = content.replace("[[name]]", (fullName));
         content = content.replace("[[CODE]]", code);
 
-        helper.setText(content, true);
-
-        mailSender.send(message);
+        send(user.getEmail(), subject, content);
         return "Sending email success";
     }
 
-    public void sendAccountLockedNotification(Person user) throws MessagingException {
+    public void sendAccountLockedNotification(Person user) throws MessagingException, UnsupportedEncodingException {
         String subject = "Unlock your account";
         String content = "Dear %s,<br>"
                 + "Please click the link below to unlock your account and change your password:<br>"
@@ -119,13 +96,17 @@ public class MailSenderService {
         redirectUrl = redirectUrl.formatted(user.getEmail(), user.getRecoveryCode());
         content = content.formatted(fullName, redirectUrl);
 
+        send(user.getEmail(), subject, content);
+    }
+
+    private void send(String to, String subject, String text) throws MessagingException, UnsupportedEncodingException {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
 
-        helper.setFrom(fromAddress);
-        helper.setTo(user.getEmail());
+        helper.setFrom(fromAddress, senderName);
+        helper.setTo(to);
         helper.setSubject(subject);
-        helper.setText(content, true);
+        helper.setText(text);
 
         mailSender.send(message);
     }

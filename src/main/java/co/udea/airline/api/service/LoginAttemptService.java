@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import co.udea.airline.api.model.jpa.model.Person;
 import co.udea.airline.api.model.jpa.repository.PersonRepository;
-import jakarta.mail.MessagingException;
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.utility.RandomString;
 
@@ -37,7 +36,7 @@ public class LoginAttemptService {
         if (!p.isEnabled()) {
             try {
                 mailSenderService.sendAccountLockedNotification(p);
-            } catch (MessagingException e) {
+            } catch (Exception e) {
                 log.error("can't send unlock email", e);
             }
             return;
