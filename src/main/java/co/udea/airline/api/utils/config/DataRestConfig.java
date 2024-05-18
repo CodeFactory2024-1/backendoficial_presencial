@@ -1,10 +1,15 @@
 package co.udea.airline.api.utils.config;
 
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
+import org.springframework.data.rest.core.mapping.ConfigurableHttpMethods;
+import org.springframework.data.rest.core.mapping.ExposureConfigurer.AggregateResourceHttpMethodsFilter;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+
+import co.udea.airline.api.model.jpa.model.IdentificationType;
 
 @Component
 public class DataRestConfig implements RepositoryRestConfigurer {
@@ -13,6 +18,22 @@ public class DataRestConfig implements RepositoryRestConfigurer {
     public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config, CorsRegistry cors) {
         config.useHalAsDefaultJsonMediaType(false);
         config.setDefaultMediaType(MediaType.APPLICATION_JSON);
+
+        config.getExposureConfiguration()
+                .withCollectionExposure(idMethodsFilter(false))
+                .withItemExposure(idMethodsFilter(true));
+    }
+
+    AggregateResourceHttpMethodsFilter idMethodsFilter(boolean all) {
+        return (metdata, httpMethods) -> {
+            if (metdata.getDomainType().equals(IdentificationType.class)) {
+                if (all)
+                    return ConfigurableHttpMethods.NONE;
+                else
+                    return ConfigurableHttpMethods.NONE.enable(HttpMethod.GET);
+            }
+            return httpMethods;
+        };
     }
 
 }

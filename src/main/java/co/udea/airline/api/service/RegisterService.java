@@ -2,8 +2,6 @@ package co.udea.airline.api.service;
 
 import java.io.UnsupportedEncodingException;
 
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
@@ -13,10 +11,8 @@ import co.udea.airline.api.model.jpa.model.Person;
 import co.udea.airline.api.model.jpa.repository.IdentificationTypeRepository;
 import co.udea.airline.api.model.jpa.repository.PersonRepository;
 import co.udea.airline.api.model.jpa.repository.PositionRepository;
-import co.udea.airline.api.utils.common.JwtUtils;
 import co.udea.airline.api.utils.exception.AlreadyExistsException;
 import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
 import net.bytebuddy.utility.RandomString;
 
 @Service
@@ -24,73 +20,32 @@ public class RegisterService {
 
     private PersonRepository personRepository;
     private PasswordEncoder passwordEncoder;
-    private JwtUtils jwtUtils;
     private IdentificationTypeRepository idRepository;
     private PositionRepository positionRepository;
-    private JavaMailSender mailSender;
+    private MailSenderService mailSenderService;
 
-    public RegisterService(PersonRepository personRepository, PasswordEncoder passwordEncoder, JwtUtils jwtUtils,
+    public RegisterService(PersonRepository personRepository, PasswordEncoder passwordEncoder,
             IdentificationTypeRepository idRepository, PositionRepository positionRepository,
-            JavaMailSender mailSender) {
+            MailSenderService mailSenderService) {
         this.personRepository = personRepository;
         this.passwordEncoder = passwordEncoder;
-        this.jwtUtils = jwtUtils;
         this.idRepository = idRepository;
         this.positionRepository = positionRepository;
-        this.mailSender = mailSender;
+        this.mailSenderService = mailSenderService;
     }
 
     public boolean verify(String verificationCode) {
-        Person user = personRepository.findByVerificationCode(verificationCode);
+        Person user = personRepository.findByRecoveryCode(verificationCode);
 
         if (user == null || user.getVerified()) {
             return false;
         } else {
-            user.setVerificationCode(null);
+            user.setRecoveryCode(null);
             user.setVerified(true);
             personRepository.save(user);
 
             return true;
         }
-
-    }
-/**
- * Sends a verification email to the user with a link to verify their registration.
- *
- * @param user    The user to whom the verification email will be sent.
- * @param siteURL The base URL of the site to generate the verification link.
- * @throws MessagingException            If there is an error while sending the email.
- * @throws UnsupportedEncodingException  If there is an error with the encoding of the email.
- */
-    private void sendVerificationEmail(Person user, String siteURL)
-            throws MessagingException, UnsupportedEncodingException {
-        String toAddress = user.getEmail();
-        String fromAddress = "sitassingapurairlines@gmail.com";
-        String senderName = "Sitas airline";
-        String subject = "Please verify your registration";
-        String content = "Dear [[name]],<br>"
-                + "Please click the link below to verify your registration:<br>"
-                + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
-                + "Thank you,<br>"
-                + "Sitas.";
-
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message);
-
-        helper.setFrom(fromAddress, senderName);
-        helper.setTo(toAddress);
-        helper.setSubject(subject);
-        String fullName = user.getFirstName() + " " + user.getLastName();
-
-        content = content.replace("[[name]]", (fullName));
-
-        String verifyURL = siteURL + "/verify?code=" + user.getVerificationCode();
-
-        content = content.replace("[[URL]]", verifyURL);
-
-        helper.setText(content, true);
-
-        mailSender.send(message);
 
     }
 
@@ -101,9 +56,9 @@ public class RegisterService {
      * @param loginSource The external login source that provided the idToken
      * @throws UnsupportedOperationException if login source is not 'Google' (as for
      *                                       now)
-     * @return A {@link Jwt} containing user's roles and permissions
+     * @return The succesfully registered person
      */
-    public Jwt externalRegister(Jwt idToken, String loginSource) throws UnsupportedOperationException {
+    public Person externalRegister(Jwt idToken, String loginSource) throws UnsupportedOperationException {
 
         if (!loginSource.equalsIgnoreCase("google")) {
             throw new UnsupportedOperationException("login source %s is not supported yet".formatted(loginSource));
@@ -117,8 +72,7 @@ public class RegisterService {
         user.setVerified(true);
         user.setFailedLoginAttempts(0);
         user.setEnabled(true);
-        personRepository.save(user);
-        return jwtUtils.createToken(user);
+        return personRepository.save(user);
     }
 
     /**
@@ -129,7 +83,7 @@ public class RegisterService {
      * @return A {@link Jwt} on success
      * @throws AlreadyExistsException if the user is already registered
      */
-    public String register(RegisterRequestDTO request, String siteURL)
+    public String register(RegisterRequestDTO request)
             throws AlreadyExistsException, MessagingException, UnsupportedEncodingException {
 
         // check if user already exist. if exist than authenticate the user
@@ -144,19 +98,21 @@ public class RegisterService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setIdentificationNumber(request.getIdNumber());
         user.setIdentificationType(idRepository.findByIdentificationTypeName(request.getIdType()));
-        user.setCity(request.getCity());
         user.setCountry(request.getCountry());
+        user.setProvince(request.getProvince());
+        user.setCity(request.getCity());
+        user.setAddress(request.getAddress());
         user.setPhoneNumber(request.getPhoneNumber());
         user.setGenre(request.getGenre());
         user.setPositions(positionRepository.findByName("USER"));
         user.setVerified(false);
         user.setFailedLoginAttempts(0);
         String randomCode = RandomString.make(64);
-        user.setVerificationCode(randomCode);
+        user.setRecoveryCode(randomCode);
         user.setEnabled(true);
 
-        sendVerificationEmail(user, siteURL);
-        user = personRepository.save(user);
+        mailSenderService.sendVerificationEmail(user);
+        personRepository.save(user);
         return ("User registration was successful");
     }
 

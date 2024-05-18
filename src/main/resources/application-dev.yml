@@ -38,15 +38,15 @@ airline-api:
   dev:
     super-admin-token: ${SUPER_ADMIN_TOKEN:}
   mail:
-    host: smtp.gmail.com
-    port: 587
-    username: email
-    password: password
+    host: smtp.freesmtpservers.com
+    port: 25
+    username: 
+    password: 
     transport:
       protocol: smtp
     smtp:
-      use-auth: true
-      use-tls: true
+      use-auth: none
+      use-tls: false
   jwt:
     expiration: 28800
   openapi:

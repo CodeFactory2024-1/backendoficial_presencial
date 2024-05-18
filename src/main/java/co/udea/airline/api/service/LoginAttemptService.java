@@ -2,24 +2,26 @@ package co.udea.airline.api.service;
 
 import java.util.Optional;
 
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import co.udea.airline.api.model.jpa.model.Person;
 import co.udea.airline.api.model.jpa.repository.PersonRepository;
+import lombok.extern.slf4j.Slf4j;
+import net.bytebuddy.utility.RandomString;
 
 @Service
+@Slf4j
 public class LoginAttemptService {
 
-    private final int MAX_ATTEMPTS = 3;
+    private static final int MAX_ATTEMPTS = 3;
 
-    final PersonRepository personRepository;
+    private PersonRepository personRepository;
 
-    final JavaMailSender mailSender;
+    private MailSenderService mailSenderService;
 
-    public LoginAttemptService(PersonRepository personRepository, JavaMailSender mailSender) {
+    public LoginAttemptService(PersonRepository personRepository, MailSenderService mailSenderService) {
         this.personRepository = personRepository;
-        this.mailSender = mailSender;
+        this.mailSenderService = mailSenderService;
     }
 
     public void loginFailedFor(String email) {
@@ -30,17 +32,21 @@ public class LoginAttemptService {
 
         Person p = op.get();
 
+        // the 4th try sends the email
         if (!p.isEnabled()) {
-            // TODO: send email
+            try {
+                mailSenderService.sendAccountLockedNotification(p);
+            } catch (Exception e) {
+                log.error("can't send unlock email", e);
+            }
             return;
         }
 
         p.setFailedLoginAttempts(p.getFailedLoginAttempts() + 1);
 
         if (p.getFailedLoginAttempts() >= MAX_ATTEMPTS) {
-
             p.setEnabled(false);
-            // TODO: send recovvery email
+            p.setRecoveryCode(RandomString.make(64));
         }
         personRepository.save(p);
     }

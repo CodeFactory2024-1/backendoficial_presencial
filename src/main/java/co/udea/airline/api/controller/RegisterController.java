@@ -3,6 +3,8 @@ package co.udea.airline.api.controller;
 import java.io.UnsupportedEncodingException;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -11,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import co.udea.airline.api.model.dto.RegisterRequestDTO;
 import co.udea.airline.api.service.RegisterService;
 import co.udea.airline.api.utils.exception.AlreadyExistsException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,16 +30,22 @@ public class RegisterController {
     }
 
     @PostMapping("/register")
+    @Operation(summary = "Creates a new user based on the data provided")
+    @ApiResponse(responseCode = "200", description = "User created")
+    @ApiResponse(responseCode = "400", description = "Bad request")
     public ResponseEntity<String> register(@RequestBody RegisterRequestDTO request, HttpServletRequest http)
             throws MessagingException, UnsupportedEncodingException {
         try {
-            return ResponseEntity.ok(authService.register(request, getSiteURL(http)));
+            return ResponseEntity.ok(authService.register(request));
         } catch (AlreadyExistsException e) {
             return ResponseEntity.badRequest().body("user already exists");
         }
     }
 
-    @PostMapping("/verify")
+    @GetMapping("/verify")
+    @Operation(summary = "Verifies a user recently created with a randomly generated code")
+    @ApiResponse(responseCode = "200", description = "User successfuly verified")
+    @ApiResponse(responseCode = "400", description = "If the code is not a valid verification code or the user is already verified")
     public ResponseEntity<String> verifyUser(@RequestParam("code") String code) {
         try {
 
@@ -44,14 +54,9 @@ public class RegisterController {
             } else {
                 return ResponseEntity.badRequest().body("invalid code");
             }
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
+        } catch (MailException e) {
+            return ResponseEntity.internalServerError().body("can't register, try again later");
         }
-    }
-
-    private String getSiteURL(HttpServletRequest request) {
-        String siteURL = request.getRequestURL().toString();
-        return siteURL.replace(request.getServletPath(), "");
     }
 
 }

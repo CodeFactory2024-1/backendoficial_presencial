@@ -2,7 +2,6 @@ package co.udea.airline.api.service;
 
 import java.util.NoSuchElementException;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
@@ -10,17 +9,17 @@ import co.udea.airline.api.model.dto.UpdateInfoDTO;
 import co.udea.airline.api.model.jpa.model.Person;
 import co.udea.airline.api.model.jpa.repository.IdentificationTypeRepository;
 import co.udea.airline.api.model.jpa.repository.PersonRepository;
-import co.udea.airline.api.utils.common.JwtUtils;
 
 @Service
 public class UpdateInfoService {
-    @Autowired
+
     private IdentificationTypeRepository idRepository;
-    @Autowired
     private PersonRepository personRepository;
 
-    @Autowired
-    JwtUtils jwtUtils;
+    public UpdateInfoService(IdentificationTypeRepository idRepository, PersonRepository personRepository) {
+        this.idRepository = idRepository;
+        this.personRepository = personRepository;
+    }
 
     /**
      * Finds the person information for updating based on the JWT.
@@ -35,8 +34,7 @@ public class UpdateInfoService {
                 ? person.getIdentificationType().getIdentificationTypeName()
                 : null;
 
-        UpdateInfoDTO updateInfoDTO = new UpdateInfoDTO(
-                identificationType,
+        return new UpdateInfoDTO(identificationType,
                 person.getIdentificationNumber(),
                 person.getFirstName(),
                 person.getLastName(),
@@ -47,7 +45,6 @@ public class UpdateInfoService {
                 person.getProvince(),
                 person.getCity(),
                 person.getAddress());
-        return updateInfoDTO;
     }
 
     /**

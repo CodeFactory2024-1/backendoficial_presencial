@@ -52,10 +52,7 @@ public class LoginService {
         auth = authenticationManager.authenticate(auth);
 
         if (auth.isAuthenticated()) {
-            Optional<Person> p = personRepository.findByEmail(auth.getName());
-            if (!p.isPresent())
-                throw new UsernameNotFoundException("User hasn't registerred yet");
-            return jwtUtils.createToken(p.get());
+            return jwtUtils.createToken((Person) auth.getPrincipal());
         }
         throw new AuthenticationServiceException(
                 "cannot authenticate user %s".formatted(auth.getName()));
@@ -80,9 +77,9 @@ public class LoginService {
             Jwt token = (Jwt) auth.getPrincipal();
 
             Optional<Person> p = personRepository.findByEmail(token.getClaimAsString("email"));
-            
+
             if (!p.isPresent()) {
-                return authenticationService.externalRegister(token, "Google");
+                p = Optional.of(authenticationService.externalRegister(token, "Google"));
             }
 
             return jwtUtils.createToken(p.get());
