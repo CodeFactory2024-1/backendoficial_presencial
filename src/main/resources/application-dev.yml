@@ -11,16 +11,17 @@ spring:
           batch_size: 50
           lob:
             non_contextual_creation: true
-        default_schema: seatdb
+        default_schema: ${DB_SCHEMA}
         temp:
           use_jdbc_metadata_defaults: false
 
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     #url: jdbc:oracle:thin://localhost:1521/airline-dev?serverTimezone=America/Bogota
-    url: jdbc:oracle:thin:@//localhost:1521/xepdb1
-    username: seatdb
-    password: seatdb
+    #url: jdbc:oracle:thin:@//localhost:1521/xepdb1
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     hikari:
       idle-timeout: 10000
       maximum-pool-size: 5
