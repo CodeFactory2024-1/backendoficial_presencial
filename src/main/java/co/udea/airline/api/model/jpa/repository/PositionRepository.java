@@ -2,7 +2,7 @@ package co.udea.airline.api.model.jpa.repository;
 
 import java.util.List;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,11 +18,17 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "6. Roles Management", description = "CRUD operations for roles (only for admins)")
 @SecurityRequirement(name = "JWT")
 @PreAuthorize("hasRole('ADMIN')")
-public interface PositionRepository extends JpaRepository<Position, Long> {
+public interface PositionRepository extends CrudRepository<Position, Long> {
 
     @RestResource(exported = false)
     @PreAuthorize("permitAll()")
     List<Position> findByName(String name);
+
+    @RestResource(exported = false)
+    @PreAuthorize("permitAll()")
+    default Position saveInternal(Position position) {
+        return save(position);
+    }
 
     @RestResource(path = "byName")
     List<Position> findByNameContainingIgnoreCase(String name);

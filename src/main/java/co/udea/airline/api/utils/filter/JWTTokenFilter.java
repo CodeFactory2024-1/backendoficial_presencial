@@ -33,9 +33,6 @@ public class JWTTokenFilter extends OncePerRequestFilter {
 
     private Jwt superAdminToken;
 
-    @Value("${airline-api.dev.super-admin-token}")
-    private String ENCRYPTED_SUPER_ADMIN_TOKEN;
-
     final JwtUtils jwtUtils;
 
     @Value("${airline-api.dev.super-admin-token}")
