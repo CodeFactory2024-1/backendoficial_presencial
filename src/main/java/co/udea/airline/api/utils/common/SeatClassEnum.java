@@ -1,5 +1,14 @@
 package co.udea.airline.api.utils.common;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
 public enum SeatClassEnum {
-    TOURIST, FIRST_CLASS, EXECUTIVE
+    TOURIST("T"), 
+    FIRST_CLASS("FC"), 
+    EXECUTIVE("E");
+
+    private String tag;
 }

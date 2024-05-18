@@ -1,14 +1,12 @@
-package co.udea.airline.api.controller.seats;
+package co.udea.airline.api.controller;
 
 import co.udea.airline.api.model.DTO.CreateSeatDTO;
 import co.udea.airline.api.model.DTO.SeatDTO;
 import co.udea.airline.api.model.jpa.model.seats.Seat;
-import co.udea.airline.api.model.mapper.CreateSeatMapper;
-import co.udea.airline.api.services.seats.service.ISeatService;
+import co.udea.airline.api.model.mapper.SeatMapper;
 import co.udea.airline.api.services.seats.service.SeatServiceImpl;
 import co.udea.airline.api.utils.common.Messages;
 import co.udea.airline.api.utils.common.StandardResponse;
-import co.udea.airline.api.utils.exception.DataDuplicatedException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -17,15 +15,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.http.HttpHeaders;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Tag(name = "Seat", description = "Seat management")
 @CrossOrigin(origins = "*")
@@ -43,7 +40,9 @@ public class SeatController {
     private ModelMapper modelMapper;
 
     @Autowired
-    private CreateSeatMapper createSeatMapper;
+    private SeatMapper seatMapper;
+
+
 
     @GetMapping("/v1/find/{id}")
     @Operation(summary = "Get Seat by Id")
@@ -86,8 +85,6 @@ public class SeatController {
                 )
         );
     }
-
-
     @PutMapping("/v1/update/{id}")
     @Operation(summary = "Update seat by id")
     @ApiResponses({
@@ -104,6 +101,29 @@ public class SeatController {
                         seatService.update(seat)
                 )
         );
+    }
+    @PostMapping("/v1/generateSeats/{flightId}")
+    @Operation(summary = "Get List of seats by Flight id")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {
+                    @Content(schema = @Schema(implementation = SeatDTO.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
+            }, description = "Seats generated successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid Request"),
+            @ApiResponse(responseCode = "404", description = "Seat Not found"),
+            @ApiResponse(responseCode = "500", description = "Server internal Error")})
+    public ResponseEntity<StandardResponse<List<SeatDTO>>> generateSeatsByFlightIdV1(@PathVariable("flightId") String flightId) {
+        List<Seat> seatList = seatService.generateSeatsByFlightId(Long.valueOf(flightId));
+        List<SeatDTO> seatDTOList = seatList.stream()
+                .map(seatMapper::convertToDto)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(
+                new StandardResponse<>(StandardResponse.StatusStandardResponse.OK,
+                        "Seats generated successfully",
+                        seatDTOList
+                )
+        );
+
     }
 
 }

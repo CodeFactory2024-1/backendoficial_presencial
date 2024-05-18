@@ -23,8 +23,17 @@ public class Seat implements Serializable {
     @Column(name = "id_seat")
     private Long id;
 
+    @NotNull
+    @Column(name = "codename")
+    private String codename;
+
+    @NotNull
+    @Column(name = "tag")
+    private String tag;
+
+    @NotNull
     @Column(name = "status")
-    private SeatStatusEnum status;
+    private SeatStatusEnum status = SeatStatusEnum.AVAILABLE;
 
     @NotNull
     @Column(name = "class")

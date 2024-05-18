@@ -75,6 +75,8 @@ public class AirlineApiApplication extends SpringBootServletInitializer {
             seat.setSeatClass(SeatClassEnum.FIRST_CLASS);
             seat.setLocation(SeatLocationEnum.AISLE);
             seat.setFlight(savedFlights.get(1));
+            seat.setTag("Test-1");
+            seat.setCodename("FlightID-SeatNumber-ClassTag");
             seatRepository.save(seat);
 
         };

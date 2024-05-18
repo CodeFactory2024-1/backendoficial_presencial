@@ -5,6 +5,7 @@ import co.udea.airline.api.utils.common.SeatLocationEnum;
 import co.udea.airline.api.utils.common.SeatStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -16,12 +17,19 @@ import lombok.*;
 @NoArgsConstructor
 public class SeatDTO {
 
-    @NotNull
-    @Schema(description = "The seat id auto-generated", requiredMode = RequiredMode.NOT_REQUIRED, example = "1")
-    private Long id = 0L;
+//    @NotNull
+//    @Schema(description = "The seat id auto-generated", requiredMode = RequiredMode.NOT_REQUIRED, example = "1")
+//    private Long id = 0L;
 
     @NotNull
-    @Schema(description = "The status of the seat.", requiredMode = RequiredMode.NOT_REQUIRED, example = "AVAILABLE")
+    @Schema(description = "The seat codename used to identify the seat", requiredMode = RequiredMode.REQUIRED, example = "FlightID-SeatNumber-ClassTag")
+    private String codename;
+
+    @NotNull
+    @Schema(description = "The seat tag. User-friendly label used to label seats.", requiredMode = RequiredMode.REQUIRED, example = "ColumnLetter-RowNumber")
+    private String tag;
+
+    @Schema(description = "The status of the seat.", requiredMode = RequiredMode.REQUIRED, example = "AVAILABLE")
     private SeatStatusEnum seatStatus = SeatStatusEnum.AVAILABLE;
 
     @NotNull(message = "The seat class is required.")
@@ -37,6 +45,6 @@ public class SeatDTO {
             example = "15000")
     @Min(value = 0, message = "The surcharge must be equal or greater than 0.")
     @Max(value = 1000000, message = "The surcharge must be equal or less than 1000000.")
-    private int surcharge;
+    private int surcharge = 0;
 
 }
