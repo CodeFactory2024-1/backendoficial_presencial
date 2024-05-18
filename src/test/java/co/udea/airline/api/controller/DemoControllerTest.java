@@ -1,5 +1,9 @@
 package co.udea.airline.api.controller;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -16,6 +20,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import co.udea.airline.api.model.jpa.model.Person;
 import co.udea.airline.api.model.jpa.model.Position;
+import co.udea.airline.api.model.jpa.model.Privilege;
 import co.udea.airline.api.utils.common.JwtUtils;
 
 @SpringBootTest
@@ -37,7 +42,9 @@ class DemoControllerTest {
         person = Person.builder()
                 .firstName("user")
                 .email("user@email")
-                .positions(Arrays.asList(new Position(0L, "USER", "Default user", new ArrayList<>())))
+                .positions(Arrays.asList(new Position(0L, "USER", "Default user", Arrays.asList(Privilege.builder()
+                        .name("search:flights")
+                        .build()))))
                 .enabled(true)
                 .verified(true)
                 .build();
@@ -46,6 +53,10 @@ class DemoControllerTest {
 
     @Test
     void testDemoWithoutAuthorization() throws Exception {
+
+        assertTrue(person.getAuthorities().stream()
+                .anyMatch(t -> t.getAuthority().equals("search:flights")));
+
         mockMvc.perform(MockMvcRequestBuilders.get("/demo"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
@@ -82,4 +93,13 @@ class DemoControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
     }
+
+    @Test
+    void testSuperAdminToken() throws Exception {
+
+        mockMvc.perform(get("/admin_only")
+                .header("Authorization", "Bearer adminTokenTest"))
+                .andExpect(status().isOk());
+    }
+
 }

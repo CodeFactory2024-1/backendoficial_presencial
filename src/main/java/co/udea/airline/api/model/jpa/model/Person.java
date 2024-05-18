@@ -153,7 +153,7 @@ public class Person implements UserDetails {
     @Override
     @JsonIgnore
     public boolean isEnabled() {
-        return enabled;
+        return enabled && isVerified();
     }
 
     @JsonIgnore
