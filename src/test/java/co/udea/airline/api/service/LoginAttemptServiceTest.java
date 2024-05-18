@@ -16,7 +16,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import co.udea.airline.api.model.dto.LoginRequestDTO;
@@ -56,7 +55,7 @@ class LoginAttemptServiceTest {
     }
 
     @Test
-    void testAccountLock() throws JsonProcessingException, Exception {
+    void testAccountLock() throws Exception {
 
         LoginRequestDTO requestDTO = new LoginRequestDTO("user@lock.test", "invalid_pass");
 
