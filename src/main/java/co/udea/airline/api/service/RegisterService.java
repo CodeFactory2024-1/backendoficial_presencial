@@ -98,8 +98,10 @@ public class RegisterService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setIdentificationNumber(request.getIdNumber());
         user.setIdentificationType(idRepository.findByIdentificationTypeName(request.getIdType()));
-        user.setCity(request.getCity());
         user.setCountry(request.getCountry());
+        user.setProvince(request.getProvince());
+        user.setCity(request.getCity());
+        user.setAddress(request.getAddress());
         user.setPhoneNumber(request.getPhoneNumber());
         user.setGenre(request.getGenre());
         user.setPositions(positionRepository.findByName("USER"));

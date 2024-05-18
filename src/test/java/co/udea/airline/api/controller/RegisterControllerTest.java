@@ -81,7 +81,6 @@ class RegisterControllerTest {
                 .country("Colombia")
                 .province("Antioquia")
                 .city("Medellín")
-                .residence("noc")
                 .email("juan@lopez.com")
                 .password("pass123")
                 .build();

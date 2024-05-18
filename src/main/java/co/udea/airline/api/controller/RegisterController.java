@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import co.udea.airline.api.model.dto.RegisterRequestDTO;
 import co.udea.airline.api.service.RegisterService;
 import co.udea.airline.api.utils.exception.AlreadyExistsException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,6 +30,9 @@ public class RegisterController {
     }
 
     @PostMapping("/register")
+    @Operation(summary = "Creates a new user based on the data provided")
+    @ApiResponse(responseCode = "200", description = "User created")
+    @ApiResponse(responseCode = "400", description = "Bad request")
     public ResponseEntity<String> register(@RequestBody RegisterRequestDTO request, HttpServletRequest http)
             throws MessagingException, UnsupportedEncodingException {
         try {
@@ -38,6 +43,9 @@ public class RegisterController {
     }
 
     @GetMapping("/verify")
+    @Operation(summary = "Verifies a user recently created with a randomly generated code")
+    @ApiResponse(responseCode = "200", description = "User successfuly verified")
+    @ApiResponse(responseCode = "400", description = "If the code is not a valid verification code or the user is already verified")
     public ResponseEntity<String> verifyUser(@RequestParam("code") String code) {
         try {
 

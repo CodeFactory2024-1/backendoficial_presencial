@@ -31,7 +31,7 @@ public class JwtUtils {
      * Json Web Token expiration time in seconds
      */
     @Value("${airline-api.jwt.expiration:#{28800}}")
-    private Long EXPIRATION; // in seconds
+    private Long expiration; // in seconds
 
     final JwtEncoder jwtEncoder;
 
@@ -66,7 +66,7 @@ public class JwtUtils {
                         .map(Privilege::getName).collect(Collectors.toList()))
                 .issuer("https://airline-api.com")
                 .issuedAt(now)
-                .expiresAt(now.plusSeconds(EXPIRATION))
+                .expiresAt(now.plusSeconds(expiration))
                 .build();
 
         return jwtEncoder.encode(JwtEncoderParameters.from(claims));
