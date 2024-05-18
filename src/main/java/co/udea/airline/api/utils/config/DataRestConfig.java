@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 import co.udea.airline.api.model.jpa.model.IdentificationType;
+import co.udea.airline.api.model.jpa.model.Position;
+import co.udea.airline.api.model.jpa.model.Privilege;
 
 @Component
 public class DataRestConfig implements RepositoryRestConfigurer {
@@ -18,6 +20,8 @@ public class DataRestConfig implements RepositoryRestConfigurer {
     public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config, CorsRegistry cors) {
         config.useHalAsDefaultJsonMediaType(false);
         config.setDefaultMediaType(MediaType.APPLICATION_JSON);
+
+        config.exposeIdsFor(Position.class, Privilege.class);
 
         config.getExposureConfiguration()
                 .withCollectionExposure(idMethodsFilter(false))

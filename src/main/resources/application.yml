@@ -25,3 +25,4 @@ springdoc:
   swagger-ui:
     tags-sorter: alpha
     path: /docs
+    persist-authorization: true

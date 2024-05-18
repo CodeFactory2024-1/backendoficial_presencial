@@ -7,7 +7,7 @@ import org.springframework.data.rest.core.config.Projection;
 import co.udea.airline.api.model.jpa.model.Position;
 import co.udea.airline.api.model.jpa.model.Privilege;
 
-@Projection(name = "withPrivileges", types = { Position.class })
+@Projection(types = { Position.class })
 public interface WithPrivilegesAndId {
 
     Long getPositionId();

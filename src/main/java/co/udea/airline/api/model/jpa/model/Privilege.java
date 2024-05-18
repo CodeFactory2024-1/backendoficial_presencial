@@ -1,10 +1,11 @@
 package co.udea.airline.api.model.jpa.model;
 
-import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.security.core.GrantedAuthority;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.AccessMode;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -27,7 +28,7 @@ public class Privilege implements GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PRIVILEGE_ID")
-    @RestResource(exported = true)
+    @Schema(hidden = false, accessMode = AccessMode.READ_ONLY)
     private Long privilegeId;
 
     @Column(name = "NAME")

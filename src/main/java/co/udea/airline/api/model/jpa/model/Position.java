@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.springframework.data.rest.core.annotation.RestResource;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.AccessMode;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -35,7 +35,7 @@ public class Position implements Serializable { // == Role
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "POSITION_ID")
-    @JsonIgnore
+    @Schema(hidden = false, accessMode = AccessMode.READ_ONLY)
     private Long positionId;
 
     @Column(name = "NAME")

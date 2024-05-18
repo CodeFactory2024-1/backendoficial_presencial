@@ -106,7 +106,7 @@ public class MailSenderService {
         helper.setFrom(fromAddress, senderName);
         helper.setTo(to);
         helper.setSubject(subject);
-        helper.setText(text);
+        helper.setText(text, true);
 
         mailSender.send(message);
     }
