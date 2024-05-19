@@ -1,7 +1,6 @@
 package co.udea.airline.api.utils.config;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -22,6 +21,7 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
+import org.springframework.util.FileCopyUtils;
 
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
@@ -93,8 +93,8 @@ public class JWTConfig {
 
         KeyFactory kf = KeyFactory.getInstance("RSA");
 
-        byte[] keyBytes = Files.readAllBytes(privateKeyFile.getFile().toPath());
-        byte[] keyBytesPub = Files.readAllBytes(publicKeyFile.getFile().toPath());
+        byte[] keyBytes = FileCopyUtils.copyToByteArray(privateKeyFile.getInputStream());
+        byte[] keyBytesPub = FileCopyUtils.copyToByteArray(publicKeyFile.getInputStream());
 
         PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(keyBytes);
         X509EncodedKeySpec specPub = new X509EncodedKeySpec(keyBytesPub);
