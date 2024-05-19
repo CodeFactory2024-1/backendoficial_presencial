@@ -32,9 +32,9 @@ public class SecurityConfig {
 
         return http
                 .csrf(AbstractHttpConfigurer::disable)
+                .anonymous(anon -> anon.disable())
                 .authorizeHttpRequests(
                         req -> req.requestMatchers("/login/**", "/register/**").permitAll()
-                                .requestMatchers("/admin_only/**").hasRole("ADMIN")
                                 .anyRequest().permitAll())
                 .userDetailsService(userDetailsServiceImp)
                 .sessionManagement(session -> session

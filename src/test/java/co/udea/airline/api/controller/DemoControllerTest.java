@@ -58,7 +58,7 @@ class DemoControllerTest {
                 .anyMatch(t -> t.getAuthority().equals("search:flights")));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/demo"))
-                .andExpect(MockMvcResultMatchers.status().isForbidden());
+                .andExpect(MockMvcResultMatchers.status().isUnauthorized());
     }
 
     @Test

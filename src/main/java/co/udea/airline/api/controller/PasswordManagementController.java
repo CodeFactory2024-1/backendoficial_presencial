@@ -49,9 +49,9 @@ public class PasswordManagementController {
     @PatchMapping("/reset")
     @Operation(summary = "Changes the user's password that is authenticated in the JWT")
     @ApiResponse(responseCode = "200", description = "Password changed")
-    @ApiResponse(responseCode = "403", description = "If no JWT were provided")
+    @ApiResponse(responseCode = "401", description = "User is not authenticated")
     @SecurityRequirement(name = "JWT")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("authenticated")
     public ResponseEntity<String> passwordReset(@AuthenticationPrincipal Jwt jwt, @RequestParam String currentPassword,
             @RequestParam String newPassword) {
         return ResponseEntity.ok(passwordManagementService.passwReset(jwt, currentPassword, newPassword));

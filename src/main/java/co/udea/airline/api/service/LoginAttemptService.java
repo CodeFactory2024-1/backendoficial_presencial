@@ -54,6 +54,7 @@ public class LoginAttemptService {
     public void loginSucceededFor(String email) {
         Person p = personRepository.findByEmail(email).orElseThrow();
         p.setFailedLoginAttempts(0);
+        p.setEnabled(true);
         personRepository.save(p);
     }
 

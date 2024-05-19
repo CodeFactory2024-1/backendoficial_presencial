@@ -9,19 +9,21 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
 
 import co.udea.airline.api.model.jpa.model.Privilege;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Repository
 @RepositoryRestResource(path = "privileges")
 @Tag(name = "7. Privileges Management", description = "CRUD operations for privileges (only for admins)")
+@ApiResponse(responseCode = "200", description = "OK")
+@ApiResponse(responseCode = "401", description = "User is not authenticated")
+@ApiResponse(responseCode = "403", description = "User has insufficient permissions")
 @SecurityRequirement(name = "JWT")
-@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("hasAuthority('modify:privileges')")
 public interface PrivilegeRepository extends CrudRepository<Privilege, Long> {
 
     @RestResource(path = "byName")
     List<Privilege> findByNameContainingIgnoreCase(String name);
 
-    @RestResource(path = "all")
-    List<Privilege> findAll();
 }

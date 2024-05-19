@@ -16,12 +16,22 @@ import co.udea.airline.api.utils.common.StandardResponse;
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler({ AccessDeniedException.class, AuthenticationCredentialsNotFoundException.class })
-    protected ResponseEntity<?> handleAccessDeniedException(Exception ex) {
+    @ExceptionHandler(AccessDeniedException.class)
+    protected ResponseEntity<?> handleAccessDeniedException(AccessDeniedException ex) {
         return new ResponseEntity<>(
                 new StandardResponse<>(StandardResponse.StatusStandardResponse.ERROR,
                         "Insufficient permissions to access resource."),
                 HttpStatus.FORBIDDEN);
+
+    }
+
+    @ExceptionHandler(AuthenticationCredentialsNotFoundException.class)
+    protected ResponseEntity<?> handleAuthenticationCredentialsNotFoundException(
+            AuthenticationCredentialsNotFoundException ex) {
+        return new ResponseEntity<>(
+                new StandardResponse<>(StandardResponse.StatusStandardResponse.ERROR,
+                        "User not authenticated"),
+                HttpStatus.UNAUTHORIZED);
 
     }
 

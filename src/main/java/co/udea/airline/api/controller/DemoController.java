@@ -27,23 +27,25 @@ public class DemoController {
 
     @GetMapping("/demo")
     @Operation(summary = "this is a demostration of a secured endpoint where only users with the role 'USER' can use it")
-    @ApiResponse(responseCode = "403", description = "User does not have 'USER' role. UNAUTHORIZED")
     @ApiResponse(responseCode = "200", description = "OK")
+    @ApiResponse(responseCode = "401", description = "User is not authenticated")
+    @ApiResponse(responseCode = "403", description = "User does not have 'USER' role")
     @SecurityRequirement(name = "JWT")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<String> demo(@AuthenticationPrincipal Jwt jwt) {
 
         return ResponseEntity
-                .ok("Hello from secured url, your roles are: %s"
-                        .formatted(jwtUtils.getRoles(jwt).stream()
-                                .collect(Collectors.joining(","))));
+        .ok("Hello from secured url, your roles are: %s"
+        .formatted(jwtUtils.getRoles(jwt).stream()
+        .collect(Collectors.joining(", "))));
     }
-
+    
     @GetMapping("/admin_only")
     @Operation(summary = "this is a demostration of a secured endpoint where only users with the role 'ADMIN' can use it")
-    @SecurityRequirement(name = "JWT")
-    @ApiResponse(responseCode = "403", description = "User does not have 'ADMIN' role. UNAUTHORIZED")
     @ApiResponse(responseCode = "200", description = "OK")
+    @ApiResponse(responseCode = "401", description = "User is not authenticated")
+    @ApiResponse(responseCode = "403", description = "User does not have 'ADMIN' role")
+    @SecurityRequirement(name = "JWT")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> adminOnly(@AuthenticationPrincipal Jwt jwt) {
 

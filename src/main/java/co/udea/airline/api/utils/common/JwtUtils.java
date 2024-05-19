@@ -57,7 +57,7 @@ public class JwtUtils {
         Instant now = Instant.now();
         List<Position> roles = Optional.ofNullable(person.getPositions()).orElse(List.of());
         Set<Privilege> privileges = Optional.ofNullable(person.getPrivileges()).orElse(Set.of());
-
+        
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .subject(person.getEmail())
                 .claim(ROLES_IDENTIFIER, roles.stream()

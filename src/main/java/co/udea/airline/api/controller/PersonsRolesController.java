@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RequestMapping("/usersroles")
 @Tag(name = "8. Users Management")
 @SecurityRequirement(name = "JWT")
-@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("hasAuthority('assign:roles')")
 public class PersonsRolesController {
 
     PersonRolesService personRolesService;

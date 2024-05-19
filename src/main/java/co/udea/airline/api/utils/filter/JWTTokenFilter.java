@@ -31,7 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class JWTTokenFilter extends OncePerRequestFilter {
 
-    private Jwt superAdminToken;
+    private final Jwt superAdminToken;
 
     final JwtUtils jwtUtils;
 
@@ -40,6 +40,19 @@ public class JWTTokenFilter extends OncePerRequestFilter {
 
     public JWTTokenFilter(JwtUtils jwtUtils) {
         this.jwtUtils = jwtUtils;
+        String[] superAdminPrivs = { "assign:roles", "modify:roles", "modify:privileges" };
+        Person superAdmin = Person.builder()
+                .email("super@admin")
+                .positions(Arrays.asList(Position.builder()
+                        .name("ADMIN")
+                        .privileges(Arrays.stream(superAdminPrivs)
+                                .map(name -> Privilege.builder()
+                                        .name(name)
+                                        .build())
+                                .toList())
+                        .build()))
+                .build();
+        superAdminToken = jwtUtils.createToken(superAdmin);
     }
 
     @Override
@@ -83,7 +96,7 @@ public class JWTTokenFilter extends OncePerRequestFilter {
     /**
      * For testing purposes. Checks if the raw token provided is the configured
      * super admin token matching against the BCrypt encrypted token
-     * {@link #ENCRYPTED_SUPER_ADMIN_TOKEN}.
+     * {@link #encryptedSuperAdminToken}.
      * 
      * @param token The raw token, doesn't need to be JWT like token, it's like a
      *              password
@@ -92,26 +105,7 @@ public class JWTTokenFilter extends OncePerRequestFilter {
      */
     boolean checkIfSuperAdmin(String token) {
         var encoder = new BCryptPasswordEncoder();
-
-        if (encoder.matches(token, encryptedSuperAdminToken)) {
-
-            if (superAdminToken == null) {
-
-                Person superAdmin = Person.builder()
-                        .email("super@admin")
-                        .positions(Arrays.asList(Position.builder()
-                                .name("ADMIN")
-                                .privileges(Arrays.asList(Privilege.builder()
-                                        .name("all:privileges")
-                                        .build()))
-                                .build()))
-                        .build();
-                superAdminToken = jwtUtils.createToken(superAdmin);
-            }
-
-            return true;
-        }
-        return false;
+        return encoder.matches(token, encryptedSuperAdminToken);
     }
 
 }

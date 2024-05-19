@@ -1,7 +1,7 @@
 package co.udea.airline.api.controller;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,8 +20,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RestController
 @Tag(name = "3. Info Update", description = "Update info of user with a JWT")
 @RequestMapping("/userinfo")
+@SecurityRequirement(name = "JWT")
+@PreAuthorize("isAuthenticated()")
 public class UpdateInfoController {
-    
+
     private UpdateInfoService updateInfoService;
 
     public UpdateInfoController(UpdateInfoService updateInfoService) {
@@ -30,29 +32,19 @@ public class UpdateInfoController {
 
     @GetMapping("")
     @Operation(summary = "returns the info of the currently authenticated user with the respective JWT", description = "You should send the JWT as a bearer token in the 'Authorization' header")
-    @ApiResponse(responseCode = "401", description = "User isn't authenticated, try again with a JWT")
     @ApiResponse(responseCode = "200", description = "User's info")
-    @SecurityRequirement(name = "JWT")
-    public ResponseEntity<UpdateInfoDTO> bodyRequest(@AuthenticationPrincipal Jwt jwt) {
-        
-        if (jwt == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-        
+    @ApiResponse(responseCode = "401", description = "User isn't authenticated, try again with a JWT")
+    public ResponseEntity<UpdateInfoDTO> getInfo(@AuthenticationPrincipal Jwt jwt) {
+
         return ResponseEntity.ok(updateInfoService.getInfo(jwt));
     }
-    
+
     @PutMapping("")
     @Operation(summary = "updates the info of the currently authenticated user with the respective JWT", description = "You should send the JWT as a bearer token in the 'Authorization' header")
-    @ApiResponse(responseCode = "401", description = "User isn't authenticated, try again with a JWT")
     @ApiResponse(responseCode = "200", description = "Info updated")
-    @SecurityRequirement(name = "JWT")
+    @ApiResponse(responseCode = "401", description = "User isn't authenticated, try again with a JWT")
     public ResponseEntity<String> updateInfo(@RequestBody UpdateInfoDTO request, @AuthenticationPrincipal Jwt jwt) {
-        
-        if (jwt == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-        
+
         return ResponseEntity.ok(updateInfoService.updateInfo(request, jwt));
     }
 

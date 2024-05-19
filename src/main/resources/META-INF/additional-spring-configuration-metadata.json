@@ -59,6 +59,21 @@
       "name": "airline-api.cors.allow-origins",
       "type": "java.lang.String",
       "description": "Allowed origins from where to allow incoming requests"
+    },
+    {
+      "name": "airline-api.jwt.use-random-rsa-key",
+      "type": "java.lang.Boolean",
+      "description": "Wheter to generate a random RSA key or use a local one"
+    },
+    {
+      "name": "airline-api.jwt.rsa-key",
+      "type": "java.lang.String",
+      "description": "A description for 'airline-api.jwt.rsa-key'"
+    },
+    {
+      "name": "airline-api.jwt.rsa-pub-key",
+      "type": "java.lang.String",
+      "description": "A description for 'airline-api.jwt.rsa-pub-key'"
     }
   ]
 }
