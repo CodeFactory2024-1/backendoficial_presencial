@@ -2,7 +2,6 @@ package co.udea.airline.api.utils.config;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -18,6 +17,7 @@ import java.security.spec.X509EncodedKeySpec;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.Resource;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
@@ -79,10 +79,10 @@ public class JWTConfig {
      */
     @Bean()
     KeyPair keyPair(@Value("${airline-api.jwt.use-random-rsa-key:true}") Boolean useRandomRsaKey,
-            @Value("${airline-api.jwt.rsa-key:}") String privateKeyFile,
-            @Value("${airline-api.jwt.rsa-pub-key:}") String publicKeyFile)
+            @Value("${airline-api.jwt.rsa-key:}") Resource privateKeyFile,
+            @Value("${airline-api.jwt.rsa-pub-key:}") Resource publicKeyFile)
             throws NoSuchAlgorithmException, IOException, InvalidKeySpecException {
-                
+
         if (useRandomRsaKey) {
             KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
             generator.initialize(2048);
@@ -93,8 +93,8 @@ public class JWTConfig {
 
         KeyFactory kf = KeyFactory.getInstance("RSA");
 
-        byte[] keyBytes = Files.readAllBytes(Paths.get(privateKeyFile));
-        byte[] keyBytesPub = Files.readAllBytes(Paths.get(publicKeyFile));
+        byte[] keyBytes = Files.readAllBytes(privateKeyFile.getFile().toPath());
+        byte[] keyBytesPub = Files.readAllBytes(publicKeyFile.getFile().toPath());
 
         PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(keyBytes);
         X509EncodedKeySpec specPub = new X509EncodedKeySpec(keyBytesPub);

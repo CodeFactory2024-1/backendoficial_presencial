@@ -54,8 +54,8 @@ airline-api:
   jwt:
     expiration: 28800
     use-random-rsa-key: false
-    rsa-key: src\main\resources\private_key.der
-    rsa-pub-key: src\main\resources\public_key.der
+    rsa-key: classpath:private_key.der
+    rsa-pub-key: classpath:public_key.der
   openapi:
     dev-url: https://codefact.udea.edu.co/modulo-02/
     prod-url: https://codefact.udea.edu.co/modulo-02/
