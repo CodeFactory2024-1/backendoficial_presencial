@@ -93,8 +93,7 @@ public class SeatServiceImpl implements ISeatService{
         Seat savedSeat = seatRepository.save(seat);
 
         // Prepare the response
-        CreateSeatDTO seatResponseDto = createSeatMapper.convertToDto(savedSeat);
-        return seatResponseDto;
+        return createSeatMapper.convertToDto(savedSeat);
     }
 
 //    public Seat update(Seat seat) {
@@ -246,5 +245,9 @@ public class SeatServiceImpl implements ISeatService{
         return null;
     }
 
-
+    @Override
+    public List<Seat> getAllSeatsByFlightId(Long flightId) {
+        Flight flight = getFlightIfExists(flightId);
+        return seatRepository.findAllByFlightId(flightId);
+    }
 }

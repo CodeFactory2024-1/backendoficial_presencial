@@ -10,15 +10,11 @@ public interface ISeatService {
     //Seat save(Seat s);
     //Seat update(Seat seat);
     Optional<Seat> findSeatById(Long id);
-
     List<Seat> generateSeatsByFlightId(Long id);
-
+    List<Seat> getAllSeatsByFlightId(Long id);
     SeatXPassengerDTO getSeatByPassengerId(Long id);
-
     SeatXPassengerDTO assignSeatToPassenger(Long seatId, Long passengerId);
-
     SeatXPassengerDTO removeSeatToPassenger(Long seatId, Long passengerId);
-
     SeatXPassengerDTO updateSeatToPassenger(Long newSeatId, Long passengerId);
 
 }
