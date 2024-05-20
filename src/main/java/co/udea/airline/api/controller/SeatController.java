@@ -44,27 +44,27 @@ public class SeatController {
 
 
 
-    @GetMapping("/v1/find/{id}")
-    @Operation(summary = "Get Seat by Id")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", content = {
-                    @Content(schema = @Schema(implementation = Seat.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
-            }, description = "Seat obtained successfully."),
-            @ApiResponse(responseCode = "400", description = "Invalid Request"),
-            @ApiResponse(responseCode = "404", description = "Seat Not found"),
-            @ApiResponse(responseCode = "500", description = "Server internal Error")})
-    public ResponseEntity<StandardResponse<Seat>> getSeatByIdV1(@PathVariable String id) {
-        Long idLong = Long.valueOf(id);
-        Optional<Seat> seatFound = seatService.findSeatById(idLong);
-        if (seatFound.isPresent()){
-            Seat seatResponse = seatFound.get();
-            return ResponseEntity.ok(new StandardResponse<>(StandardResponse.StatusStandardResponse.OK,
-                    messages.get("seat.findById"),
-                    seatResponse));
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
+//    @GetMapping("/v1/find/{id}")
+//    @Operation(summary = "Get Seat by Id")
+//    @ApiResponses({
+//            @ApiResponse(responseCode = "200", content = {
+//                    @Content(schema = @Schema(implementation = Seat.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
+//            }, description = "Seat obtained successfully."),
+//            @ApiResponse(responseCode = "400", description = "Invalid Request"),
+//            @ApiResponse(responseCode = "404", description = "Seat Not found"),
+//            @ApiResponse(responseCode = "500", description = "Server internal Error")})
+//    public ResponseEntity<StandardResponse<Seat>> getSeatByIdV1(@PathVariable String id) {
+//        Long idLong = Long.valueOf(id);
+//        Optional<Seat> seatFound = seatService.findSeatById(idLong);
+//        if (seatFound.isPresent()){
+//            Seat seatResponse = seatFound.get();
+//            return ResponseEntity.ok(new StandardResponse<>(StandardResponse.StatusStandardResponse.OK,
+//                    messages.get("seat.findById"),
+//                    seatResponse));
+//        } else {
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
 
     @PostMapping("/v1/save")
     @Operation(summary = "Save a single Seat")
@@ -85,23 +85,23 @@ public class SeatController {
                 )
         );
     }
-    @PutMapping("/v1/update/{id}")
-    @Operation(summary = "Update seat by id")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", content = {
-                    @Content(schema = @Schema(implementation = Seat.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
-            }, description = "Seat updated successfully."),
-            @ApiResponse(responseCode = "400", description = "Invalid Request"),
-            @ApiResponse(responseCode = "404", description = "Seat Not found"),
-            @ApiResponse(responseCode = "500", description = "Server internal Error")})
-    public ResponseEntity<StandardResponse<Seat>> updateSeatV1(@Valid @RequestBody Seat seat) {
-        return ResponseEntity.ok(
-                new StandardResponse<>(StandardResponse.StatusStandardResponse.OK,
-                        messages.get("seat.update.successful"),
-                        seatService.update(seat)
-                )
-        );
-    }
+//    @PutMapping("/v1/update/{id}")
+//    @Operation(summary = "Update seat by id")
+//    @ApiResponses({
+//            @ApiResponse(responseCode = "200", content = {
+//                    @Content(schema = @Schema(implementation = Seat.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
+//            }, description = "Seat updated successfully."),
+//            @ApiResponse(responseCode = "400", description = "Invalid Request"),
+//            @ApiResponse(responseCode = "404", description = "Seat Not found"),
+//            @ApiResponse(responseCode = "500", description = "Server internal Error")})
+//    public ResponseEntity<StandardResponse<Seat>> updateSeatV1(@Valid @RequestBody Seat seat) {
+//        return ResponseEntity.ok(
+//                new StandardResponse<>(StandardResponse.StatusStandardResponse.OK,
+//                        messages.get("seat.update.successful"),
+//                        seatService.update(seat)
+//                )
+//        );
+//    }
     @PostMapping("/v1/generateSeats/{flightId}")
     @Operation(summary = "Get List of seats by Flight id")
     @ApiResponses({

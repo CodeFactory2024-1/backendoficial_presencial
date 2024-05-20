@@ -6,7 +6,7 @@ spring:
     properties:
       hibernate:
         order_inserts: true
-        dialect: org.hibernate.dialect.OracleDialect
+        dialect: ${DB_DIALECT}
         jdbc:
           batch_size: 50
           lob:

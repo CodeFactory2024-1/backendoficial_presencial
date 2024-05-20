@@ -2,7 +2,8 @@
 server:
   servlet:
     context-path: /ssmu-api
-  port: 8080
+  port: application-dev.yml"
+  
 # Spring properties
 spring:
   # Dev is active by default. This value can be overwritten by java arg param
