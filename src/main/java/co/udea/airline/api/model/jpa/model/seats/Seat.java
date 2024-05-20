@@ -8,7 +8,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-
 import java.io.Serializable;
 
 @Getter
@@ -50,6 +49,9 @@ public class Seat implements Serializable {
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinColumn(name="flight_id")
     private Flight flight;
+
+    @OneToOne(mappedBy = "seat", cascade = CascadeType.ALL)
+    private SeatXPassenger seatXPassenger;
 }
 
 

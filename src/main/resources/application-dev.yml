@@ -25,7 +25,7 @@ spring:
     hikari:
       idle-timeout: 10000
       maximum-pool-size: 5
-    driver-class-name: oracle.jdbc.driver.OracleDriver
+    driver-class-name: ${DB_DRIVER}
 airline-api:
   openapi:
     dev-url: http://localhost:8080/ssmu-api  # Same as context-path
