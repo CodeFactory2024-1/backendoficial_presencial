@@ -1,23 +1,27 @@
 package co.udea.airline.api.services.seats.service;
 
 import co.udea.airline.api.model.DTO.CreateSeatDTO;
+import co.udea.airline.api.model.DTO.SeatXPassengerDTO;
+import co.udea.airline.api.model.jpa.model.bookings.Passenger;
 import co.udea.airline.api.model.jpa.model.flights.Flight;
 import co.udea.airline.api.model.jpa.model.seats.Seat;
-import co.udea.airline.api.model.jpa.model.vehicles.Aircraft;
+import co.udea.airline.api.model.jpa.model.seats.SeatXPassenger;
+import co.udea.airline.api.model.jpa.repository.bookings.IBookingRepository;
+import co.udea.airline.api.model.jpa.repository.bookings.IPassengerRepository;
 import co.udea.airline.api.model.jpa.repository.flights.IFlightRepository;
 import co.udea.airline.api.model.jpa.repository.seats.ISeatRepository;
+import co.udea.airline.api.model.jpa.repository.seats.ISeatXPassengerRepository;
 import co.udea.airline.api.model.mapper.CreateSeatMapper;
+import co.udea.airline.api.model.mapper.SeatXPassengerMapper;
 import co.udea.airline.api.utils.common.Messages;
 import co.udea.airline.api.utils.common.SeatClassEnum;
 import co.udea.airline.api.utils.common.SeatLocationEnum;
 import co.udea.airline.api.utils.common.SeatStatusEnum;
-import co.udea.airline.api.utils.exception.BusinessException;
 import co.udea.airline.api.utils.exception.DataDuplicatedException;
 import co.udea.airline.api.utils.exception.DataNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,13 +33,49 @@ public class SeatServiceImpl implements ISeatService{
     ISeatRepository seatRepository;
 
     @Autowired
-    IFlightRepository flightRepository;
+    private IFlightRepository flightRepository;
 
     @Autowired
-    Messages messages;
+    private IPassengerRepository passengerRepository;
+
+    @Autowired
+    private IBookingRepository bookingRepository;
+
+    @Autowired
+    private ISeatXPassengerRepository seatXPassengerRepository;
+
+    @Autowired
+    private Messages messages;
 
     @Autowired
     private CreateSeatMapper createSeatMapper;
+
+    @Autowired
+    private SeatXPassengerMapper seatXPassengerMapper;
+
+    private Flight getFlightIfExists(Long id){
+        Optional<Flight> flightOptional = flightRepository.findById(id);
+        if (flightOptional.isEmpty()){
+            throw new DataNotFoundException(String.format(messages.get("flight.does.not.exist")));
+        }
+        return flightOptional.get();
+    }
+
+    private Seat getSeatIfExists(Long id){
+        Optional<Seat> seatOptional = seatRepository.findById(id);
+        if (seatOptional.isEmpty()){
+            throw new DataNotFoundException(String.format(messages.get("seat.does.not.exist")));
+        }
+        return seatOptional.get();
+    }
+
+    private Passenger getPassengerIfExists(Long id){
+        Optional<Passenger> passengerOptional = passengerRepository.findById(id);
+        if (passengerOptional.isEmpty()){
+            throw new DataNotFoundException(String.format(messages.get("passenger.does.not.exist")));
+        }
+        return passengerOptional.get();
+    }
 
     public CreateSeatDTO save(CreateSeatDTO seatToSave){
         Long flightId = seatToSave.getFlightId();
@@ -57,26 +97,17 @@ public class SeatServiceImpl implements ISeatService{
         return seatResponseDto;
     }
 
-    public Seat update(Seat seat) {
-        Optional<Seat> seatOptional = seatRepository.findById(seat.getId());
-        if (seatOptional.isEmpty()){
-            throw new DataNotFoundException(String.format(messages.get("seat.does.not.exist")));
-        }
-        return seatRepository.save(seat);
-    }
+//    public Seat update(Seat seat) {
+//        Optional<Seat> seatOptional = seatRepository.findById(seat.getId());
+//        if (seatOptional.isEmpty()){
+//            throw new DataNotFoundException(String.format(messages.get("seat.does.not.exist")));
+//        }
+//        return seatRepository.save(seat);
+//    }
 
     @Override
     public Optional<Seat> findSeatById(Long id) {
         return seatRepository.findById(id);
-    }
-
-
-    private Flight getFlightIfExists(Long id){
-        Optional<Flight> flightOptional = flightRepository.findById(id);
-        if (flightOptional.isEmpty()){
-            throw new DataNotFoundException(String.format(messages.get("flight.does.not.exist")));
-        }
-        return flightOptional.get();
     }
 
     /**
@@ -175,6 +206,44 @@ public class SeatServiceImpl implements ISeatService{
 
         // PERSISTING SEATS
         return seatRepository.saveAll(seats);
+    }
+
+    @Override
+    public SeatXPassengerDTO assignSeatToPassenger(Long seatId, Long passengerId) {
+        // Methods already handle exceptions
+        Seat seat = getSeatIfExists(seatId);
+        Passenger passenger = getPassengerIfExists(passengerId);
+
+        // Check if the exact pair seat-passenger already exists
+        if (seatXPassengerRepository.existsBySeatIdAndPassengerId(
+                seatId, passengerId)){
+            throw new DataDuplicatedException(String.format(
+                    messages.get("seat.passenger.already.exists")));
+        }
+
+        // Create SeatXPassenger entity
+        SeatXPassenger seatXPassenger = new SeatXPassenger();
+        seatXPassenger.setSeat(seat);
+        seatXPassenger.setPassenger(passenger);
+
+        // insert into SeatXPassenger
+        SeatXPassenger savedSeatXPassenger = seatXPassengerRepository.save(seatXPassenger);
+        return seatXPassengerMapper.convertToDto(savedSeatXPassenger);
+    }
+
+    @Override
+    public SeatXPassengerDTO getSeatByPassengerId(Long id) {
+        return null;
+    }
+
+    @Override
+    public SeatXPassengerDTO removeSeatToPassenger(Long seatId, Long passengerId) {
+        return null;
+    }
+
+    @Override
+    public SeatXPassengerDTO updateSeatToPassenger(Long newSeatId, Long passengerId) {
+        return null;
     }
 
 

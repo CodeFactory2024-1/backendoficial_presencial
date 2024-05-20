@@ -1,7 +1,9 @@
 package co.udea.airline.api;
 
 
+import co.udea.airline.api.model.jpa.model.bookings.Passenger;
 import co.udea.airline.api.model.jpa.model.flights.Flight;
+import co.udea.airline.api.model.jpa.repository.bookings.IPassengerRepository;
 import co.udea.airline.api.model.jpa.repository.flights.IFlightRepository;
 import co.udea.airline.api.utils.common.FlightTypeEnum;
 import org.springframework.boot.SpringApplication;
@@ -55,7 +57,9 @@ public class AirlineApiApplication extends SpringBootServletInitializer {
 
      // Testing Flights
     @Bean
-    CommandLineRunner runner(IFlightRepository flightRepository, ISeatRepository seatRepository) {
+    CommandLineRunner runner(IFlightRepository flightRepository,
+                             ISeatRepository seatRepository,
+                             IPassengerRepository passengerRepository) {
         return args -> {
 
             Flight flight1 = new Flight();
@@ -79,6 +83,11 @@ public class AirlineApiApplication extends SpringBootServletInitializer {
             seat.setCodename("FlightID-SeatNumber-ClassTag");
             seatRepository.save(seat);
 
+
+            // Generating a Passenger
+            Passenger passenger = new Passenger();
+            passenger.setName("Gomecito");
+            passengerRepository.save(passenger);
         };
     }
 

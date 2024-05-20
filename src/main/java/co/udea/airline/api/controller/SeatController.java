@@ -2,6 +2,7 @@ package co.udea.airline.api.controller;
 
 import co.udea.airline.api.model.DTO.CreateSeatDTO;
 import co.udea.airline.api.model.DTO.SeatDTO;
+import co.udea.airline.api.model.DTO.SeatXPassengerDTO;
 import co.udea.airline.api.model.jpa.model.seats.Seat;
 import co.udea.airline.api.model.mapper.SeatMapper;
 import co.udea.airline.api.services.seats.service.SeatServiceImpl;
@@ -103,7 +104,7 @@ public class SeatController {
 //        );
 //    }
     @PostMapping("/v1/generateSeats/{flightId}")
-    @Operation(summary = "Get List of seats by Flight id")
+    @Operation(summary = "Generate Seats given a flight id")
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {
                     @Content(schema = @Schema(implementation = SeatDTO.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
@@ -126,5 +127,29 @@ public class SeatController {
         );
 
     }
+
+    @PostMapping("/v1/assign/seat/{seatId}/passenger/{passengerId}")
+    @Operation(summary = "Assign a seat to a passenger")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {
+                    @Content(schema = @Schema(implementation = SeatDTO.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
+            }, description = "Seats generated successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid Request."),
+            @ApiResponse(responseCode = "404", description = "Flight does not exist."),
+            @ApiResponse(responseCode = "409", description = "Flight already has seats."),
+            @ApiResponse(responseCode = "500", description = "Server internal Error.")})
+    public ResponseEntity<StandardResponse<SeatXPassengerDTO>> assignSeatToPassengerV1(
+            @PathVariable("seatId") String seatId, @PathVariable("passengerId") String passengerId){
+        return ResponseEntity.ok(
+                new StandardResponse<>(StandardResponse.StatusStandardResponse.OK,
+                        "Seat assigned to Passenger successfully",
+                        seatService.assignSeatToPassenger(
+                                Long.valueOf(seatId),
+                                Long.valueOf(passengerId))
+                )
+        );
+    }
+
+
 
 }
