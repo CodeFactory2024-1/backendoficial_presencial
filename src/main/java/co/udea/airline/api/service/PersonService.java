@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import co.udea.airline.api.model.jpa.model.Person;
 import co.udea.airline.api.model.jpa.repository.PersonRepository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -13,7 +12,7 @@ public class PersonService {
     @Autowired
     PersonRepository personRepository;
 
-    public List<Person> getPersons() {
+    public Iterable<Person> getPersons() {
         return personRepository.findAll();
     }
 
