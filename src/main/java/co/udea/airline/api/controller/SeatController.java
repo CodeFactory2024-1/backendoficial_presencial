@@ -127,4 +127,28 @@ public class SeatController {
 
     }
 
+    @GetMapping("/v1/getAllSeatsByFlightId/{flightId}")
+    @Operation(summary = "Get List of seats by Flight id")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {
+                    @Content(schema = @Schema(implementation = SeatDTO.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
+            }, description = "Seats successfully obtained"),
+            @ApiResponse(responseCode = "400", description = "Invalid Request."),
+            @ApiResponse(responseCode = "404", description = "Flight does not exist."),
+            @ApiResponse(responseCode = "500", description = "Server internal Error.")})
+    public ResponseEntity<StandardResponse<List<SeatDTO>>> getAllSeatsByFlightIdV1(@PathVariable("flightId") String flightId) {
+        List<Seat> seatList = seatService.getAllSeatsByFlightId(Long.valueOf(flightId));
+        List<SeatDTO> seatDTOList = seatList.stream()
+                .map(seatMapper::convertToDto)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(
+                new StandardResponse<>(StandardResponse.StatusStandardResponse.OK,
+                        "Seats retrieved successfully",
+                        seatDTOList
+                )
+        );
+
+    }
+
 }

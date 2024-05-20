@@ -177,5 +177,10 @@ public class SeatServiceImpl implements ISeatService{
         return seatRepository.saveAll(seats);
     }
 
+    @Override
+    public List<Seat> getAllSeatsByFlightId(Long flightId) {
+        Flight flight = getFlightIfExists(flightId);
 
+        return seatRepository.findAllByFlightId(flightId);
+    }
 }

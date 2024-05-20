@@ -11,5 +11,7 @@ public interface ISeatService {
     Optional<Seat> findSeatById(Long id);
 
     List<Seat> generateSeatsByFlightId(Long id);
+    List<Seat> getAllSeatsByFlightId(Long id);
+
 
 }
