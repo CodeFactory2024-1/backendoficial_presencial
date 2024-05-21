@@ -1,12 +1,11 @@
 package co.udea.airline.api.model.jpa.model;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
-import java.util.List;
-
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,9 +17,8 @@ public class Booking {
     @Column(name = "BOOKING_ID")
     private Long bookingId;
 
-    @ManyToOne
-    @JoinColumn(name = "FLIGHT_ID")
-    private Flight flight;
+    @Column(name = "FLIGHT_ID")
+    private Long flight;
 
     @Column(name = "BOOKING_DATE")
     private Date booking_date;
