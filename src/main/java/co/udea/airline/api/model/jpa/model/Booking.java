@@ -18,7 +18,7 @@ public class Booking {
     private Long bookingId;
 
     @Column(name = "FLIGHT_ID")
-    private Long flight;
+    private Long flightId;
 
     @Column(name = "BOOKING_DATE")
     private Date booking_date;
