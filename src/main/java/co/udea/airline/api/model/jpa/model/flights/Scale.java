@@ -21,7 +21,7 @@ public class Scale {
     @Column(name = "scale_id")
     private long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "flight_id")
     private Flight flight;
 
