@@ -53,6 +53,14 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST);
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(IllegalArgumentException.class)
+        public ResponseEntity<?> handleIllegalArgumentException(IllegalArgumentException ex) {
+                return new ResponseEntity<>(new StandardResponse<>(400, "Validation error", ex.getMessage()),
+                        HttpStatus.BAD_REQUEST);
+        }
+        
+
     @ExceptionHandler(Throwable.class)
     protected ResponseEntity<?> handleThrowable(Throwable ex) {
         return new ResponseEntity<>(
