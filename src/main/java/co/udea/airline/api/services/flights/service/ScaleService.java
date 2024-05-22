@@ -38,4 +38,25 @@ public class ScaleService {
     public void deleteScaleById(Long id) {
         scaleRepository.deleteById(id);
     }
+
+    public Scale updateScale(Scale scale) {
+        Scale updatedScale = scaleRepository.findById(scale.getId()).orElse(null);
+
+        if (updatedScale == null) {
+            return saveScale(scale);
+        }
+
+        Airport originRes = airportRepository.findByIATA(scale.getOriginAirport().getId());
+        Airport destinationRes = airportRepository.findByIATA(scale.getDestinationAirport().getId());
+        AirplaneModel airplaneModelRes = airplaneModelRepository.findById(scale.getAirplaneModel().getId()).get();
+
+        updatedScale.setOriginAirport(originRes);
+        updatedScale.setDestinationAirport(destinationRes);
+        updatedScale.setAirplaneModel(airplaneModelRes);
+        updatedScale.setArrivalDate(scale.getArrivalDate());
+        updatedScale.setDepartureDate(scale.getDepartureDate());
+
+        scaleRepository.save(updatedScale);
+        return updatedScale;
+    }
 }

@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 
 import co.udea.airline.api.model.DTO.flights.FlightDTO;
 
@@ -92,12 +92,18 @@ public class FlightController {
         return ResponseEntity.ok(modelMapper.map(flight, FlightDTO.class));
     }
 
-    @Operation(summary = "Update flight by id", description = "Update flight by id")
-    @PatchMapping("/{id}")
-    public ResponseEntity<FlightDTO> putMethodName(@PathVariable String id, @RequestBody FlightDTO flight) {
-        // TODO: process PUT request
+    @Operation(summary = "Update flight by flightNumber", description = "Update flight by its number")
+    @PutMapping("/{flightNumber}")
+    public ResponseEntity<FlightDTO> putMethodName(@PathVariable String flightNumber,
+            @Valid @RequestBody FlightDTO flight) {
+        Flight flightRes = modelMapper.map(flight, Flight.class);
+        flightRes = flightService.updateFlight(flightNumber, flightRes);
+        if (flightRes == null) {
+            throw new DataNotFoundException("Flight with flight number: " + flightNumber + " not found");
+        }
+        FlightDTO flightResDTO = modelMapper.map(flightRes, FlightDTO.class);
 
-        return ResponseEntity.ok(new FlightDTO());
+        return new ResponseEntity<FlightDTO>(flightResDTO, HttpStatus.CREATED);
     }
 
     @Operation(summary = "Delete flight by flight number", description = "Delete flight by flight number")
