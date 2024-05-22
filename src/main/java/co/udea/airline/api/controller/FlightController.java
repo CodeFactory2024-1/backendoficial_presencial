@@ -1,6 +1,7 @@
 package co.udea.airline.api.controller;
 
 import co.udea.airline.api.model.jpa.model.flights.Flight;
+import co.udea.airline.api.services.bookings.service.BookingService;
 import co.udea.airline.api.services.flights.service.FlightService;
 import co.udea.airline.api.utils.exception.DataNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,6 +41,9 @@ public class FlightController {
 
     @Autowired
     private FlightService flightService;
+
+    @Autowired
+    private BookingService bookingService;
 
     @PostMapping("")
     @Operation(summary = "Create a new flight", description = "Create a new flight")
@@ -100,12 +104,7 @@ public class FlightController {
     @DeleteMapping("/{flightNumber}")
     public ResponseEntity<FlightDTO> deleteMethodNameByFlightNumber(@PathVariable String flightNumber) {
         Flight deletedFlight = null;
-        try {
-
-            deletedFlight = flightService.deleteFlightByFlightNumber(flightNumber);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        deletedFlight = flightService.deleteFlightByFlightNumber(flightNumber);
         if (deletedFlight == null) {
             throw new DataNotFoundException("Flight with flight number: " + flightNumber + " not found");
         }
@@ -113,4 +112,8 @@ public class FlightController {
         return ResponseEntity.ok(modelMapper.map(deletedFlight, FlightDTO.class));
     }
 
+    @GetMapping("/has-bookings/{flightId}")
+    public ResponseEntity<Boolean> flightHasBookings(@PathVariable Long flightId) {
+        return ResponseEntity.ok(bookingService.flightHasBookings(flightId));
+    }
 }

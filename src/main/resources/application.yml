@@ -16,6 +16,8 @@ airline-api:
   openapi:
     dev-url: http://localhost:8018/modulo-18
     prod-url: https://codefact.udea.edu.co/modulo-18
+  bookings:
+    api-url: https://codefact.udea.edu.co/modulo-08/v1/booking/seachBookingByFlightId/
 
 springdoc:
   api-docs:
