@@ -3,8 +3,10 @@ package co.udea.airline.api;
 
 import co.udea.airline.api.model.jpa.model.bookings.Passenger;
 import co.udea.airline.api.model.jpa.model.flights.Flight;
+import co.udea.airline.api.model.jpa.model.seats.SeatXPassenger;
 import co.udea.airline.api.model.jpa.repository.bookings.IPassengerRepository;
 import co.udea.airline.api.model.jpa.repository.flights.IFlightRepository;
+import co.udea.airline.api.model.jpa.repository.seats.ISeatXPassengerRepository;
 import co.udea.airline.api.utils.common.FlightTypeEnum;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -59,7 +61,8 @@ public class AirlineApiApplication extends SpringBootServletInitializer {
     @Bean
     CommandLineRunner runner(IFlightRepository flightRepository,
                              ISeatRepository seatRepository,
-                             IPassengerRepository passengerRepository) {
+                             IPassengerRepository passengerRepository,
+                             ISeatXPassengerRepository seatXPassengerRepository) {
         return args -> {
 
             Flight flight1 = new Flight();
@@ -83,11 +86,34 @@ public class AirlineApiApplication extends SpringBootServletInitializer {
             seat.setCodename("FlightID-SeatNumber-ClassTag");
             seatRepository.save(seat);
 
-
             // Generating a Passenger
             Passenger passenger = new Passenger();
             passenger.setName("Gomecito");
             passengerRepository.save(passenger);
+
+            SeatXPassenger seatXPassenger = new SeatXPassenger();
+            seatXPassenger.setPassenger(passenger);
+            seatXPassenger.setSeat(seat);
+            seatXPassengerRepository.save(seatXPassenger);
+
+            // Otros datos de prueba...
+            Seat seat2 = new Seat();
+            seat2.setSeatClass(SeatClassEnum.EXECUTIVE);
+            seat2.setLocation(SeatLocationEnum.CENTER);
+            seat2.setFlight(savedFlights.get(1));
+            seat2.setTag("Test-2");
+            seat2.setCodename("FlightID2-SeatNumber2-ClassTag2");
+            seatRepository.save(seat2);
+
+            // Generating a Passenger
+            Passenger passenger2 = new Passenger();
+            passenger2.setName("Daniel");
+            passengerRepository.save(passenger2);
+
+            SeatXPassenger seatXPassenger2 = new SeatXPassenger();
+            seatXPassenger2.setPassenger(passenger2);
+            seatXPassenger2.setSeat(seat2);
+            seatXPassengerRepository.save(seatXPassenger2);
         };
     }
 

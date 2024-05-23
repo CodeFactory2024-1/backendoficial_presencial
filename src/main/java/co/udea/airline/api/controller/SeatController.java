@@ -173,5 +173,23 @@ public class SeatController {
         );
     }
 
+    @GetMapping("/v1/getSeatByPassengerId/{passengerId}")
+    @Operation(summary = "Get Seat by Passenger Id")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {
+                    @Content(schema = @Schema(implementation = SeatDTO.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
+            }, description = "Seat successfully obtained"),
+            @ApiResponse(responseCode = "400", description = "Invalid Request."),
+            @ApiResponse(responseCode = "404", description = "Passenger does not exist."),
+            @ApiResponse(responseCode = "500", description = "Server internal Error.")})
+    public ResponseEntity<StandardResponse<SeatXPassengerDTO>> getSeatByPassengerIdV1(@PathVariable("passengerId") String passengerId) {
+        SeatXPassengerDTO seatXPassengerDTO = seatService.getSeatByPassengerId(Long.valueOf(passengerId));
+        return ResponseEntity.ok(
+                new StandardResponse<>(StandardResponse.StatusStandardResponse.OK,
+                        "Assigned seat successfully obtained",
+                        seatXPassengerDTO)
+        );
+
+    }
 
 }

@@ -232,7 +232,14 @@ public class SeatServiceImpl implements ISeatService{
 
     @Override
     public SeatXPassengerDTO getSeatByPassengerId(Long id) {
-        return null;
+        Passenger passenger = getPassengerIfExists(id);
+
+        Optional<SeatXPassenger> seatXPassengerOptional = seatXPassengerRepository.findByPassengerId(id);
+        if (seatXPassengerOptional.isEmpty()) {
+            throw new DataNotFoundException(String.format(messages.get("seat.passenger.not.found")));
+        }
+
+        return seatXPassengerMapper.convertToDto(seatXPassengerOptional.get());
     }
 
     @Override
