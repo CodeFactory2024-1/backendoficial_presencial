@@ -17,6 +17,7 @@ import co.udea.airline.api.utils.common.Messages;
 import co.udea.airline.api.utils.common.SeatClassEnum;
 import co.udea.airline.api.utils.common.SeatLocationEnum;
 import co.udea.airline.api.utils.common.SeatStatusEnum;
+import co.udea.airline.api.utils.exception.BusinessException;
 import co.udea.airline.api.utils.exception.DataDuplicatedException;
 import co.udea.airline.api.utils.exception.DataNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,36 +110,32 @@ public class SeatServiceImpl implements ISeatService{
         return seatRepository.findById(id);
     }
 
-    /**
-     * SEATS SETUP DEPENDS ON AICRAFT
-     * We have three Seat class type: TOURIST, EXECUTIVE AND FIRST_CLASS.
-     * Seats distribution goes like this: 80% tourist, 10% executive,
-     * and 10% to first class. If we need to change those proportions or if you
-     * need to have a different number of seats
-     * service must not be used.
-     * @param id Flight id
-     * @return List<Seat> List of seats.
-     */
-    @Override
-    public List<Seat> generateSeatsByFlightId(Long id) {
-        // Seat Config preparation
-        // Given K columns, the proportion that meet
-        // business requirements is the following
-        // first_class:executive:tourist := K:K:8K
-        // We only need 1 row for first_class
-        // 1 row for executive
-        // 8 rows for tourist
-        // total rows = 10
 
+    @Override
+    public List<Seat> generateSeatsByFlightId(Long id, int nSeats) {
+
+        if(nSeats < 60){
+            String msg = "Minimum number of seats is 60";
+            throw new DataDuplicatedException(msg);
+        } else if (nSeats > 500) {
+            String msg = "This is not a intergalactic spaceship";
+            throw new BusinessException(msg);
+        }
         Flight flight = getFlightIfExists(id);
         if (seatRepository.existsSeatByFlightId(id)){
             String msg = String.format(messages.get("flight.has.seats"));
             throw new DataDuplicatedException(msg);
         }
 
+        Seat seat;
+        String seatTag;
+        List<Seat> seats = new ArrayList<>();
+        float proportion;
+        int rowsPerSeatClass;
+
         final int COLUMNS = 6;
-        final int ROWS = 10;
-        final int TOTAL_SEATS = ROWS*COLUMNS;
+        final int TOTAL_ROWS = nSeats / COLUMNS; // Integer division to trunk
+        final int TOTAL_SEATS = TOTAL_ROWS*COLUMNS;
 
         // Code duplication to decrease complexity in loop and readability.
         SeatLocationEnum[] locationEnumList = new SeatLocationEnum[COLUMNS];
@@ -157,52 +154,26 @@ public class SeatServiceImpl implements ISeatService{
         columnLetter[4] = "E";
         columnLetter[5] = "F";
 
-        String seatTag;
-        String seatCodename;
-        SeatClassEnum seatClass;
-        List<Seat> seats = new ArrayList<>();
         int seatPosNumber = 1; // For Tag
+        for (SeatClassEnum seatClass : SeatClassEnum.values()) {
+            proportion = seatClass.getProportion();
+            rowsPerSeatClass = (int) (proportion*TOTAL_ROWS); // Trunks
 
-        // GENERATING SEATS
-        // Rows loop
-        for (int i = 0; i < ROWS; i++) {
-            // First rows is First_class. Changing Airplane structure
-            // changes this
-            int i_aux = i+1;
-            if (i_aux == 1){
-                seatClass = SeatClassEnum.FIRST_CLASS;
-            }
-            // The next rows are Executive class
-            else if (i_aux == 2) {
-                seatClass = SeatClassEnum.EXECUTIVE;
-            }
-            // last rows are Tourist class type
-            else  {
-                seatClass = SeatClassEnum.TOURIST;
-            }
-            // Columns loop
-            for (int j = 0; j < COLUMNS; j++) {
-                // Preparing new Seat
-                Seat seat = new Seat();
-                seat.setStatus(SeatStatusEnum.AVAILABLE);
-                seat.setLocation(locationEnumList[j]);
-                seat.setSeatClass(seatClass);
-                seat.setFlight(flight);
-                seatTag = columnLetter[j] + "-" + Integer.toString(i_aux);
-                seat.setTag(seatTag);
-                seatCodename = Long.toString(flight.getId()) +
-                        "-" +
-                        Integer.toString(seatPosNumber) +
-                        "-" +
-                        seatClass.getTag();
-                seat.setCodename(seatCodename);
-
-                // Adding to List of seat
-                seats.add(seat);
-                seatPosNumber++;
+            for (int i = 0; i < rowsPerSeatClass; i++) {
+                for (int j = 0; j < COLUMNS; j++) {
+                    seat = new Seat();
+                    seat.setSeatNumber(seatPosNumber);
+                    seat.setSeatClass(seatClass);
+                    seat.setLocation(locationEnumList[j]);
+                    seat.setFlight(flight);
+                    seat.setStatus(SeatStatusEnum.AVAILABLE);
+                    seatTag = columnLetter[j] + "-" + (i+1);
+                    seat.setTag(seatTag);
+                    seats.add(seat);
+                    seatPosNumber++;
+                }
             }
         }
-
         // PERSISTING SEATS
         return seatRepository.saveAll(seats);
     }

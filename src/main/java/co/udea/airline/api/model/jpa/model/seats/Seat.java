@@ -23,10 +23,6 @@ public class Seat implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "codename")
-    private String codename;
-
-    @NotNull
     @Column(name = "tag")
     private String tag;
 
@@ -41,6 +37,10 @@ public class Seat implements Serializable {
     @NotNull
     @Column(name = "location")
     private SeatLocationEnum location;
+
+    @NotNull
+    @Column(name = "seat_number")
+    private int seatNumber;
 
     @NotNull
     @Column(name = "surcharge")

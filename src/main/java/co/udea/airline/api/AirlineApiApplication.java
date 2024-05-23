@@ -82,8 +82,8 @@ public class AirlineApiApplication extends SpringBootServletInitializer {
             seat.setSeatClass(SeatClassEnum.FIRST_CLASS);
             seat.setLocation(SeatLocationEnum.AISLE);
             seat.setFlight(savedFlights.get(1));
+            seat.setSeatNumber(25);
             seat.setTag("Test-1");
-            seat.setCodename("FlightID-SeatNumber-ClassTag");
             seatRepository.save(seat);
 
             // Generating a Passenger
@@ -101,8 +101,8 @@ public class AirlineApiApplication extends SpringBootServletInitializer {
             seat2.setSeatClass(SeatClassEnum.EXECUTIVE);
             seat2.setLocation(SeatLocationEnum.CENTER);
             seat2.setFlight(savedFlights.get(1));
+            seat2.setSeatNumber(13);
             seat2.setTag("Test-2");
-            seat2.setCodename("FlightID2-SeatNumber2-ClassTag2");
             seatRepository.save(seat2);
 
             // Generating a Passenger

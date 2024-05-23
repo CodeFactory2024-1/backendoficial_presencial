@@ -103,7 +103,7 @@ public class SeatController {
 //                )
 //        );
 //    }
-    @PostMapping("/v1/generateSeats/{flightId}")
+    @PostMapping("/v1/generateSeats/{flightId}/{nSeats}")
     @Operation(summary = "Generate Seats given a flight id")
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {
@@ -113,8 +113,12 @@ public class SeatController {
             @ApiResponse(responseCode = "404", description = "Flight does not exist."),
             @ApiResponse(responseCode = "409", description = "Flight already has seats."),
             @ApiResponse(responseCode = "500", description = "Server internal Error.")})
-    public ResponseEntity<StandardResponse<List<SeatDTO>>> generateSeatsByFlightIdV1(@PathVariable("flightId") String flightId) {
-        List<Seat> seatList = seatService.generateSeatsByFlightId(Long.valueOf(flightId));
+    public ResponseEntity<StandardResponse<List<SeatDTO>>> generateSeatsByFlightIdV1(@PathVariable("flightId") String flightId,
+                                                                                     @PathVariable("nSeats") String nSeats) {
+        List<Seat> seatList = seatService.generateSeatsByFlightId(
+                Long.valueOf(flightId),
+                Integer.valueOf(nSeats));
+
         List<SeatDTO> seatDTOList = seatList.stream()
                 .map(seatMapper::convertToDto)
                 .collect(Collectors.toList());
