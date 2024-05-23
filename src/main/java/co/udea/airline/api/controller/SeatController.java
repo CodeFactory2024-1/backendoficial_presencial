@@ -177,7 +177,7 @@ public class SeatController {
     @Operation(summary = "Get Seat by Passenger Id")
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {
-                    @Content(schema = @Schema(implementation = SeatDTO.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
+                    @Content(schema = @Schema(implementation = SeatXPassengerDTO.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
             }, description = "Seat successfully obtained"),
             @ApiResponse(responseCode = "400", description = "Invalid Request."),
             @ApiResponse(responseCode = "404", description = "Passenger does not exist."),

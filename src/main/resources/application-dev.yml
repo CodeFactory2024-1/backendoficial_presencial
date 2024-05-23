@@ -17,8 +17,6 @@ spring:
 
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    #url: jdbc:oracle:thin://localhost:1521/airline-dev?serverTimezone=America/Bogota
-    #url: jdbc:oracle:thin:@//localhost:1521/xepdb1
     url: ${DB_URL}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}

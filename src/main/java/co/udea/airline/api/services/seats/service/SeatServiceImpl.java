@@ -220,6 +220,9 @@ public class SeatServiceImpl implements ISeatService{
                     messages.get("seat.passenger.already.exists")));
         }
 
+        //  Update seat status
+        seat.setStatus(SeatStatusEnum.OCCUPIED);
+
         // Create SeatXPassenger entity
         SeatXPassenger seatXPassenger = new SeatXPassenger();
         seatXPassenger.setSeat(seat);
