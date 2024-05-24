@@ -225,7 +225,31 @@ public class SeatServiceImpl implements ISeatService{
 
     @Override
     public SeatXPassengerDTO updateSeatToPassenger(Long newSeatId, Long passengerId) {
-        return null;
+        Passenger passenger = getPassengerIfExists(passengerId);
+        Seat newSeat = getSeatIfExists(newSeatId);
+
+        Optional<SeatXPassenger> seatXPassengerOptional = seatXPassengerRepository.findByPassengerId(passengerId);
+        if (seatXPassengerOptional.isEmpty()) {
+            throw new DataNotFoundException(String.format(messages.get("seat.passenger.not.found")));
+        }
+
+        if (newSeat.getStatus() == SeatStatusEnum.OCCUPIED) {
+            throw new BusinessException(String.format(messages.get("seat.is.occupied")));
+        }
+
+        SeatXPassenger seatXPassenger = seatXPassengerOptional.get();
+
+        Seat oldSeat = seatXPassenger.getSeat();
+        oldSeat.setStatus(SeatStatusEnum.AVAILABLE);
+        seatRepository.save(oldSeat);
+
+        seatXPassenger.setSeat(newSeat);
+        newSeat.setStatus(SeatStatusEnum.OCCUPIED);
+        seatRepository.save(newSeat);
+
+        SeatXPassenger updatedSeatXPassenger = seatXPassengerRepository.save(seatXPassenger);
+
+        return seatXPassengerMapper.convertToDto(updatedSeatXPassenger);
     }
 
     @Override
