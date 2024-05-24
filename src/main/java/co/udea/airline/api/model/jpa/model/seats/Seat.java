@@ -4,7 +4,6 @@ import co.udea.airline.api.model.jpa.model.flights.Flight;
 import co.udea.airline.api.utils.common.SeatClassEnum;
 import co.udea.airline.api.utils.common.SeatLocationEnum;
 import co.udea.airline.api.utils.common.SeatStatusEnum;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;

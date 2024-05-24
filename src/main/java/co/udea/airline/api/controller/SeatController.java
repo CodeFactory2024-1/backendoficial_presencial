@@ -196,7 +196,7 @@ public class SeatController {
 
     }
 
-    @PutMapping("/v1/updateSeatToPassenger/{newSeatId}/{passengerId}")
+    @PutMapping("/v1/updateSeatToPassenger/passenger/{passengerId}/seat/{newSeatId}")
     @Operation(summary = "Update a seat assigned to a passenger")
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {
@@ -216,5 +216,4 @@ public class SeatController {
                 )
         );
     }
-
 }

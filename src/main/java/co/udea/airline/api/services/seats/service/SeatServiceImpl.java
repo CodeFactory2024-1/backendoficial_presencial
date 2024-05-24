@@ -214,7 +214,6 @@ public class SeatServiceImpl implements ISeatService{
         if (seatXPassengerOptional.isEmpty()) {
             throw new DataNotFoundException(String.format(messages.get("seat.passenger.not.found")));
         }
-
         return seatXPassengerMapper.convertToDto(seatXPassengerOptional.get());
     }
 
@@ -236,19 +235,14 @@ public class SeatServiceImpl implements ISeatService{
         if (newSeat.getStatus() == SeatStatusEnum.OCCUPIED) {
             throw new BusinessException(String.format(messages.get("seat.is.occupied")));
         }
-
         SeatXPassenger seatXPassenger = seatXPassengerOptional.get();
-
         Seat oldSeat = seatXPassenger.getSeat();
         oldSeat.setStatus(SeatStatusEnum.AVAILABLE);
-        seatRepository.save(oldSeat);
-
-        seatXPassenger.setSeat(newSeat);
+        seatRepository.save(oldSeat); //update old Seat Status
         newSeat.setStatus(SeatStatusEnum.OCCUPIED);
-        seatRepository.save(newSeat);
-
+        Seat newSeatSaved = seatRepository.save(newSeat); // updating new seat status
+        seatXPassenger.setSeat(newSeatSaved);
         SeatXPassenger updatedSeatXPassenger = seatXPassengerRepository.save(seatXPassenger);
-
         return seatXPassengerMapper.convertToDto(updatedSeatXPassenger);
     }
 

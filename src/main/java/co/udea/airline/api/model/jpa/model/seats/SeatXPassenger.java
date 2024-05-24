@@ -1,6 +1,7 @@
 package co.udea.airline.api.model.jpa.model.seats;
 
 import co.udea.airline.api.model.jpa.model.bookings.Passenger;
+import co.udea.airline.api.utils.common.SeatStatusEnum;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,13 +31,14 @@ public class SeatXPassenger {
     private Long id;
 
     @NotNull
-    @OneToOne(cascade = CascadeType.REFRESH)
+    @OneToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name = "id_passenger")
     private Passenger passenger;
 
     @NotNull
-    @OneToOne(cascade = CascadeType.REFRESH)
+    @OneToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name = "id_seat")
     private Seat seat;
+
 
 }

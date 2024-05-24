@@ -8,11 +8,11 @@ import co.udea.airline.api.model.jpa.repository.bookings.IPassengerRepository;
 import co.udea.airline.api.model.jpa.repository.flights.IFlightRepository;
 import co.udea.airline.api.model.jpa.repository.seats.ISeatXPassengerRepository;
 import co.udea.airline.api.utils.common.FlightTypeEnum;
+import co.udea.airline.api.utils.common.SeatStatusEnum;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 // Testing
 import org.springframework.context.annotation.Bean;
@@ -84,6 +84,7 @@ public class AirlineApiApplication extends SpringBootServletInitializer {
             seat.setFlight(savedFlights.get(1));
             seat.setSeatNumber(25);
             seat.setTag("Test-1");
+            seat.setStatus(SeatStatusEnum.OCCUPIED);
             seatRepository.save(seat);
 
             // Generating a Passenger
@@ -103,6 +104,7 @@ public class AirlineApiApplication extends SpringBootServletInitializer {
             seat2.setFlight(savedFlights.get(1));
             seat2.setSeatNumber(13);
             seat2.setTag("Test-2");
+            seat2.setStatus(SeatStatusEnum.OCCUPIED);
             seatRepository.save(seat2);
 
             // Generating a Passenger
