@@ -11,6 +11,8 @@ import java.util.Properties;
 @Configuration
 public class MailConfiguration {
 
+    @Value("${airline-api.mail.enabled:true}")
+    private boolean enabled;
     @Value("${airline-api.mail.host}")
     private String host;
     @Value("${airline-api.mail.port}")
@@ -30,16 +32,19 @@ public class MailConfiguration {
     @Bean
     public JavaMailSender getJavaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost(host);
-        mailSender.setPort(port);
+        if (enabled) {
 
-        mailSender.setUsername(username);
-        mailSender.setPassword(password);
+            mailSender.setHost(host);
+            mailSender.setPort(port);
 
-        Properties props = mailSender.getJavaMailProperties();
-        props.put("mail.transport.protocol", protocol);
-        props.put("mail.smtp.auth", useAuth);
-        props.put("mail.smtp.starttls.enable", useTls);
+            mailSender.setUsername(username);
+            mailSender.setPassword(password);
+
+            Properties props = mailSender.getJavaMailProperties();
+            props.put("mail.transport.protocol", protocol);
+            props.put("mail.smtp.auth", useAuth);
+            props.put("mail.smtp.starttls.enable", useTls);
+        }
 
         return mailSender;
     }

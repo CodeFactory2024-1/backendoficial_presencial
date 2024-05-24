@@ -19,7 +19,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
-@RequestMapping("/usersroles")
+@RequestMapping("/api/usersroles")
 @Tag(name = "8. Users Management")
 @SecurityRequirement(name = "JWT")
 @PreAuthorize("hasAuthority('assign:roles')")

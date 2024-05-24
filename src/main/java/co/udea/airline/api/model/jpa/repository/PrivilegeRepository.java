@@ -7,6 +7,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import co.udea.airline.api.model.jpa.model.Privilege;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -14,6 +15,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Repository
+@RequestMapping("/api")
 @RepositoryRestResource(path = "privileges")
 @Tag(name = "7. Privileges Management", description = "CRUD operations for privileges (only for admins)")
 @ApiResponse(responseCode = "200", description = "OK")

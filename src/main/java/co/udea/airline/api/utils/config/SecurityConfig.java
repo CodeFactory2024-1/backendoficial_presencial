@@ -26,6 +26,17 @@ public class SecurityConfig {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
+    private static final String[] AUTH_WHITELIST = {
+            "/swagger-ui.html",
+            "/swagger-ui/**",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/v3/api-docs/**",
+            "/explorer/*",
+            "/actuator/*",
+            "/api/**"
+    };
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
@@ -33,8 +44,10 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .anonymous(anon -> anon.disable())
                 .authorizeHttpRequests(
-                        req -> req.requestMatchers("/login/**", "/register/**").permitAll()
-                                .anyRequest().permitAll())
+                        req -> req
+                                .requestMatchers(AUTH_WHITELIST)
+                                .permitAll()
+                                .anyRequest().authenticated())
                 .userDetailsService(userDetailsServiceImp)
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))

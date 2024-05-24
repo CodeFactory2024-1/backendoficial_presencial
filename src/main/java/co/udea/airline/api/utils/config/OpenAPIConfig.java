@@ -1,5 +1,6 @@
 package co.udea.airline.api.utils.config;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springdoc.core.customizers.OpenApiCustomizer;
@@ -62,13 +63,25 @@ public class OpenAPIConfig {
     }
 
     @Bean
-    OpenApiCustomizer customizer() {
+    OpenApiCustomizer customizer(@Value("${airline-api.mail.enabled}") boolean mailEnabled) {
+        final String[] mailDependantPaths = { "/verify", "/password/recovery" };
+
         return openApi -> {
             Paths paths = openApi.getPaths();
             Paths newPaths = new Paths();
             paths.forEach((path, item) -> {
                 if (!path.contains("profile")) {
-                    newPaths.addPathItem(path, item);
+                    
+                    boolean hidePath = false;
+                    if (!mailEnabled) {
+                        hidePath = Arrays.stream(mailDependantPaths)
+                                .anyMatch(p -> path.contains(p));
+
+                    }
+                    
+                    if (!hidePath)
+                        newPaths.addPathItem(path, item);
+
                 }
             });
             openApi.setPaths(newPaths);

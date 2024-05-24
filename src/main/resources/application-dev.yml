@@ -38,6 +38,7 @@ airline-api:
   dev:
     super-admin-token: ${SUPER_ADMIN_TOKEN:}
   mail:
+    enabled: true
     host: smtp.freesmtpservers.com
     port: 25
     username:

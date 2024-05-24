@@ -42,6 +42,7 @@ airline-api:
   dev:
     super-admin-token: ${SUPER_ADMIN_TOKEN}
   mail:
+    enabled: false
     host: smtp.gmail.com
     port: 587
     username: ${GMAIL_USR}

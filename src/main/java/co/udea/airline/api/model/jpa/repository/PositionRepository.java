@@ -7,6 +7,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import co.udea.airline.api.model.jpa.model.Position;
 import co.udea.airline.api.model.jpa.projections.WithPrivilegesAndId;
@@ -15,6 +16,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Repository
+@RequestMapping("/api")
 @RepositoryRestResource(path = "roles", excerptProjection = WithPrivilegesAndId.class)
 @Tag(name = "6. Roles Management", description = "CRUD operations for roles (only for admins)")
 @ApiResponse(responseCode = "200", description = "OK")

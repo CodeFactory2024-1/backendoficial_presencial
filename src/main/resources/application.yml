@@ -8,6 +8,7 @@ spring:
   data:
     rest:
       detection-strategy: annotated
+      base-path: api
 management:
   endpoints:
     web:

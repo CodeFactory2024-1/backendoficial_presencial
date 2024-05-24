@@ -25,6 +25,10 @@ public class LoginAttemptService {
     }
 
     public void loginFailedFor(String email) {
+
+        if (!mailSenderService.isEnabled())
+            return;
+
         Optional<Person> op = personRepository.findByEmail(email);
 
         if (op.isEmpty())
@@ -52,6 +56,9 @@ public class LoginAttemptService {
     }
 
     public void loginSucceededFor(String email) {
+        if (!mailSenderService.isEnabled())
+            return;
+
         Person p = personRepository.findByEmail(email).orElseThrow();
         p.setFailedLoginAttempts(0);
         p.setEnabled(true);

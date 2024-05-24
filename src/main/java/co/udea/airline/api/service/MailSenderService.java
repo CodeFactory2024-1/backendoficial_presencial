@@ -2,6 +2,7 @@ package co.udea.airline.api.service;
 
 import java.io.UnsupportedEncodingException;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -15,12 +16,25 @@ public class MailSenderService {
 
     private JavaMailSender mailSender;
 
+    @Value("${airline-api.mail.enabled:true}")
+    private boolean enabled;
+
     String fromAddress = "sitassingapurairlines@gmail.com";
     String senderName = "Sitas airline";
     String frontBaseUrl = "front.codefact.noc";
 
     public MailSenderService(JavaMailSender mailSender) {
         this.mailSender = mailSender;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    private void checkEnabled() throws MessagingException {
+        if (!enabled) {
+            throw new MessagingException("Mail service is not enabled");
+        }
     }
 
     /**
@@ -36,6 +50,8 @@ public class MailSenderService {
      */
     public void sendVerificationEmail(Person user)
             throws MessagingException, UnsupportedEncodingException {
+
+        checkEnabled();
 
         String subject = "Please verify your registration";
         String content = "Dear [[name]],<br>"
@@ -67,6 +83,9 @@ public class MailSenderService {
      */
     public String sendRecoveryPasswCode(Person user)
             throws MessagingException, UnsupportedEncodingException {
+
+        checkEnabled();
+
         String subject = "Recover your password";
         String content = "Dear [[name]],<br>"
                 + "This is the code to recover your password:<br>"
@@ -85,6 +104,9 @@ public class MailSenderService {
     }
 
     public void sendAccountLockedNotification(Person user) throws MessagingException, UnsupportedEncodingException {
+
+        checkEnabled();
+
         String subject = "Unlock your account";
         String content = "Dear %s,<br>"
                 + "Please click the link below to unlock your account and change your password:<br>"
@@ -100,6 +122,9 @@ public class MailSenderService {
     }
 
     private void send(String to, String subject, String text) throws MessagingException, UnsupportedEncodingException {
+
+        checkEnabled();
+
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
 

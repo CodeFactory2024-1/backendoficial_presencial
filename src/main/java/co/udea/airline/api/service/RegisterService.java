@@ -35,6 +35,10 @@ public class RegisterService {
     }
 
     public boolean verify(String verificationCode) {
+
+        if (!mailSenderService.isEnabled())
+            return false;
+
         Person user = personRepository.findByRecoveryCode(verificationCode);
 
         if (user == null || user.getVerified()) {
@@ -105,13 +109,19 @@ public class RegisterService {
         user.setPhoneNumber(request.getPhoneNumber());
         user.setGenre(request.getGenre());
         user.setPositions(positionRepository.findByName("USER"));
-        user.setVerified(false);
         user.setFailedLoginAttempts(0);
-        String randomCode = RandomString.make(64);
-        user.setRecoveryCode(randomCode);
         user.setEnabled(true);
 
-        mailSenderService.sendVerificationEmail(user);
+        if (mailSenderService.isEnabled()) {
+
+            String randomCode = RandomString.make(64);
+            user.setRecoveryCode(randomCode);
+            user.setVerified(false);
+            mailSenderService.sendVerificationEmail(user);
+        } else {
+            user.setVerified(true);
+        }
+
         personRepository.save(user);
         return ("User registration was successful");
     }

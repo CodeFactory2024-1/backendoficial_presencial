@@ -19,7 +19,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @Tag(name = "3. Info Update", description = "Update info of user with a JWT")
-@RequestMapping("/userinfo")
+@RequestMapping("/api/userinfo")
 @SecurityRequirement(name = "JWT")
 @PreAuthorize("isAuthenticated()")
 public class UpdateInfoController {
