@@ -53,6 +53,16 @@ public class Seat implements Serializable {
 
     @OneToOne(mappedBy = "seat", cascade = CascadeType.ALL)
     private SeatXPassenger seatXPassenger;
+
+    public BigDecimal calculateTotalSurcharge(){
+        if (this.seatClass == null || this.location == null) {
+            return null;
+        }
+        BigDecimal seatClassSurcharge = this.seatClass.getSurcharge();
+        BigDecimal seatLocationSurcharge = this.location.getSurcharge();
+        return seatClassSurcharge.add(seatLocationSurcharge);
+    }
+
 }
 
 

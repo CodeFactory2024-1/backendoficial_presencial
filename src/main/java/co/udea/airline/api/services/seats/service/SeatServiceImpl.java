@@ -111,12 +111,6 @@ public class SeatServiceImpl implements ISeatService{
         return seatRepository.findById(id);
     }
 
-    private BigDecimal calculateSurcharge(Seat seat){
-        BigDecimal seatClassSurcharge = seat.getSeatClass().getSurcharge();
-        BigDecimal seatLocationSurcharge = seat.getSeatClass().getSurcharge();
-        return seatClassSurcharge.add(seatLocationSurcharge);
-    }
-
     @Override
     public List<Seat> generateSeatsByFlightId(Long id, int nSeats) {
 
@@ -138,10 +132,10 @@ public class SeatServiceImpl implements ISeatService{
         List<Seat> seats = new ArrayList<>();
         float proportion;
         int rowsPerSeatClass;
+        BigDecimal surcharge;
 
         final int COLUMNS = 6;
         final int TOTAL_ROWS = nSeats / COLUMNS; // Integer division to trunk
-        final int TOTAL_SEATS = TOTAL_ROWS*COLUMNS;
 
         // Code duplication to decrease complexity in loop and readability.
         SeatLocationEnum[] locationEnumList = new SeatLocationEnum[COLUMNS];
@@ -171,6 +165,8 @@ public class SeatServiceImpl implements ISeatService{
                     seat.setSeatNumber(seatPosNumber);
                     seat.setSeatClass(seatClass);
                     seat.setLocation(locationEnumList[j]);
+                    surcharge = seat.calculateTotalSurcharge();
+                    seat.setSurcharge(surcharge);
                     seat.setFlight(flight);
                     seat.setStatus(SeatStatusEnum.AVAILABLE);
                     seatTag = columnLetter[j] + "-" + (i+1);
