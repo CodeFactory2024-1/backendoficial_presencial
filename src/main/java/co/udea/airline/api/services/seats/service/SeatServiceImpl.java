@@ -1,6 +1,7 @@
 package co.udea.airline.api.services.seats.service;
 
 import co.udea.airline.api.model.DTO.CreateSeatDTO;
+import co.udea.airline.api.model.DTO.SeatDTO;
 import co.udea.airline.api.model.DTO.SeatXPassengerDTO;
 import co.udea.airline.api.model.jpa.model.bookings.Passenger;
 import co.udea.airline.api.model.jpa.model.flights.Flight;
@@ -244,6 +245,12 @@ public class SeatServiceImpl implements ISeatService{
         seatXPassenger.setSeat(newSeatSaved);
         SeatXPassenger updatedSeatXPassenger = seatXPassengerRepository.save(seatXPassenger);
         return seatXPassengerMapper.convertToDto(updatedSeatXPassenger);
+    }
+
+    @Override
+    public SeatDTO assignRandomSeatToPassenger(Long passengerId) {
+        Passenger passenger = getPassengerIfExists(passengerId);
+        return null;
     }
 
     @Override
