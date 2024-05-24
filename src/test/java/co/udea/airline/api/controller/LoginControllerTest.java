@@ -103,7 +103,7 @@ class LoginControllerTest {
         LoginRequestDTO loginRequest = new LoginRequestDTO("user@test.co", "pass123");
 
         mockMvc.perform(MockMvcRequestBuilders
-                .post("/login")
+                .post("/api/login")
                 .content(om.writeValueAsString(loginRequest)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers
@@ -115,7 +115,7 @@ class LoginControllerTest {
         LoginRequestDTO loginRequest = new LoginRequestDTO("user@test.co", "invalid_pass");
 
         mockMvc.perform(MockMvcRequestBuilders
-                .post("/login")
+                .post("/api/login")
                 .content(om.writeValueAsString(loginRequest)))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(MockMvcResultMatchers
@@ -151,7 +151,7 @@ class LoginControllerTest {
         });
 
         mockMvc.perform(MockMvcRequestBuilders
-                .post("/login/google")
+                .post("/api/login/google")
                 .content(om.writeValueAsString(validIdToken)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.token").exists());
@@ -166,7 +166,7 @@ class LoginControllerTest {
         when(googleJwtDecoder.decode(anyString())).thenThrow(BadJwtException.class);
 
         mockMvc.perform(MockMvcRequestBuilders
-                .post("/login/google")
+                .post("/api/login/google")
                 .content(om.writeValueAsString(invalidIdToken)))
                 .andExpectAll(MockMvcResultMatchers.status().isBadRequest(),
                         MockMvcResultMatchers

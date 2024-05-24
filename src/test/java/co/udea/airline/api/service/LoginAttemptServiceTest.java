@@ -61,14 +61,14 @@ class LoginAttemptServiceTest {
 
         for (int i = 0; i < 3; i++) {
 
-            mockMvc.perform(post("/login")
+            mockMvc.perform(post("/api/login")
                     .content(om.writeValueAsString(requestDTO))
                     .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isBadRequest());
 
         }
 
-        mockMvc.perform(post("/login")
+        mockMvc.perform(post("/api/login")
                 .content(om.writeValueAsString(requestDTO))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isLocked());

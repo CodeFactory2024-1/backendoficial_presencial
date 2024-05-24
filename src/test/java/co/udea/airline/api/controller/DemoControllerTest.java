@@ -57,7 +57,7 @@ class DemoControllerTest {
         assertTrue(person.getAuthorities().stream()
                 .anyMatch(t -> t.getAuthority().equals("search:flights")));
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/demo"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/demo"))
                 .andExpect(MockMvcResultMatchers.status().isUnauthorized());
     }
 
@@ -66,7 +66,7 @@ class DemoControllerTest {
         Jwt jwt = jwtUtils.createToken(person);
 
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/demo")
+                .get("/api/demo")
                 .header("Authorization", "Bearer %s".formatted(jwt.getTokenValue())))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
@@ -76,7 +76,7 @@ class DemoControllerTest {
         Jwt jwt = jwtUtils.createToken(person); // USER
 
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/admin_only")
+                .get("/api/admin_only")
                 .header("Authorization", "Bearer %s".formatted(jwt.getTokenValue())))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
@@ -88,7 +88,7 @@ class DemoControllerTest {
         Jwt jwt = jwtUtils.createToken(person); // ADMIN
 
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/admin_only")
+                .get("/api/admin_only")
                 .header("Authorization", "Bearer %s".formatted(jwt.getTokenValue())))
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
@@ -97,7 +97,7 @@ class DemoControllerTest {
     @Test
     void testSuperAdminToken() throws Exception {
 
-        mockMvc.perform(get("/admin_only")
+        mockMvc.perform(get("/api/admin_only")
                 .header("Authorization", "Bearer adminTokenTest"))
                 .andExpect(status().isOk());
     }

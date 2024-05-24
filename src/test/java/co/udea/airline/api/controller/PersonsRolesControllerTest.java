@@ -65,7 +65,7 @@ class PersonsRolesControllerTest {
     @Test
     void testGetUsersRoles() throws Exception {
 
-        mockMvc.perform(get("/usersroles")
+        mockMvc.perform(get("/api/usersroles")
                 .header("Authorization", "Bearer adminTokenTest"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(allOf(
@@ -77,7 +77,7 @@ class PersonsRolesControllerTest {
     @Test
     void testGetUserRoles() throws Exception {
 
-        mockMvc.perform(get("/usersroles/{id}", p.getPersonId())
+        mockMvc.perform(get("/api/usersroles/{id}", p.getPersonId())
                 .header("Authorization", "Bearer adminTokenTest"))
                 .andExpect(status().isOk());
 
@@ -86,7 +86,7 @@ class PersonsRolesControllerTest {
     @Test
     void testUpdateUserRoles() throws JsonProcessingException, Exception {
 
-        mockMvc.perform(patch("/usersroles/{id}", p.getPersonId())
+        mockMvc.perform(patch("/api/usersroles/{id}", p.getPersonId())
                 .header("Authorization", "Bearer adminTokenTest")
                 .content(new ObjectMapper()
                         .writeValueAsString(List.of(posAdmin.getPositionId())))

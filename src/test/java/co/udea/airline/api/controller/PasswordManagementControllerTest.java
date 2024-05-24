@@ -76,7 +76,7 @@ class PasswordManagementControllerTest {
     @Order(1)
     void testSendPasswordRecovery() throws Exception {
 
-        mockMvc.perform(post("/password/recovery")
+        mockMvc.perform(post("/api/password/recovery")
                 .param("email", p.getEmail())
                 .contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
@@ -92,7 +92,7 @@ class PasswordManagementControllerTest {
     @Order(2)
     void testPasswordRecovery() throws Exception {
 
-        mockMvc.perform(patch("/password/recovery")
+        mockMvc.perform(patch("/api/password/recovery")
                 .param("email", p.getEmail())
                 .param("code", "code_for_testing")
                 .param("newPassword", "newPass123")
@@ -114,7 +114,7 @@ class PasswordManagementControllerTest {
 
         Jwt jwt = jwtUtils.createToken(p);
 
-        mockMvc.perform(patch("/password/reset")
+        mockMvc.perform(patch("/api/password/reset")
                 .header("Authorization", "Bearer %s".formatted(jwt.getTokenValue()))
                 .param("currentPassword", "newPass123")
                 .param("newPassword", "anotherNewPass")

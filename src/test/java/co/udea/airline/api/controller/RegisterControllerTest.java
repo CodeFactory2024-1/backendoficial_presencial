@@ -97,7 +97,7 @@ class RegisterControllerTest {
     @Order(1)
     void testRegister() throws JsonProcessingException, Exception {
 
-        mockMvc.perform(post("/register")
+        mockMvc.perform(post("/api/register")
                 .content(om.writeValueAsString(registerRequestDTO))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -118,7 +118,7 @@ class RegisterControllerTest {
     @Order(2)
     void testRegisterWhenAlreadyRegistered() throws JsonProcessingException, Exception {
 
-        mockMvc.perform(post("/register")
+        mockMvc.perform(post("/api/register")
                 .content(om.writeValueAsString(registerRequestDTO))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
@@ -131,7 +131,7 @@ class RegisterControllerTest {
     @Order(3)
     void testVerifyUser() throws Exception {
 
-        mockMvc.perform(get("/verify")
+        mockMvc.perform(get("/api/verify")
                 .param("code", "test_code")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -142,7 +142,7 @@ class RegisterControllerTest {
     @Order(4)
     void testVerifyUserWithInvalidCode() throws Exception {
 
-        mockMvc.perform(get("/verify")
+        mockMvc.perform(get("/api/verify")
                 .param("code", "invalid")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
@@ -161,7 +161,7 @@ class RegisterControllerTest {
 
         doReturn(customJwt).when(googleJwtDecoder).decode(anyString());
 
-        mockMvc.perform(post("/login/google")
+        mockMvc.perform(post("/api/login/google")
                 .content(om.writeValueAsString(new OAuth2LoginRequestDTO(customJwt.getTokenValue())))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());

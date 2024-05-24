@@ -73,7 +73,7 @@ class UpdateInfoControllerTest {
 
         Jwt jwt = jwtUtils.createToken(p);
 
-        MvcResult result = mockMvc.perform(get("/userinfo")
+        MvcResult result = mockMvc.perform(get("/api/userinfo")
                 .header("Authorization", "Bearer %s".formatted(jwt.getTokenValue()))
                 .contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
                 .andReturn();
@@ -96,10 +96,10 @@ class UpdateInfoControllerTest {
     @Order(2)
     void testGetInfoNotLoggedIn() throws Exception {
 
-        mockMvc.perform(get("/userinfo")
+        mockMvc.perform(get("/api/userinfo")
                 .contentType(MediaType.APPLICATION_JSON)).andExpect(status().isUnauthorized());
 
-        mockMvc.perform(get("/userinfo")
+        mockMvc.perform(get("/api/userinfo")
                 .header("Authorization", "Bearer invlid.token.value")
                 .contentType(MediaType.APPLICATION_JSON)).andExpect(status().isUnauthorized());
     }
@@ -115,7 +115,7 @@ class UpdateInfoControllerTest {
 
         Jwt jwt = jwtUtils.createToken(p);
 
-        mockMvc.perform(put("/userinfo")
+        mockMvc.perform(put("/api/userinfo")
                 .header("Authorization", "Bearer %s".formatted(jwt.getTokenValue()))
                 .content(new ObjectMapper().writeValueAsString(infoDTO))
                 .contentType(MediaType.APPLICATION_JSON))

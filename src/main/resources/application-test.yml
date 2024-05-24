@@ -23,6 +23,7 @@ airline-api:
   dev:
     super-admin-token: $2a$10$KaxPAQ3H4o4YGXeNomAyne0A7D2sGl6qfWHg8FBp3HxNazBHTI2DW #to test = adminTokenTest
   mail:
+    enabled: true
     host: smtp.gmail.com
     port: 587
     username: email
