@@ -9,6 +9,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -44,7 +45,7 @@ public class Seat implements Serializable {
 
     @NotNull
     @Column(name = "surcharge")
-    private int surcharge = 0;
+    private BigDecimal surcharge = new BigDecimal("0.0");
 
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinColumn(name="flight_id")

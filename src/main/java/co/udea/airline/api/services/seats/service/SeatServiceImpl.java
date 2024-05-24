@@ -23,6 +23,7 @@ import co.udea.airline.api.utils.exception.DataNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -110,6 +111,11 @@ public class SeatServiceImpl implements ISeatService{
         return seatRepository.findById(id);
     }
 
+    private BigDecimal calculateSurcharge(Seat seat){
+        BigDecimal seatClassSurcharge = seat.getSeatClass().getSurcharge();
+        BigDecimal seatLocationSurcharge = seat.getSeatClass().getSurcharge();
+        return seatClassSurcharge.add(seatLocationSurcharge);
+    }
 
     @Override
     public List<Seat> generateSeatsByFlightId(Long id, int nSeats) {

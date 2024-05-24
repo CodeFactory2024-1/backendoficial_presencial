@@ -44,5 +44,5 @@ public class SeatDTO {
             example = "15000")
     @Min(value = 0, message = "The surcharge must be equal or greater than 0.")
     @Max(value = 1000000, message = "The surcharge must be equal or less than 1000000.")
-    private int surcharge = 0;
+    private String surcharge = "0";
 }
