@@ -212,7 +212,7 @@ public class SeatServiceImpl implements ISeatService{
     }
 
     @Override
-    public SeatXPassengerDTO updateSeatToPassenger(Long newSeatId, Long passengerId) {
+    public SeatXPassengerDTO changeAssignedSeatToPassenger(Long newSeatId, Long passengerId) {
         Passenger passenger = getPassengerIfExists(passengerId);
         Seat newSeat = getSeatIfExists(newSeatId);
 

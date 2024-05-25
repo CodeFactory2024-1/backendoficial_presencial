@@ -148,8 +148,8 @@ public class SeatController {
         );
     }
 
-    @PutMapping("/v1/updateSeatToPassenger/passenger/{passengerId}/seat/{newSeatId}")
-    @Operation(summary = "Update a seat assigned to a passenger")
+    @PutMapping("/v1/changeAssignedSeat/passenger/{passengerId}/seat/{newSeatId}")
+    @Operation(summary = "Changes Passenger's  current Seat to a new one.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {
                     @Content(schema = @Schema(implementation = SeatXPassengerDTO.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
@@ -158,9 +158,9 @@ public class SeatController {
             @ApiResponse(responseCode = "404", description = "Seat or Passenger not found."),
             @ApiResponse(responseCode = "409", description = "Seat already occupied by another passenger."),
             @ApiResponse(responseCode = "500", description = "Server internal Error.")})
-    public ResponseEntity<StandardResponse<SeatXPassengerDTO>> updateSeatToPassengerV1(
+    public ResponseEntity<StandardResponse<SeatXPassengerDTO>> changeAssignedSeatToPassengerV1(
             @PathVariable("newSeatId") String newSeatId, @PathVariable("passengerId") String passengerId){
-        SeatXPassengerDTO updatedSeatXPassengerDTO = seatService.updateSeatToPassenger(Long.valueOf(newSeatId), Long.valueOf(passengerId));
+        SeatXPassengerDTO updatedSeatXPassengerDTO = seatService.changeAssignedSeatToPassenger(Long.valueOf(newSeatId), Long.valueOf(passengerId));
         return ResponseEntity.ok(
                 new StandardResponse<>(StandardResponse.StatusStandardResponse.OK,
                         "Seat updated successfully",

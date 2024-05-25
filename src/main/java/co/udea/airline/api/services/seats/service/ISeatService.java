@@ -3,9 +3,7 @@ package co.udea.airline.api.services.seats.service;
 import co.udea.airline.api.model.DTO.SeatDTO;
 import co.udea.airline.api.model.DTO.SeatXPassengerDTO;
 import co.udea.airline.api.model.jpa.model.seats.Seat;
-
 import java.util.List;
-import java.util.Optional;
 
 public interface ISeatService {
     SeatDTO findSeatById(Long id);
@@ -14,7 +12,7 @@ public interface ISeatService {
     SeatXPassengerDTO getSeatByPassengerId(Long id);
     SeatXPassengerDTO assignSeatToPassenger(Long seatId, Long passengerId);
     SeatXPassengerDTO removeSeatToPassenger(Long seatId, Long passengerId);
-    SeatXPassengerDTO updateSeatToPassenger(Long newSeatId, Long passengerId);
+    SeatXPassengerDTO changeAssignedSeatToPassenger(Long newSeatId, Long passengerId);
     SeatXPassengerDTO assignRandomSeatToPassenger(Long passengerId);
     String getTotalSurchargeByBooking(Long bookingId);
     String getSeatSurcharge(Long seatId);
