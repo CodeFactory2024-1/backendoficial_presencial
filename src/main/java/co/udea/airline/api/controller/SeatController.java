@@ -217,8 +217,8 @@ public class SeatController {
         );
     }
 
-    @GetMapping("/v1/assignSeatsRandomly/{passengerId}")
-    @Operation(summary = "Get Seat by Passenger Id")
+    @PostMapping("/v1/assignSeatsRandomly/{passengerId}")
+    @Operation(summary = "Assign a randomly-selected seat to a passenger.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {
                     @Content(schema = @Schema(implementation = SeatXPassengerDTO.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
@@ -228,8 +228,12 @@ public class SeatController {
             @ApiResponse(responseCode = "500", description = "Server internal Error.")})
     public ResponseEntity<StandardResponse<SeatXPassengerDTO>> assignSeatsRandomlyToPassenger(
             @PathVariable("passengerId") String passengerId) {
-        seatService.assignRandomSeatToPassenger(Long.valueOf(passengerId));
-        return null;
-
+        SeatXPassengerDTO seatXPassengerDTO  = seatService.assignRandomSeatToPassenger(Long.valueOf(passengerId));
+        return ResponseEntity.ok(
+                new StandardResponse<>(StandardResponse.StatusStandardResponse.OK,
+                        "Random available seat",
+                        seatXPassengerDTO
+                )
+        );
     }
 }

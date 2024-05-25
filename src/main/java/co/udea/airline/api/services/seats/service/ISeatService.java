@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ISeatService {
-    //Seat save(Seat s);
-    //Seat update(Seat seat);
     Optional<Seat> findSeatById(Long id);
     List<Seat> generateSeatsByFlightId(Long id, int nSeats);
     List<Seat> getAllSeatsByFlightId(Long id);
@@ -17,6 +15,5 @@ public interface ISeatService {
     SeatXPassengerDTO assignSeatToPassenger(Long seatId, Long passengerId);
     SeatXPassengerDTO removeSeatToPassenger(Long seatId, Long passengerId);
     SeatXPassengerDTO updateSeatToPassenger(Long newSeatId, Long passengerId);
-    SeatDTO assignRandomSeatToPassenger(Long passengerId);
-
+    SeatXPassengerDTO assignRandomSeatToPassenger(Long passengerId);
 }

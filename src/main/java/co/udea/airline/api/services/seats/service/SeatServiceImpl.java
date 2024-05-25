@@ -14,14 +14,13 @@ import co.udea.airline.api.model.jpa.repository.flights.IFlightRepository;
 import co.udea.airline.api.model.jpa.repository.seats.ISeatRepository;
 import co.udea.airline.api.model.jpa.repository.seats.ISeatXPassengerRepository;
 import co.udea.airline.api.model.mapper.CreateSeatMapper;
+import co.udea.airline.api.model.mapper.SeatMapper;
 import co.udea.airline.api.model.mapper.SeatXPassengerMapper;
 import co.udea.airline.api.utils.common.Messages;
 import co.udea.airline.api.utils.common.SeatClassEnum;
 import co.udea.airline.api.utils.common.SeatLocationEnum;
 import co.udea.airline.api.utils.common.SeatStatusEnum;
-import co.udea.airline.api.utils.exception.BusinessException;
-import co.udea.airline.api.utils.exception.DataDuplicatedException;
-import co.udea.airline.api.utils.exception.DataNotFoundException;
+import co.udea.airline.api.utils.exception.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +28,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class SeatServiceImpl implements ISeatService{
@@ -56,6 +56,9 @@ public class SeatServiceImpl implements ISeatService{
 
     @Autowired
     private SeatXPassengerMapper seatXPassengerMapper;
+
+    @Autowired
+    private SeatMapper seatMapper;
 
     private Flight getFlightIfExists(Long id){
         Optional<Flight> flightOptional = flightRepository.findById(id);
@@ -248,26 +251,55 @@ public class SeatServiceImpl implements ISeatService{
         return seatXPassengerMapper.convertToDto(updatedSeatXPassenger);
     }
 
+    private Seat selectRandomSeat(List<Seat> seats){
+        int maxValIndex = 0;
+        double currVal;
+        double maxVal = 0d;
+        for (int i = 0; i < seats.size(); i++) {
+            currVal = Math.random();
+            if (currVal > maxVal){
+                maxVal = currVal;
+                maxValIndex = i;
+            }
+        }
+        return seats.get(maxValIndex);
+    }
+
+
     @Override
-    public SeatDTO assignRandomSeatToPassenger(Long passengerId) {
+    public SeatXPassengerDTO assignRandomSeatToPassenger(Long passengerId) {
+        Seat seat;
         Passenger passenger = getPassengerIfExists(passengerId);
         Booking booking = bookingRepository.getReferenceById(passenger.getId());
         Flight flight = flightRepository.getReferenceById(booking.getId());
         List<Seat> availableSeats = seatRepository.getAllAvailableStatus(flight.getId());
 
-//        List<Seat> touristSeats = availableSeats.stream()
-//                .filter(seat -> seat.getSeatClass() == SeatClass.T)
-//                .collect(Collectors.toList());
-//
-//        List<Seat> economyClassSeats = availableSeats.stream()
-//                .filter(seat -> seat.getSeatClass() == SeatClass.E)
-//                .collect(Collectors.toList());
-//
-//        List<Seat> firstClassSeats = availableSeats.stream()
-//                .filter(seat -> seat.getSeatClass() == SeatClass.FC)
-//                .collect(Collectors.toList());
+        List<Seat> touristSeats = availableSeats.stream()
+                .filter(s -> s.getSeatClass() == SeatClassEnum.TOURIST)
+                .collect(Collectors.toList());
 
-        return null;
+        List<Seat> executiveSeats = availableSeats.stream()
+                .filter(s -> s.getSeatClass() == SeatClassEnum.EXECUTIVE)
+                .collect(Collectors.toList());
+
+        List<Seat> fcSeats = availableSeats.stream()
+                .filter(s -> s.getSeatClass() == SeatClassEnum.FIRST_CLASS)
+                .collect(Collectors.toList());
+
+        if (!touristSeats.isEmpty()){
+            seat = selectRandomSeat(touristSeats);
+        } else if (!executiveSeats.isEmpty()) {
+            seat = selectRandomSeat(executiveSeats);
+        } else if (!fcSeats.isEmpty()) {
+            seat = selectRandomSeat(fcSeats);
+        } else {
+            throw new NotAvailableSeatsException("There aren't any available seats :(");
+        }
+        // Update seat surcharge to 0
+        seat.setSurcharge(new BigDecimal("0.0"));
+        Seat updatedSeat = seatRepository.save(seat);
+
+        return this.assignSeatToPassenger(updatedSeat.getId(), passenger.getId());
     }
 
     @Override
