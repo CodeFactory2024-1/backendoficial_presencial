@@ -31,7 +31,7 @@ public class Flight {
     private FlightTypeEnum flightType = FlightTypeEnum.Domestic;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL,  fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "flight", cascade = CascadeType.MERGE,  fetch = FetchType.EAGER)
     private List<Seat> seatList = new ArrayList<>();
 
     @JsonIgnore

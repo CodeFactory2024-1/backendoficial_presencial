@@ -46,11 +46,11 @@ public class Seat implements Serializable {
     @Column(name = "surcharge")
     private BigDecimal surcharge = new BigDecimal("0.0");
 
-    @ManyToOne(cascade = CascadeType.ALL,  fetch = FetchType.LAZY)
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH},  fetch = FetchType.EAGER)
     @JoinColumn(name="flight_id")
     private Flight flight;
 
-    @OneToOne(mappedBy = "seat", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "seat", cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
     private SeatXPassenger seatXPassenger;
 
     public BigDecimal calculateTotalSurcharge(){

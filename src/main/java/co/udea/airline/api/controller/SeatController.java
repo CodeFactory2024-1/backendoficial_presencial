@@ -35,74 +35,27 @@ public class SeatController {
     private SeatServiceImpl seatService;
 
     @Autowired
-    private Messages messages;
-
-    @Autowired
-    private ModelMapper modelMapper;
-
-    @Autowired
     private SeatMapper seatMapper;
 
-
-
-//    @GetMapping("/v1/find/{id}")
-//    @Operation(summary = "Get Seat by Id")
-//    @ApiResponses({
-//            @ApiResponse(responseCode = "200", content = {
-//                    @Content(schema = @Schema(implementation = Seat.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
-//            }, description = "Seat obtained successfully."),
-//            @ApiResponse(responseCode = "400", description = "Invalid Request"),
-//            @ApiResponse(responseCode = "404", description = "Seat Not found"),
-//            @ApiResponse(responseCode = "500", description = "Server internal Error")})
-//    public ResponseEntity<StandardResponse<Seat>> getSeatByIdV1(@PathVariable String id) {
-//        Long idLong = Long.valueOf(id);
-//        Optional<Seat> seatFound = seatService.findSeatById(idLong);
-//        if (seatFound.isPresent()){
-//            Seat seatResponse = seatFound.get();
-//            return ResponseEntity.ok(new StandardResponse<>(StandardResponse.StatusStandardResponse.OK,
-//                    messages.get("seat.findById"),
-//                    seatResponse));
-//        } else {
-//            return ResponseEntity.notFound().build();
-//        }
-//    }
-
-    @PostMapping("/v1/save")
-    @Operation(summary = "Save a single Seat")
+    @GetMapping("/v1/seat/{id}")
+    @Operation(summary = "Get Seat by Id")
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {
-                    @Content(schema = @Schema(implementation = SeatDTO.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
-            }, description = "Seat saved successfully."),
+                    @Content(schema = @Schema(implementation = Seat.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
+            }, description = "Seat obtained successfully."),
             @ApiResponse(responseCode = "400", description = "Invalid Request"),
-            @ApiResponse(responseCode = "409", description = "Seat already exists"),
+            @ApiResponse(responseCode = "404", description = "Seat Not found"),
             @ApiResponse(responseCode = "500", description = "Server internal Error")})
-    public ResponseEntity<StandardResponse<CreateSeatDTO>> saveV1(@Valid @RequestBody CreateSeatDTO seatToCreate) {
-        CreateSeatDTO seatCreated = seatService.save(seatToCreate);
+    public ResponseEntity<StandardResponse<SeatDTO>> getSeatByIdV1(@PathVariable String id) {
         return ResponseEntity.ok(
                 new StandardResponse<>(
                         StandardResponse.StatusStandardResponse.OK,
-                        messages.get("seat.save.successful"),
-                        seatCreated
+                        "Seat returned.",
+                        seatService.findSeatById(Long.valueOf(id))
                 )
         );
     }
-//    @PutMapping("/v1/update/{id}")
-//    @Operation(summary = "Update seat by id")
-//    @ApiResponses({
-//            @ApiResponse(responseCode = "200", content = {
-//                    @Content(schema = @Schema(implementation = Seat.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
-//            }, description = "Seat updated successfully."),
-//            @ApiResponse(responseCode = "400", description = "Invalid Request"),
-//            @ApiResponse(responseCode = "404", description = "Seat Not found"),
-//            @ApiResponse(responseCode = "500", description = "Server internal Error")})
-//    public ResponseEntity<StandardResponse<Seat>> updateSeatV1(@Valid @RequestBody Seat seat) {
-//        return ResponseEntity.ok(
-//                new StandardResponse<>(StandardResponse.StatusStandardResponse.OK,
-//                        messages.get("seat.update.successful"),
-//                        seatService.update(seat)
-//                )
-//        );
-//    }
+
     @PostMapping("/v1/generateSeats/{flightId}/{nSeats}")
     @Operation(summary = "Generate Seats given a flight id")
     @ApiResponses({
@@ -193,7 +146,6 @@ public class SeatController {
                         "Assigned seat successfully obtained",
                         seatXPassengerDTO)
         );
-
     }
 
     @PutMapping("/v1/updateSeatToPassenger/passenger/{passengerId}/seat/{newSeatId}")
@@ -226,7 +178,7 @@ public class SeatController {
             @ApiResponse(responseCode = "400", description = "Invalid Request."),
             @ApiResponse(responseCode = "404", description = "Passenger does not exist."),
             @ApiResponse(responseCode = "500", description = "Server internal Error.")})
-    public ResponseEntity<StandardResponse<SeatXPassengerDTO>> assignSeatsRandomlyToPassenger(
+    public ResponseEntity<StandardResponse<SeatXPassengerDTO>> assignSeatsRandomlyToPassengerV1(
             @PathVariable("passengerId") String passengerId) {
         SeatXPassengerDTO seatXPassengerDTO  = seatService.assignRandomSeatToPassenger(Long.valueOf(passengerId));
         return ResponseEntity.ok(
@@ -236,4 +188,67 @@ public class SeatController {
                 )
         );
     }
+
+    @GetMapping("/v1/getTotalSurcharge/booking/{bookingId}")
+    @Operation(summary = "Get total surcharge for a given booking.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {
+                    @Content(schema = @Schema(implementation = String.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
+            }, description = "Total surcharge returned successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid Request."),
+            @ApiResponse(responseCode = "404", description = "Passenger does not exist."),
+            @ApiResponse(responseCode = "500", description = "Server internal Error.")})
+    public ResponseEntity<StandardResponse<String>> getTotalSurchargeByBookingV1(@PathVariable("bookingId") String bookingId){
+        return ResponseEntity.ok(
+                new StandardResponse<>(StandardResponse.StatusStandardResponse.OK,
+                        "Total surcharge returned successfully",
+                        seatService.getTotalSurchargeByBooking(
+                                Long.valueOf(bookingId)
+                        )
+                )
+        );
+    }
+
+    @GetMapping("/v1/getSurcharge/seat/{seatId}")
+    @Operation(summary = "Get total surcharge for a given booking.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {
+                    @Content(schema = @Schema(implementation = String.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
+            }, description = "Surcharge returned successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid Request."),
+            @ApiResponse(responseCode = "404", description = "Passenger does not exist."),
+            @ApiResponse(responseCode = "500", description = "Server internal Error.")})
+    public ResponseEntity<StandardResponse<String>> getSeatSurchargeV1(@PathVariable("seatId") String seatId){
+        return ResponseEntity.ok(
+                new StandardResponse<>(StandardResponse.StatusStandardResponse.OK,
+                        "Surcharge returned successfully",
+                        seatService.getSeatSurcharge(
+                                Long.valueOf(seatId)
+                        )
+                )
+        );
+    }
+
+    @PutMapping("/v1/updateSurcharge/seat/{seatId}/surcharge/{newSurcharge}")
+    @Operation(summary = "Update a seat assigned to a passenger")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {
+                    @Content(schema = @Schema(implementation = SeatDTO.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
+            }, description = "Seat updated successfully."),
+            @ApiResponse(responseCode = "400", description = "Invalid Request."),
+            @ApiResponse(responseCode = "404", description = "Seat or Passenger not found."),
+            @ApiResponse(responseCode = "409", description = "Seat already occupied by another passenger."),
+            @ApiResponse(responseCode = "500", description = "Server internal Error.")})
+    public ResponseEntity<StandardResponse<SeatDTO>> updateSeatSurchargeV1(
+            @PathVariable("seatId") String seatId, @PathVariable("newSurcharge") String newSurcharge){
+        SeatDTO seatDTO = seatService.setSeatSurcharge(Long.valueOf(seatId),newSurcharge);
+        return ResponseEntity.ok(
+                new StandardResponse<>(StandardResponse.StatusStandardResponse.OK,
+                        "Seat updated successfully",
+                        seatDTO
+                )
+        );
+    }
+
+
 }

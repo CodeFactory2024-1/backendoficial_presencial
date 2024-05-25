@@ -23,12 +23,12 @@ public class SeatXPassenger {
     private Long id;
 
     @NotNull
-    @OneToOne(cascade = {CascadeType.REFRESH},  fetch = FetchType.LAZY)
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH},  fetch = FetchType.EAGER)
     @JoinColumn(name = "id_passenger")
     private Passenger passenger;
 
     @NotNull
-    @OneToOne(cascade = {CascadeType.REFRESH},  fetch = FetchType.LAZY)
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH},  fetch = FetchType.EAGER)
     @JoinColumn(name = "id_seat")
     private Seat seat;
 

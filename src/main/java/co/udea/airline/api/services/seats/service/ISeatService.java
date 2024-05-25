@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ISeatService {
-    Optional<Seat> findSeatById(Long id);
+    SeatDTO findSeatById(Long id);
     List<Seat> generateSeatsByFlightId(Long id, int nSeats);
     List<Seat> getAllSeatsByFlightId(Long id);
     SeatXPassengerDTO getSeatByPassengerId(Long id);
@@ -16,4 +16,7 @@ public interface ISeatService {
     SeatXPassengerDTO removeSeatToPassenger(Long seatId, Long passengerId);
     SeatXPassengerDTO updateSeatToPassenger(Long newSeatId, Long passengerId);
     SeatXPassengerDTO assignRandomSeatToPassenger(Long passengerId);
+    String getTotalSurchargeByBooking(Long bookingId);
+    String getSeatSurcharge(Long seatId);
+    SeatDTO setSeatSurcharge(Long seatId, String surcharge);
 }

@@ -84,36 +84,11 @@ public class SeatServiceImpl implements ISeatService{
         return passengerOptional.get();
     }
 
-    public CreateSeatDTO save(CreateSeatDTO seatToSave){
-        Long flightId = seatToSave.getFlightId();
-        Optional<Flight> flightOptional = flightRepository.findById(flightId);
-        if (flightOptional.isEmpty()){
-            throw new DataNotFoundException(String.format(messages.get("flight.does.not.exist")));
-        }
-
-        // To-Do: check if seat already exists.
-
-        // Preparing to save
-        Seat seat = createSeatMapper.convertToEntity(seatToSave);
-        seat.setFlight(flightOptional.get());
-
-        Seat savedSeat = seatRepository.save(seat);
-
-        // Prepare the response
-        return createSeatMapper.convertToDto(savedSeat);
-    }
-
-//    public Seat update(Seat seat) {
-//        Optional<Seat> seatOptional = seatRepository.findById(seat.getId());
-//        if (seatOptional.isEmpty()){
-//            throw new DataNotFoundException(String.format(messages.get("seat.does.not.exist")));
-//        }
-//        return seatRepository.save(seat);
-//    }
 
     @Override
-    public Optional<Seat> findSeatById(Long id) {
-        return seatRepository.findById(id);
+    public SeatDTO findSeatById(Long id) {
+        Seat seat = getSeatIfExists(id);
+        return seatMapper.convertToDto(seat);
     }
 
     @Override
@@ -190,6 +165,15 @@ public class SeatServiceImpl implements ISeatService{
         // Methods already handle exceptions
         Seat seat = getSeatIfExists(seatId);
         Passenger passenger = getPassengerIfExists(passengerId);
+        Long flightId = passenger.getBooking().getFlight().getId();
+
+        if (!flightId.equals(seat.getFlight().getId())){
+            throw new BusinessException(
+                    "Can't assign a seat that does not belong to passenger's Flight."
+            );
+        }
+        // Check if seat is assignable, this is, it's a seat from the flight
+        // of the passenger
 
         // Check if the exact pair seat-passenger already exists
         if (seatXPassengerRepository.existsBySeatIdAndPassengerId(
@@ -265,7 +249,6 @@ public class SeatServiceImpl implements ISeatService{
         return seats.get(maxValIndex);
     }
 
-
     @Override
     public SeatXPassengerDTO assignRandomSeatToPassenger(Long passengerId) {
         Seat seat;
@@ -300,6 +283,41 @@ public class SeatServiceImpl implements ISeatService{
         Seat updatedSeat = seatRepository.save(seat);
 
         return this.assignSeatToPassenger(updatedSeat.getId(), passenger.getId());
+    }
+
+    @Override
+    public String getTotalSurchargeByBooking(Long bookingId) {
+        if(!bookingRepository.existsById(bookingId)){
+            String msg = "Booking by id %d does not exist.";
+            throw new DataNotFoundException(String.format(msg, bookingId));
+        }
+
+        BigDecimal totalSum = new BigDecimal("0.0");
+        List<Passenger> passengerList = passengerRepository.findAllByBookingId(bookingId);
+
+        for(Passenger p: passengerList){
+            try {
+                totalSum = totalSum.add(p.getSeatXPassenger().getSeat().getSurcharge());
+            }
+            catch (NullPointerException e) {
+                String msg = "Error obtaining passenger seat. ¿Does the passenger have a seat assigned?";
+                throw new BusinessException(msg);
+            }
+        }
+        return totalSum.toString();
+    }
+
+    @Override
+    public String getSeatSurcharge(Long seatId) {
+        return getSeatIfExists(seatId).getSurcharge().toString();
+    }
+
+    @Override
+    public SeatDTO setSeatSurcharge(Long seatId, String surcharge) {
+        Seat seat = getSeatIfExists(seatId);
+        seat.setSurcharge(new BigDecimal(surcharge));
+        Seat savedSeat = seatRepository.save(seat);
+        return seatMapper.convertToDto(savedSeat);
     }
 
     @Override
