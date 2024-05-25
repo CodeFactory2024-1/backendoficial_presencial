@@ -55,6 +55,7 @@ public class AirlineApiApplication extends SpringBootServletInitializer {
                              IBookingRepository bookingRepository) {
         return args -> {
 
+
             Flight flight1 = new Flight();
             flight1.setFlightType(FlightTypeEnum.International);
 

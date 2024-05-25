@@ -216,4 +216,20 @@ public class SeatController {
                 )
         );
     }
+
+    @GetMapping("/v1/assignSeatsRandomly/{passengerId}")
+    @Operation(summary = "Get Seat by Passenger Id")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {
+                    @Content(schema = @Schema(implementation = SeatXPassengerDTO.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
+            }, description = "Seat successfully obtained"),
+            @ApiResponse(responseCode = "400", description = "Invalid Request."),
+            @ApiResponse(responseCode = "404", description = "Passenger does not exist."),
+            @ApiResponse(responseCode = "500", description = "Server internal Error.")})
+    public ResponseEntity<StandardResponse<SeatXPassengerDTO>> assignSeatsRandomlyToPassenger(
+            @PathVariable("passengerId") String passengerId) {
+        seatService.assignRandomSeatToPassenger(Long.valueOf(passengerId));
+        return null;
+
+    }
 }

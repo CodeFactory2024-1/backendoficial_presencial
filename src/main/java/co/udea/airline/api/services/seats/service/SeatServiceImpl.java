@@ -3,6 +3,7 @@ package co.udea.airline.api.services.seats.service;
 import co.udea.airline.api.model.DTO.CreateSeatDTO;
 import co.udea.airline.api.model.DTO.SeatDTO;
 import co.udea.airline.api.model.DTO.SeatXPassengerDTO;
+import co.udea.airline.api.model.jpa.model.bookings.Booking;
 import co.udea.airline.api.model.jpa.model.bookings.Passenger;
 import co.udea.airline.api.model.jpa.model.flights.Flight;
 import co.udea.airline.api.model.jpa.model.seats.Seat;
@@ -250,6 +251,21 @@ public class SeatServiceImpl implements ISeatService{
     @Override
     public SeatDTO assignRandomSeatToPassenger(Long passengerId) {
         Passenger passenger = getPassengerIfExists(passengerId);
+        Booking booking = bookingRepository.getReferenceById(passenger.getId());
+        Flight flight = flightRepository.getReferenceById(booking.getId());
+        List<Seat> availableSeats = seatRepository.getAllAvailableStatus(flight.getId());
+
+//        List<Seat> touristSeats = availableSeats.stream()
+//                .filter(seat -> seat.getSeatClass() == SeatClass.T)
+//                .collect(Collectors.toList());
+//
+//        List<Seat> economyClassSeats = availableSeats.stream()
+//                .filter(seat -> seat.getSeatClass() == SeatClass.E)
+//                .collect(Collectors.toList());
+//
+//        List<Seat> firstClassSeats = availableSeats.stream()
+//                .filter(seat -> seat.getSeatClass() == SeatClass.FC)
+//                .collect(Collectors.toList());
 
         return null;
     }
