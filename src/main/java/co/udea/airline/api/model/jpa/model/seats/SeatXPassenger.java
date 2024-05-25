@@ -2,15 +2,7 @@ package co.udea.airline.api.model.jpa.model.seats;
 
 import co.udea.airline.api.model.jpa.model.bookings.Passenger;
 import co.udea.airline.api.utils.common.SeatStatusEnum;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,14 +23,13 @@ public class SeatXPassenger {
     private Long id;
 
     @NotNull
-    @OneToOne(cascade = {CascadeType.MERGE})
+    @OneToOne(cascade = {CascadeType.REFRESH},  fetch = FetchType.LAZY)
     @JoinColumn(name = "id_passenger")
     private Passenger passenger;
 
     @NotNull
-    @OneToOne(cascade = {CascadeType.MERGE})
+    @OneToOne(cascade = {CascadeType.REFRESH},  fetch = FetchType.LAZY)
     @JoinColumn(name = "id_seat")
     private Seat seat;
-
 
 }

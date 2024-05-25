@@ -1,9 +1,12 @@
 package co.udea.airline.api.model.jpa.model.flights;
 
+import java.awt.print.Book;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import co.udea.airline.api.model.jpa.model.bookings.Booking;
+import co.udea.airline.api.model.jpa.model.bookings.Passenger;
 import co.udea.airline.api.model.jpa.model.seats.Seat;
 import co.udea.airline.api.utils.common.FlightTypeEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -28,6 +31,10 @@ public class Flight {
     private FlightTypeEnum flightType = FlightTypeEnum.Domestic;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL,  fetch = FetchType.LAZY)
     private List<Seat> seatList = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "flight", cascade = {CascadeType.MERGE},  fetch = FetchType.EAGER)
+    private List<Booking> bookingList = new ArrayList<>();
 }

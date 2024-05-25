@@ -250,6 +250,7 @@ public class SeatServiceImpl implements ISeatService{
     @Override
     public SeatDTO assignRandomSeatToPassenger(Long passengerId) {
         Passenger passenger = getPassengerIfExists(passengerId);
+
         return null;
     }
 
