@@ -94,5 +94,4 @@ public class Flight {
         this.arrivalDate = arrivalDate;
     }
 
-    // Eliminamos getTotalCost() y setTotalCost() de Flight
 }
