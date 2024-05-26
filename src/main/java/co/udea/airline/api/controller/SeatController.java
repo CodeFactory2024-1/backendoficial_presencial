@@ -268,4 +268,20 @@ public class SeatController {
                         seatDTO)
                 );
     }
+
+    @GetMapping("/v1/getAllSeats/booking/{bookingId}")
+    @Operation(summary = "Get all seats per passenger, that have been already assigned.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {
+                    @Content(schema = @Schema(implementation = List.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
+            }, description = "Surcharge returned successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid Request."),
+            @ApiResponse(responseCode = "404", description = "Booking does not exist."),
+            @ApiResponse(responseCode = "500", description = "Server internal Error.")})
+    public ResponseEntity<StandardResponse<List<SeatXPassengerDTO>>> getAllSeatsByBookingIdV1(@PathVariable("bookingId") String bookingId){
+        return ResponseEntity.ok(
+                new StandardResponse<>(StandardResponse.StatusStandardResponse.OK,
+                        "Relation returned successfully.",
+                        seatService.getAllSeatsByBookingId(Long.valueOf(bookingId))));
+    }
 }

@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.text.html.Option;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +65,7 @@ public class SeatServiceImpl implements ISeatService{
     private Flight getFlightIfExists(Long id){
         Optional<Flight> flightOptional = flightRepository.findById(id);
         if (flightOptional.isEmpty()){
-            throw new DataNotFoundException(String.format(messages.get("flight.does.not.exist")));
+            throw new DataNotFoundException("Flight does not exist.");
         }
         return flightOptional.get();
     }
@@ -72,7 +73,7 @@ public class SeatServiceImpl implements ISeatService{
     private Seat getSeatIfExists(Long id){
         Optional<Seat> seatOptional = seatRepository.findById(id);
         if (seatOptional.isEmpty()){
-            throw new DataNotFoundException(String.format(messages.get("seat.does.not.exist")));
+            throw new DataNotFoundException("Seat does not exist.");
         }
         return seatOptional.get();
     }
@@ -80,7 +81,7 @@ public class SeatServiceImpl implements ISeatService{
     private Passenger getPassengerIfExists(Long id){
         Optional<Passenger> passengerOptional = passengerRepository.findById(id);
         if (passengerOptional.isEmpty()){
-            throw new DataNotFoundException(String.format(messages.get("passenger.does.not.exist")));
+            throw new DataNotFoundException("Passenger does not exist");
         }
         return passengerOptional.get();
     }
@@ -104,7 +105,7 @@ public class SeatServiceImpl implements ISeatService{
         }
         Flight flight = getFlightIfExists(id);
         if (seatRepository.existsSeatByFlightId(id)){
-            String msg = String.format(messages.get("flight.has.seats"));
+            String msg = "Flight already has seats";
             throw new DataDuplicatedException(msg);
         }
 
@@ -233,11 +234,11 @@ public class SeatServiceImpl implements ISeatService{
 
         Optional<SeatXPassenger> seatXPassengerOptional = seatXPassengerRepository.findByPassengerId(passengerId);
         if (seatXPassengerOptional.isEmpty()) {
-            throw new DataNotFoundException(String.format(messages.get("seat.passenger.not.found")));
+            throw new DataNotFoundException("Passenger not found.");
         }
 
         if (newSeat.getStatus() == SeatStatusEnum.OCCUPIED) {
-            throw new BusinessException(String.format(messages.get("seat.is.occupied")));
+            throw new BusinessException("Seat is already occupied.");
         }
         SeatXPassenger seatXPassenger = seatXPassengerOptional.get();
         Seat oldSeat = seatXPassenger.getSeat();
@@ -303,7 +304,7 @@ public class SeatServiceImpl implements ISeatService{
     @Override
     public String getTotalSurchargeByBooking(Long bookingId) {
         if(!bookingRepository.existsById(bookingId)){
-            String msg = "Booking by id %d does not exist.";
+            String msg = "Booking does not exist.";
             throw new DataNotFoundException(String.format(msg, bookingId));
         }
 
@@ -339,5 +340,26 @@ public class SeatServiceImpl implements ISeatService{
     public List<Seat> getAllSeatsByFlightId(Long flightId) {
         Flight flight = getFlightIfExists(flightId);
         return seatRepository.findAllByFlightId(flightId);
+    }
+
+    private List<Passenger> getPassengerListByBookingId(Long bookingId){
+        return passengerRepository.findAllByBookingId(bookingId);
+    }
+
+    @Override
+    public List<SeatXPassengerDTO> getAllSeatsByBookingId(Long id) {
+        if(!bookingRepository.existsById(id)){
+            throw new DataNotFoundException("Booking does not exist.");
+        }
+        Optional<SeatXPassenger> passengerOptional;
+        List<SeatXPassengerDTO> spList = new ArrayList<>();
+        List<Passenger> passengerList = getPassengerListByBookingId(id);
+        for(Passenger p: passengerList){
+            passengerOptional = seatXPassengerRepository.findByPassengerId(p.getId());
+            if (passengerOptional.isPresent()){
+                spList.add(seatXPassengerMapper.convertToDto(passengerOptional.get()));
+            }
+        }
+        return spList;
     }
 }
