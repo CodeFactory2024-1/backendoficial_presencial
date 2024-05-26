@@ -2,26 +2,19 @@ package com.udea.vuelo.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
-@Entity
-public class Flight {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
 
+public class Flight {
+    private int id;
     private String airline;
     private String origin;
     private String destination;
-
-    @Embedded
-    private Price price;
+    private Price price; // Cambio de int a objeto Price
 
     @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate departureDate;
-
     @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate arrivalDate;
 
@@ -93,6 +86,4 @@ public class Flight {
     public void setArrivalDate(LocalDate arrivalDate) {
         this.arrivalDate = arrivalDate;
     }
-
-    // Eliminamos getTotalCost() y setTotalCost() de Flight
 }
