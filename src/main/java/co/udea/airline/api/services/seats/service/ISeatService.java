@@ -3,8 +3,6 @@ package co.udea.airline.api.services.seats.service;
 import co.udea.airline.api.model.DTO.SeatDTO;
 import co.udea.airline.api.model.DTO.SeatXPassengerDTO;
 import co.udea.airline.api.model.jpa.model.seats.Seat;
-import co.udea.airline.api.model.jpa.model.seats.SeatXPassenger;
-
 import java.util.List;
 
 public interface ISeatService {

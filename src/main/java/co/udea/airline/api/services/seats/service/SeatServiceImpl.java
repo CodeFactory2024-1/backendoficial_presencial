@@ -12,10 +12,8 @@ import co.udea.airline.api.model.jpa.repository.bookings.IPassengerRepository;
 import co.udea.airline.api.model.jpa.repository.flights.IFlightRepository;
 import co.udea.airline.api.model.jpa.repository.seats.ISeatRepository;
 import co.udea.airline.api.model.jpa.repository.seats.ISeatXPassengerRepository;
-import co.udea.airline.api.model.mapper.CreateSeatMapper;
 import co.udea.airline.api.model.mapper.SeatMapper;
 import co.udea.airline.api.model.mapper.SeatXPassengerMapper;
-import co.udea.airline.api.utils.common.Messages;
 import co.udea.airline.api.utils.common.SeatClassEnum;
 import co.udea.airline.api.utils.common.SeatLocationEnum;
 import co.udea.airline.api.utils.common.SeatStatusEnum;
@@ -24,7 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.text.html.Option;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,12 +45,6 @@ public class SeatServiceImpl implements ISeatService{
 
     @Autowired
     ISeatXPassengerRepository seatXPassengerRepository;
-
-    @Autowired
-    Messages messages;
-
-    @Autowired
-    CreateSeatMapper createSeatMapper;
 
     @Autowired
     SeatXPassengerMapper seatXPassengerMapper;
@@ -84,7 +75,6 @@ public class SeatServiceImpl implements ISeatService{
         }
         return passengerOptional.get();
     }
-
 
     @Override
     public SeatDTO findSeatById(Long id) {

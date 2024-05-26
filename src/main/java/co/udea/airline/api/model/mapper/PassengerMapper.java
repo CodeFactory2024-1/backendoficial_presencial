@@ -1,9 +1,7 @@
 package co.udea.airline.api.model.mapper;
 
-import co.udea.airline.api.model.DTO.CreateSeatDTO;
 import co.udea.airline.api.model.DTO.PassengerDTO;
 import co.udea.airline.api.model.jpa.model.bookings.Passenger;
-import co.udea.airline.api.model.jpa.model.seats.Seat;
 import co.udea.airline.api.model.jpa.repository.flights.IFlightRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
