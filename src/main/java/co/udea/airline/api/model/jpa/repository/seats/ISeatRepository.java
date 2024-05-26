@@ -13,10 +13,7 @@ public interface ISeatRepository  extends JpaRepository<Seat,Long> {
     List<Seat> findAllByFlightId(Long id);
     Boolean existsSeatByFlightId(Long id);
     // statUs = 1 means AVAILABLE. See SeatStatusEnum
-    @Query("SELECT s FROM Seat s WHERE s.status = 1")
-    List<Seat> getAllAvailableStatus(Long id);
-
-    @Query("SELECT s from Seat s where s.id =:seatId and s.flight.id=:flightId")
-    Seat getBySeatIdAndAndFlightId(Long seatId, Long flightId);
+    @Query("SELECT s FROM Seat s WHERE s.status = 1 and s.flight.id=:id")
+    List<Seat> getAllAvailableSeatByFlightId(Long id);
 
 }

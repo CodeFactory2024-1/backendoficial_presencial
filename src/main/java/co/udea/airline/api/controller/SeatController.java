@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 @Tag(name = "Seat", description = "Seat management")
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/api/seat")
+@RequestMapping("/api")
 public class SeatController {
 
     @Autowired
@@ -56,7 +56,7 @@ public class SeatController {
         );
     }
 
-    @PostMapping("/v1/generateSeats/{flightId}/{nSeats}")
+    @PostMapping("/v1/generate/seats/{nSeats}/flight/{flightId}")
     @Operation(summary = "Generate Seats given a flight id")
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {
@@ -85,7 +85,7 @@ public class SeatController {
 
     }
 
-    @GetMapping("/v1/getAllSeatsByFlightId/{flightId}")
+    @GetMapping("/v1/getAllSeats/flight/{flightId}")
     @Operation(summary = "Get List of seats by Flight id")
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {
@@ -130,7 +130,7 @@ public class SeatController {
         );
     }
 
-    @GetMapping("/v1/getSeatByPassengerId/{passengerId}")
+    @GetMapping("/v1/getSeat/passenger/{passengerId}")
     @Operation(summary = "Get Seat by Passenger Id")
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {
@@ -148,7 +148,7 @@ public class SeatController {
         );
     }
 
-    @PutMapping("/v1/changeAssignedSeat/passenger/{passengerId}/seat/{newSeatId}")
+    @PutMapping("/v1/change/seat/{newSeatId}/passenger/{passengerId}")
     @Operation(summary = "Changes Passenger's  current Seat to a new one.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {
@@ -169,7 +169,7 @@ public class SeatController {
         );
     }
 
-    @PostMapping("/v1/assignSeatsRandomly/{passengerId}")
+    @PostMapping("/v1/assignSeatRandomly/passenger/{passengerId}")
     @Operation(summary = "Assign a randomly-selected seat to a passenger.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = {
@@ -249,6 +249,23 @@ public class SeatController {
                 )
         );
     }
+    @DeleteMapping("/v1/remove/seat/{seatId}/passenger/{passengerId}")
+    @Operation(summary = "Remove the relation between a seat and a passenger")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Relation removed successfully."),
+            @ApiResponse(responseCode = "400", description = "Invalid Request."),
+            @ApiResponse(responseCode = "404", description = "Seat or Passenger not found."),
+            @ApiResponse(responseCode = "500", description = "Server internal Error.")})
+    public ResponseEntity<StandardResponse<SeatDTO>> removeSeatToPassengerV1(
+            @PathVariable("seatId") String seatId, @PathVariable("passengerId") String passengerId){
+        SeatDTO seatDTO = seatService.removeSeatToPassenger(
+                Long.valueOf(seatId),
+                Long.valueOf(passengerId));
 
-
+        return ResponseEntity.ok(
+                new StandardResponse<>(StandardResponse.StatusStandardResponse.OK,
+                        "Seat removed successfully",
+                        seatDTO)
+                );
+    }
 }

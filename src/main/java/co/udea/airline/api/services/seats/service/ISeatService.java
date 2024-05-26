@@ -11,7 +11,7 @@ public interface ISeatService {
     List<Seat> getAllSeatsByFlightId(Long id);
     SeatXPassengerDTO getSeatByPassengerId(Long id);
     SeatXPassengerDTO assignSeatToPassenger(Long seatId, Long passengerId);
-    SeatXPassengerDTO removeSeatToPassenger(Long seatId, Long passengerId);
+    SeatDTO removeSeatToPassenger(Long seatId, Long passengerId);
     SeatXPassengerDTO changeAssignedSeatToPassenger(Long newSeatId, Long passengerId);
     SeatXPassengerDTO assignRandomSeatToPassenger(Long passengerId);
     String getTotalSurchargeByBooking(Long bookingId);

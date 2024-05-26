@@ -23,6 +23,7 @@ import co.udea.airline.api.utils.common.SeatStatusEnum;
 import co.udea.airline.api.utils.exception.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -37,28 +38,28 @@ public class SeatServiceImpl implements ISeatService{
     ISeatRepository seatRepository;
 
     @Autowired
-    private IFlightRepository flightRepository;
+    IFlightRepository flightRepository;
 
     @Autowired
-    private IPassengerRepository passengerRepository;
+    IPassengerRepository passengerRepository;
 
     @Autowired
-    private IBookingRepository bookingRepository;
+    IBookingRepository bookingRepository;
 
     @Autowired
-    private ISeatXPassengerRepository seatXPassengerRepository;
+    ISeatXPassengerRepository seatXPassengerRepository;
 
     @Autowired
-    private Messages messages;
+    Messages messages;
 
     @Autowired
-    private CreateSeatMapper createSeatMapper;
+    CreateSeatMapper createSeatMapper;
 
     @Autowired
-    private SeatXPassengerMapper seatXPassengerMapper;
+    SeatXPassengerMapper seatXPassengerMapper;
 
     @Autowired
-    private SeatMapper seatMapper;
+    SeatMapper seatMapper;
 
     private Flight getFlightIfExists(Long id){
         Optional<Flight> flightOptional = flightRepository.findById(id);
@@ -176,10 +177,12 @@ public class SeatServiceImpl implements ISeatService{
         // of the passenger
 
         // Check if the exact pair seat-passenger already exists
-        if (seatXPassengerRepository.existsBySeatIdAndPassengerId(
-                seatId, passengerId)){
-            throw new DataDuplicatedException(String.format(
-                    messages.get("seat.passenger.already.exists")));
+        if (seat.getStatus().equals(SeatStatusEnum.OCCUPIED)){
+            throw new DataDuplicatedException("Seat is occupied.");
+        }
+
+        if (seatXPassengerRepository.findByPassengerId(passenger.getId()).isPresent()){
+            throw new DataDuplicatedException("Passenger has another seat assigned.");
         }
 
         //  Update seat status
@@ -201,14 +204,26 @@ public class SeatServiceImpl implements ISeatService{
 
         Optional<SeatXPassenger> seatXPassengerOptional = seatXPassengerRepository.findByPassengerId(id);
         if (seatXPassengerOptional.isEmpty()) {
-            throw new DataNotFoundException(String.format(messages.get("seat.passenger.not.found")));
+            throw new DataNotFoundException("Passenger does not exist.");
         }
         return seatXPassengerMapper.convertToDto(seatXPassengerOptional.get());
     }
 
+    @Transactional
     @Override
-    public SeatXPassengerDTO removeSeatToPassenger(Long seatId, Long passengerId) {
-        return null;
+    public SeatDTO removeSeatToPassenger(Long seatId, Long passengerId) {
+        Passenger passenger = getPassengerIfExists(passengerId);
+        Seat seat = getSeatIfExists(seatId);
+        Optional<SeatXPassenger>  seatXPassengerOptional =  seatXPassengerRepository
+                .findBySeatIdAndPassengerId(seatId,passengerId);
+        if (seatXPassengerOptional.isEmpty()){
+            String msg = "The relation does not exists!";
+            throw new DataNotFoundException(msg);
+        }
+
+        seatXPassengerRepository.deleteSeatPassenger(seatXPassengerOptional.get().getId());
+        seat.setStatus(SeatStatusEnum.AVAILABLE);
+        return seatMapper.convertToDto(seatRepository.save(seat));
     }
 
     @Override
@@ -253,9 +268,9 @@ public class SeatServiceImpl implements ISeatService{
     public SeatXPassengerDTO assignRandomSeatToPassenger(Long passengerId) {
         Seat seat;
         Passenger passenger = getPassengerIfExists(passengerId);
-        Booking booking = bookingRepository.getReferenceById(passenger.getId());
-        Flight flight = flightRepository.getReferenceById(booking.getId());
-        List<Seat> availableSeats = seatRepository.getAllAvailableStatus(flight.getId());
+        Booking booking = bookingRepository.getReferenceById(passenger.getBooking().getId());
+        Flight flight = flightRepository.getReferenceById(booking.getFlight().getId());
+        List<Seat> availableSeats = seatRepository.getAllAvailableSeatByFlightId(flight.getId());
 
         List<Seat> touristSeats = availableSeats.stream()
                 .filter(s -> s.getSeatClass() == SeatClassEnum.TOURIST)
