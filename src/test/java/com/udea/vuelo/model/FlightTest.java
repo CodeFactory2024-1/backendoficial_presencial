@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
 class FlightTest {
 
@@ -19,9 +20,8 @@ class FlightTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.initMocks(this);
-        flight = new Flight(1, "Airline1", "Origin1", "Destination1", priceMock, LocalDate.of(2024, 4, 1),
-                LocalDate.of(2024, 4, 2));
+        MockitoAnnotations.openMocks(this);
+        flight = new Flight(1, "Airline1", "Origin1", "Destination1", priceMock, LocalDate.of(2024, 4, 1), LocalDate.of(2024, 4, 2));
     }
 
     @Test
