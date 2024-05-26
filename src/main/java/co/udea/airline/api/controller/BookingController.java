@@ -1,6 +1,8 @@
 package co.udea.airline.api.controller;
 
 
+import co.udea.airline.api.model.DTO.BookingDTO;
+import co.udea.airline.api.model.DTO.PassengerDTO;
 import co.udea.airline.api.model.DTO.SeatDTO;
 import co.udea.airline.api.model.jpa.model.bookings.Passenger;
 import co.udea.airline.api.model.jpa.model.seats.Seat;
@@ -35,7 +37,7 @@ public class BookingController {
             @ApiResponse(responseCode = "400", description = "Invalid Request"),
             @ApiResponse(responseCode = "404", description = "Booking Not found"),
             @ApiResponse(responseCode = "500", description = "Server internal Error")})
-    public ResponseEntity<StandardResponse<List<Passenger>>> getSeatByIdV1(@PathVariable String bookingId) {
+    public ResponseEntity<StandardResponse<List<PassengerDTO>>> getSeatByIdV1(@PathVariable String bookingId) {
         return ResponseEntity.ok(
                 new StandardResponse<>(
                         StandardResponse.StatusStandardResponse.OK,
@@ -44,4 +46,22 @@ public class BookingController {
                 )
         );
     }
+
+    @GetMapping("/v1/booking/{bookingId}")
+    @Operation(summary = "Get Booking by id")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Booking obtained successfully."),
+            @ApiResponse(responseCode = "400", description = "Invalid Request"),
+            @ApiResponse(responseCode = "404", description = "Booking Not found"),
+            @ApiResponse(responseCode = "500", description = "Server internal Error")})
+    public ResponseEntity<StandardResponse<BookingDTO>> getBookingByIdV1(@PathVariable String bookingId) {
+        return ResponseEntity.ok(
+                new StandardResponse<>(
+                        StandardResponse.StatusStandardResponse.OK,
+                        "A booking.",
+                        bookingService.getBookingById(Long.valueOf(bookingId))
+                )
+        );
+    }
+
 }
