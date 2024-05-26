@@ -32,10 +32,10 @@ import java.util.stream.Collectors;
 public class SeatController {
 
     @Autowired
-    private SeatServiceImpl seatService;
+    SeatServiceImpl seatService;
 
     @Autowired
-    private SeatMapper seatMapper;
+    SeatMapper seatMapper;
 
     @GetMapping("/v1/seat/{id}")
     @Operation(summary = "Get Seat by Id")

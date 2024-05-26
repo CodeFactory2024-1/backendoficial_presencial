@@ -1,6 +1,5 @@
 package co.udea.airline.api.services.seats.service;
 
-import co.udea.airline.api.model.DTO.CreateSeatDTO;
 import co.udea.airline.api.model.DTO.SeatDTO;
 import co.udea.airline.api.model.DTO.SeatXPassengerDTO;
 import co.udea.airline.api.model.jpa.model.bookings.Booking;
@@ -358,6 +357,11 @@ public class SeatServiceImpl implements ISeatService{
             passengerOptional = seatXPassengerRepository.findByPassengerId(p.getId());
             if (passengerOptional.isPresent()){
                 spList.add(seatXPassengerMapper.convertToDto(passengerOptional.get()));
+            } else {
+                SeatXPassenger spWithNoSeat = new SeatXPassenger();
+                spWithNoSeat.setPassenger(p);
+                spWithNoSeat.setSeat(null);
+                spList.add(seatXPassengerMapper.convertToDto(spWithNoSeat));
             }
         }
         return spList;
