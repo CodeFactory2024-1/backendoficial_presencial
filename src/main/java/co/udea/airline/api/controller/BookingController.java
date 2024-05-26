@@ -29,6 +29,11 @@ public class BookingController {
     public Optional<Booking> getBookingById(@PathVariable Long bookingId) {
         return bookingService.getBooking(bookingId);
     }
+
+    @GetMapping("/searchBookingByFlightId/{flightId}")
+    public List<Booking> getBookingByFlightId(@PathVariable Long flightId) {
+        return bookingService.getBookingByFlightId(flightId);
+    }
     @PreAuthorize("hasAuthority('save:booking')")
     @PostMapping("/booking")
     public void saveBooking(@AuthenticationPrincipal Jwt jwt, @RequestBody Booking booking) {

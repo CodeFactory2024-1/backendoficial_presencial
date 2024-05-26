@@ -24,6 +24,9 @@ public class BookingService {
         bookingRepository.save(booking);
     }
 
+    public List<Booking> getBookingByFlightId(Long flightId) {
+        return bookingRepository.findBookingByFlightId(flightId);
+    }
     public void delete(Long id){
         bookingRepository.deleteById(id);
     }
