@@ -2,6 +2,7 @@ package co.udea.airline.api.controller;
 
 import co.udea.airline.api.model.jpa.model.Booking;
 import co.udea.airline.api.service.BookingService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -14,6 +15,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/v1/booking")
 @CrossOrigin
+@Tag(name = "Bookings")
 public class BookingController {
     @Autowired
     private BookingService bookingService;
@@ -32,9 +34,9 @@ public class BookingController {
     public void saveBooking(@AuthenticationPrincipal Jwt jwt, @RequestBody Booking booking) {
         bookingService.saveOrUpdate(booking);
     }
-
+    @PreAuthorize("hasAuthority('save:booking')")
     @DeleteMapping("/{bookingId}")
-    public void deleteBooking(@PathVariable Long bookingId){
+    public void deleteBooking(@AuthenticationPrincipal Jwt jwt,@PathVariable Long bookingId){
         bookingService.delete(bookingId);
     }
 }

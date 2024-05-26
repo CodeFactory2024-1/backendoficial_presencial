@@ -50,7 +50,7 @@ public class Person implements UserDetails {
     private String recoveryCode;
 
     @Column(name = "IDENTIFICATION_NUMBER")
-    private String identificationNumber;
+    private String idNumber;
 
     @Column(name = "FIRST_NAME")
     private String firstName;

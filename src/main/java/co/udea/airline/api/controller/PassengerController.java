@@ -2,6 +2,7 @@ package co.udea.airline.api.controller;
 
 import co.udea.airline.api.model.jpa.model.Passenger;
 import co.udea.airline.api.service.PassengerService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +12,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/v1/passenger")
 @CrossOrigin
+@Tag(name = "Passenger")
 public class PassengerController {
     @Autowired
     private PassengerService passengerService;
@@ -30,10 +32,10 @@ public class PassengerController {
         passengerService.saveOrUpdate(passenger);
     }
 
-    @DeleteMapping("/{passengerId}")
+   /* @DeleteMapping("/{passengerId}")
     public void deletePassenger(@PathVariable Long passengerId){
         passengerService.delete(passengerId);
-    }
+    }*/
 
     @GetMapping("/booking/{bookingId}")
     public List<Passenger> getPassengerByBookingId(@PathVariable Long bookingId) {

@@ -24,7 +24,10 @@ public class PersonService {
         personRepository.save(person);
     }
 
-    public void delete(Long id){
+   /* public void delete(Long id){
         personRepository.deleteById(id);
-    }
+    }*/
+   public Optional<Person> getPersonByIdNumber(String idNumber) {
+       return personRepository.findByidNumber(idNumber);
+   }
 }
