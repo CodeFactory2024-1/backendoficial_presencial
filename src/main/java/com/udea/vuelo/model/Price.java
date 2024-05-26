@@ -1,11 +1,17 @@
 package com.udea.vuelo.model;
 
+import jakarta.persistence.Embeddable;
+
+@Embeddable
 public class Price {
     private int seatCost;
     private int flightCost;
     private int baggageCost;
     private int otherCosts;
-    private int totalCost;
+    private int totalCost; // Cambiado de double a int
+
+    public Price() {
+    }
 
     public Price(int seatCost, int flightCost, int baggageCost, int otherCosts, int totalCost) {
         this.seatCost = seatCost;
@@ -54,7 +60,4 @@ public class Price {
     public void setTotalCost(int totalCost) {
         this.totalCost = totalCost;
     }
-
-
-
 }
