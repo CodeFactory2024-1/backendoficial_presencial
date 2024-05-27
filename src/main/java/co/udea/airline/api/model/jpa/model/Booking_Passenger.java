@@ -16,8 +16,8 @@ public class Booking_Passenger {
     private Long booking_passenger_id;
 
     @Column(name = "BOOKING_ID")
-    private Booking booking;
+    private Long booking;
 
     @Column(name = "PASSENGER_ID")
-    private Passenger passenger;
+    private Long passenger;
 }
