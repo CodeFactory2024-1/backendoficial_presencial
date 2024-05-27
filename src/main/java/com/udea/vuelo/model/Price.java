@@ -53,7 +53,7 @@ public class Price {
         this.otherCosts = otherCosts;
     }
 
-    public int getTotalCost() {
+    public long getTotalCost() {
         return totalCost;
     }
 
