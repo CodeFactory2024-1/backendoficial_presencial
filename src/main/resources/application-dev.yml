@@ -6,12 +6,12 @@ spring:
     properties:
       hibernate:
         order_inserts: true
-        dialect: oracle.jdbc.driver.OracleDriver
+        dialect: org.hibernate.dialect.OracleDialect
         jdbc:
           batch_size: 50
           lob:
             non_contextual_creation: true
-        default_schema: ${DB_SCHEMA}
+        default_schema: ${DB_USERNAME}
         temp:
           use_jdbc_metadata_defaults: false
 
@@ -23,7 +23,7 @@ spring:
     hikari:
       idle-timeout: 10000
       maximum-pool-size: 5
-    driver-class-name: ${DB_DRIVER}
+    driver-class-name: oracle.jdbc.driver.OracleDriver
 airline-api:
   openapi:
     dev-url: http://localhost:8006/modulo-06  # Same as context-path
