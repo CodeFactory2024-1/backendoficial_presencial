@@ -27,7 +27,8 @@ public class PassengerController {
     }
 
     @PostMapping("/passenger")
-    public void savePassenger(@RequestBody Passenger passenger) {
+    public Long savePassenger(@RequestBody Passenger passenger) {
         passengerService.saveOrUpdate(passenger);
+        return passenger.getPassengerId();
     }
 }
