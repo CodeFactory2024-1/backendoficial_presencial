@@ -87,7 +87,7 @@ public class FlightController {
 
     @Operation(summary = "Get a flight with filters", description = "Returns only one flight for given filters")
     @GetMapping("/filter")
-    public ResponseEntity<FlightDTO> getMethodNameByFlightNumber(@RequestParam String flightNumber) {
+    public ResponseEntity<FlightDTO> getByFlightNumber(@RequestParam String flightNumber) {
         Flight flight = flightService.getFlightByFlightNumber(flightNumber);
         if (flight == null) {
             throw new DataNotFoundException("Flight with flight number: " + flightNumber + " not found");
@@ -99,7 +99,7 @@ public class FlightController {
     @Operation(summary = "Update flight by flightNumber", description = "Update flight by its number")
     @PutMapping("/{flightNumber}")
     @AuthRequired()
-    public ResponseEntity<FlightDTO> putMethodName(@PathVariable String flightNumber,
+    public ResponseEntity<FlightDTO> updateFlight(@PathVariable String flightNumber,
             @Valid @RequestBody FlightDTO flight) {
         Flight flightRes = modelMapper.map(flight, Flight.class);
         flightRes = flightService.updateFlight(flightNumber, flightRes);
@@ -114,7 +114,7 @@ public class FlightController {
     @Operation(summary = "Delete flight by flight number", description = "Delete flight by flight number")
     @DeleteMapping("/{flightNumber}")
     @AuthRequired()
-    public ResponseEntity<FlightDTO> deleteMethodNameByFlightNumber(@PathVariable String flightNumber) {
+    public ResponseEntity<FlightDTO> deleteByFlightNumber(@PathVariable String flightNumber) {
         Flight deletedFlight = null;
         deletedFlight = flightService.deleteFlightByFlightNumber(flightNumber);
         if (deletedFlight == null) {
