@@ -21,8 +21,8 @@ public class BookingService {
         return bookingRepository.findById(id);
     }
 
-    public List<Booking> getBookingByFilghtId(Long flightId) {
-        return bookingRepository.findBookinByFlightId(flightId);
+    public List<Booking> getBookingByFlightId(Long flightId) {
+        return bookingRepository.findBookingByFlightId(flightId);
     }
 
     public void saveOrUpdate(Booking booking) {

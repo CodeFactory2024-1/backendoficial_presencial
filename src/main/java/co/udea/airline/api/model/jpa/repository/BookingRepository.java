@@ -10,5 +10,5 @@ import java.util.List;
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     @Query("SELECT b FROM Booking b WHERE b.flightId = ?1")
-    List<Booking> findBookinByFlightId(Long flightId);
+    List<Booking> findBookingByFlightId(Long flightId);
 }

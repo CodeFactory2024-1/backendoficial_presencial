@@ -21,14 +21,14 @@ public class BookingController {
         return bookingService.getBookings();
     }
 
-    @GetMapping("/seachBookingById/{bookingId}")
+    @GetMapping("/searchBookingById/{bookingId}")
     public Optional<Booking> getBookingById(@PathVariable Long bookingId) {
         return bookingService.getBooking(bookingId);
     }
 
-    @GetMapping("/seachBookingByFlightId/{flightId}")
+    @GetMapping("/searchBookingByFlightId/{flightId}")
     public List<Booking> getBookingByFlightId(@PathVariable Long flightId) {
-        return bookingService.getBookingByFilghtId(flightId);
+        return bookingService.getBookingByFlightId(flightId);
     }
 
     @PostMapping("/booking")
