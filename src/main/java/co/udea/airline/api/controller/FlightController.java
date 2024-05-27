@@ -3,10 +3,13 @@ package co.udea.airline.api.controller;
 import co.udea.airline.api.model.jpa.model.flights.Flight;
 import co.udea.airline.api.services.bookings.service.BookingService;
 import co.udea.airline.api.services.flights.service.FlightService;
+import co.udea.airline.api.utils.common.AuthRequired;
 import co.udea.airline.api.utils.exception.DataNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import jakarta.validation.Valid;
@@ -27,13 +30,13 @@ import co.udea.airline.api.model.DTO.flights.FlightDTO;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-
 import org.springframework.web.bind.annotation.CrossOrigin;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/flights")
 @CrossOrigin(origins = "*")
+@SecurityScheme(name = "JWT", type = SecuritySchemeType.HTTP, scheme = "bearer")
 @Tag(name = "1 - Flight Management", description = "CRUD operations for flights")
 public class FlightController {
     @Autowired
@@ -50,6 +53,7 @@ public class FlightController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Flight created")
     })
+    @AuthRequired()
     public ResponseEntity<FlightDTO> createFlight(@Valid @RequestBody FlightDTO flight) {
         // TODO: Add standard response
         Flight flightRes = modelMapper.map(flight, Flight.class);
@@ -94,6 +98,7 @@ public class FlightController {
 
     @Operation(summary = "Update flight by flightNumber", description = "Update flight by its number")
     @PutMapping("/{flightNumber}")
+    @AuthRequired()
     public ResponseEntity<FlightDTO> putMethodName(@PathVariable String flightNumber,
             @Valid @RequestBody FlightDTO flight) {
         Flight flightRes = modelMapper.map(flight, Flight.class);
@@ -108,6 +113,7 @@ public class FlightController {
 
     @Operation(summary = "Delete flight by flight number", description = "Delete flight by flight number")
     @DeleteMapping("/{flightNumber}")
+    @AuthRequired()
     public ResponseEntity<FlightDTO> deleteMethodNameByFlightNumber(@PathVariable String flightNumber) {
         Flight deletedFlight = null;
         deletedFlight = flightService.deleteFlightByFlightNumber(flightNumber);
