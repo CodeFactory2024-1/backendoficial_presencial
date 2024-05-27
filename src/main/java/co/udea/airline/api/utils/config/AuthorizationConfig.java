@@ -1,6 +1,5 @@
 package co.udea.airline.api.utils.config;
 
-import org.springdoc.core.customizers.OpenApiCustomizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,9 +9,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import io.swagger.v3.oas.models.Components;
-import io.swagger.v3.oas.models.security.SecurityScheme;
 
 @Configuration
 @EnableWebSecurity
@@ -34,23 +30,6 @@ public class AuthorizationConfig {
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
 
-    }
-
-    @Bean
-    OpenApiCustomizer customizer() {
-
-        final String securitySchemeName = "JWT";
-        SecurityScheme scheme = new SecurityScheme()
-                .name(securitySchemeName)
-                .type(SecurityScheme.Type.HTTP)
-                .scheme("bearer")
-                .bearerFormat("JWT");
-
-        return openApi -> {
-            openApi.components(
-                    new Components()
-                            .addSecuritySchemes(securitySchemeName, scheme));
-        };
     }
 
 }
