@@ -8,7 +8,7 @@ import lombok.Data;
 public class BookingDTO {
     @NotNull
     @Schema(description="The Booking id ", example = "1", requiredMode= Schema.RequiredMode.REQUIRED)
-    private String id;
+    private Long id;
 
     @NotNull
     @Schema(description="The Booking codename ", example = "BookingCodename", requiredMode= Schema.RequiredMode.REQUIRED)
@@ -16,5 +16,5 @@ public class BookingDTO {
 
     @NotNull
     @Schema(description="The Booking flight id ", example = "1", requiredMode= Schema.RequiredMode.REQUIRED)
-    private String flightId;
+    private Long flightId;
 }

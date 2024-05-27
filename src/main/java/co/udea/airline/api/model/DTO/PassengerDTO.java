@@ -9,7 +9,7 @@ public class PassengerDTO {
 
     @NotNull
     @Schema(description="The Passenger id ", example = "1", requiredMode= Schema.RequiredMode.REQUIRED)
-    private String id;
+    private Long id;
 
     @NotNull
     @Schema(description="Passenger Name", example = "Carolina", requiredMode= Schema.RequiredMode.REQUIRED)
@@ -17,5 +17,5 @@ public class PassengerDTO {
 
     @NotNull
     @Schema(description="BookingId", example = "1", requiredMode= Schema.RequiredMode.REQUIRED)
-    private String bookingId;
+    private Long bookingId;
 }

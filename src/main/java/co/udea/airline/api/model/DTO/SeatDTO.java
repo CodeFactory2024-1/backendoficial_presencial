@@ -10,6 +10,8 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -18,7 +20,7 @@ public class SeatDTO {
 
     @NotNull
     @Schema(description = "The seat id auto-generated", requiredMode = RequiredMode.NOT_REQUIRED, example = "1")
-    private Long id = 0L;
+    private Long id;
 
     @NotNull
     @Schema(description = "The seat tag. User-friendly label used to label seats.", requiredMode = RequiredMode.REQUIRED, example = "ColumnLetter-RowNumber")
@@ -44,5 +46,5 @@ public class SeatDTO {
             example = "15000")
     @Min(value = 0, message = "The surcharge must be equal or greater than 0.")
     @Max(value = 1000000, message = "The surcharge must be equal or less than 1000000.")
-    private String surcharge = "0";
+    private BigDecimal surcharge;
 }
