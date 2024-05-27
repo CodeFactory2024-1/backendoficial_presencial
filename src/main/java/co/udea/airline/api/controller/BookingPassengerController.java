@@ -5,6 +5,7 @@ import co.udea.airline.api.model.jpa.model.Booking;
 import co.udea.airline.api.model.jpa.model.Booking_Passenger;
 import co.udea.airline.api.model.jpa.model.Passenger;
 import co.udea.airline.api.service.BookingPassengerService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,8 +34,10 @@ public class BookingPassengerController {
     public Optional<Booking_Passenger> getBookingPassengerById(@PathVariable Long booking_passenger_id) {
         return bookingPassengerService.getBookingPassenger(booking_passenger_id);
     }
+    
     @PreAuthorize("hasAuthority('save:booking')")
     @PostMapping("/bookingPassenger")
+    @SecurityRequirement(name = "JWT")
     public void saveFlight(@AuthenticationPrincipal Jwt jwt, @RequestBody Booking_Passenger bookingPassenger) {
         bookingPassengerService.saveOrUpdate(bookingPassenger);
     }

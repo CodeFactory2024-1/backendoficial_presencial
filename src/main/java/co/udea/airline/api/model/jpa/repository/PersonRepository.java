@@ -8,14 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface PersonRepository extends CrudRepository<Person, Long> {
-
-    Optional<Person> findByEmail(String email);
-
-    Person findByRecoveryCode(String recoveryCode);
-
-    Boolean existsByEmail(String email);
-
-    Iterable<Person> findAll();
-
     Optional<Person> findByidNumber(String idNumber);
 }

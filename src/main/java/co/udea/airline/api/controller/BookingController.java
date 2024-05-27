@@ -2,6 +2,7 @@ package co.udea.airline.api.controller;
 
 import co.udea.airline.api.model.jpa.model.Booking;
 import co.udea.airline.api.service.BookingService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -36,11 +37,13 @@ public class BookingController {
     }
     @PreAuthorize("hasAuthority('save:booking')")
     @PostMapping("/booking")
+    @SecurityRequirement(name = "JWT")
     public void saveBooking(@AuthenticationPrincipal Jwt jwt, @RequestBody Booking booking) {
         bookingService.saveOrUpdate(booking);
     }
     @PreAuthorize("hasAuthority('save:booking')")
     @DeleteMapping("/{bookingId}")
+    @SecurityRequirement(name = "JWT")
     public void deleteBooking(@AuthenticationPrincipal Jwt jwt,@PathVariable Long bookingId){
         bookingService.delete(bookingId);
     }
