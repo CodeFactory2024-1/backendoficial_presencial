@@ -1,12 +1,12 @@
 # Server properties
 server:
   servlet:
-    context-path: /ssmu-api
-  port: 8080
+    context-path: /modulo-06
+  port: 8006
 # Spring properties
 spring:
   # Dev is active by default. This value can be overwritten by java arg param
   profiles:
     active: ${PROFILE}
   application:
-    name: ssmu-api # Same as context-path
+    name: modulo-06 # Same as context-path

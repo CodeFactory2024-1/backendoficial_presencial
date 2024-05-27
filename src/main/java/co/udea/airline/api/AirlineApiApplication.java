@@ -57,28 +57,33 @@ public class AirlineApiApplication extends SpringBootServletInitializer {
 
 
             Flight flight1 = new Flight();
+            flight1.setId(1L);
             flight1.setFlightType(FlightTypeEnum.International);
 
             Flight flight2 = new Flight();
+            flight2.setId(2L);
             flight2.setFlightType(FlightTypeEnum.Domestic);
 
             List<Flight> flightArrayList = new ArrayList<>();
             flightArrayList.add(flight1);
             flightArrayList.add(flight2);
             List<Flight> savedFlights = flightRepository.saveAll(flightArrayList);
-            flightRepository.flush();
+//            flightRepository.flush();
 
             // Generating some Bookings
             Booking booking1 = new Booking();
+            booking1.setId(1L);
             booking1.setCodename("TestBooking-1");
             booking1.setFlight(savedFlights.get(0));
 
             Booking booking2 = new Booking();
             booking2.setCodename("TestBooking-2");
+            booking2.setId(2L);
             booking2.setFlight(savedFlights.get(0));
 
             Booking booking3 = new Booking();
             booking3.setCodename("TestBooking-3");
+            booking3.setId(3L);
             booking3.setFlight(savedFlights.get(1));
 
             List<Booking> bookingArrayList = new ArrayList<>();
@@ -86,22 +91,26 @@ public class AirlineApiApplication extends SpringBootServletInitializer {
             bookingArrayList.add(booking2);
             bookingArrayList.add(booking3);
             List<Booking> savedBookings = bookingRepository.saveAll(bookingArrayList);
-            bookingRepository.flush();
+//            bookingRepository.flush();
 
             // Generating a Passenger
             Passenger passenger1 = new Passenger();
+            passenger1.setId(1L);
             passenger1.setName("JohnDoe");
             passenger1.setBooking(savedBookings.get(0));
 
             Passenger passenger2 = new Passenger();
             passenger2.setName("Juan");
+            passenger2.setId(2L);
             passenger2.setBooking(savedBookings.get(1));
 
             Passenger passenger3 = new Passenger();
+            passenger3.setId(3L);
             passenger3.setName("Sara");
             passenger3.setBooking(savedBookings.get(1));
 
             Passenger passenger4 = new Passenger();
+            passenger4.setId(4L);
             passenger4.setName("Sofia");
             passenger4.setBooking(savedBookings.get(2));
 
@@ -111,8 +120,7 @@ public class AirlineApiApplication extends SpringBootServletInitializer {
             passengerArrayList.add(passenger3);
             passengerArrayList.add(passenger4);
             List<Passenger> savedPassengers = passengerRepository.saveAll(passengerArrayList);
-            passengerRepository.flush();
-
+//            passengerRepository.flush();
         };
     }
 
