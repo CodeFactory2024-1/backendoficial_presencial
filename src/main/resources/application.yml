@@ -11,11 +11,15 @@ spring:
   application:
     name: sitas-api
 
+
 # OpenAPI properties
 airline-api:
   openapi:
     dev-url: http://localhost:8019/modulo-19
     prod-url: https://codefact.udea.edu.co/modulo-19
+  jwt:
+    rsa-pub-key: classpath:public_key.der
+
 
 springdoc:
   api-docs:
@@ -23,3 +27,7 @@ springdoc:
   swagger-ui:
     path: /docs
     tagsSorter: alpha
+
+# JWT properties
+
+
