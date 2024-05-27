@@ -15,11 +15,9 @@ public class Booking_Passenger {
     @Column(name = "BOOKING_PASSENGER_ID")
     private Long booking_passenger_id;
 
-    @ManyToOne
-    @JoinColumn(name = "BOOKING_ID")
+    @Column(name = "BOOKING_ID")
     private Booking booking;
 
-    @ManyToOne
-    @JoinColumn(name = "PASSENGER_ID")
+    @Column(name = "PASSENGER_ID")
     private Passenger passenger;
 }

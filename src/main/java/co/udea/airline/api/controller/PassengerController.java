@@ -30,9 +30,4 @@ public class PassengerController {
     public void savePassenger(@RequestBody Passenger passenger) {
         passengerService.saveOrUpdate(passenger);
     }
-
-    @DeleteMapping("/{passengerId}")
-    public void deletePassenger(@PathVariable Long passengerId){
-        passengerService.delete(passengerId);
-    }
 }

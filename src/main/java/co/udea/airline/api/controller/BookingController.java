@@ -35,9 +35,4 @@ public class BookingController {
     public void saveBooking(@RequestBody Booking booking) {
         bookingService.saveOrUpdate(booking);
     }
-
-    @DeleteMapping("/{bookingId}")
-    public void deleteBooking(@PathVariable Long bookingId) {
-        bookingService.delete(bookingId);
-    }
 }

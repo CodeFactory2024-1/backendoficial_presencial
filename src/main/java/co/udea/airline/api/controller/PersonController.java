@@ -1,4 +1,5 @@
 package co.udea.airline.api.controller;
+
 import co.udea.airline.api.model.jpa.model.Person;
 import co.udea.airline.api.service.PersonService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,12 +27,9 @@ public class PersonController {
     }
 
     @PostMapping("/person")
-    public void savePerson(@RequestBody Person person) {
+    public Long savePerson(@RequestBody Person person) {
         personService.saveOrUpdate(person);
+        return person.getPersonId();
     }
 
-    @DeleteMapping("/{personId}")
-    public void deletePerson(@PathVariable Long personId){
-        personService.delete(personId);
-    }
 }
