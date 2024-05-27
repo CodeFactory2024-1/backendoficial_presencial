@@ -20,7 +20,7 @@ public class PersonService {
         return personRepository.findById(id);
     }
 
-    public void saveOrUpdate(Person person){
+   public void saveOrUpdate(Person person){
         personRepository.save(person);
     }
 
@@ -28,7 +28,7 @@ public class PersonService {
         personRepository.deleteById(id);
     } 
     
-   public Optional<Person> getPersonByIdNumber(String idNumber) {
+    public Optional<Person> getPersonByIdNumber(String idNumber) {
        return personRepository.findByidNumber(idNumber);
    }
 }

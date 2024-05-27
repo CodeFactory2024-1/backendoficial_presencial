@@ -21,7 +21,7 @@ public class AirlineApiApplication {
     public OpenAPI customOpenAPI() {
         return new OpenAPI().info(new Info()
                 .title("RESERVATIONS SITAS")
-                .description("Messi")).components(
+                .description("ResevaB")).components(
                         new Components()
                                 .addSecuritySchemes(securitySchemeName,
                                         new SecurityScheme()
