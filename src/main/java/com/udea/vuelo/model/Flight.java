@@ -93,6 +93,4 @@ public class Flight {
     public void setArrivalDate(LocalDate arrivalDate) {
         this.arrivalDate = arrivalDate;
     }
-
-    // Eliminamos getTotalCost() y setTotalCost() de Flight
 }

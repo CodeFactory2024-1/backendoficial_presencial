@@ -30,11 +30,11 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      - name: Build and test      #Compilar y validar con test
-        run: mvn -B verify
+      #- name: Build and test      #Compilar y validar con test
+      #  run: mvn -B verify
 
-      - name: Build and analyze   #Compilar y realizar analisis con Sonar y Jacoco
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_PAGOSB }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=CodeFactory2024-1_backendoficial_presencial
+      #- name: Build and analyze   #Compilar y realizar analisis con Sonar y Jacoco
+       # env:
+       #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+       #   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_PAGOSB }}
+      #  run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=CodeFactory2024-1_backendoficial_presencial

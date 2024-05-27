@@ -1,5 +1,6 @@
 package com.udea.vuelo.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.udea.vuelo.model.Flight;
 import com.udea.vuelo.model.Price;
 import com.udea.vuelo.repository.FlightRepository;
@@ -14,7 +15,7 @@ public class FlightService {
 
     private final FlightRepository flightRepository;
 
-    public FlightService(FlightRepository flightRepository) {
+    public FlightService(FlightRepository flightRepository, ObjectMapper objectMapper) {
         this.flightRepository = flightRepository;
     }
 
