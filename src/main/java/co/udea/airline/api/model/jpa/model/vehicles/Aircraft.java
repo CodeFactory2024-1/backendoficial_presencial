@@ -2,8 +2,7 @@ package co.udea.airline.api.model.jpa.model.vehicles;
 
 import co.udea.airline.api.utils.common.VehicleStatusEnum;
 import jakarta.persistence.*;
-
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 

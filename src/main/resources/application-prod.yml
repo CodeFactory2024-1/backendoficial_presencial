@@ -1,8 +1,16 @@
+server:
+  ssl:
+    key-store: classpath:codefact.p12
+    key-store-password: ${KEY_STORE_PASSWORD}
+    keyStoreType: PKCS12
+    protocol: TLS
+    enabled-protocols: TLSv1.2
+
 spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     properties:
       hibernate:
         order_inserts: true
@@ -29,7 +37,3 @@ airline-api:
     dev-url: http://localhost:8006/modulo-06  # Same as context-path
     prod-url: https://codefact.udea.edu.co/modulo-06
 
-logging:
-  level:
-    root: DEBUG
-    org.springframework: DEBUG

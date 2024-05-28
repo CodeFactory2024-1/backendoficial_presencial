@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -21,8 +22,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 import java.util.List;
 
 @Tag(name = "Aircraft", description = "Gestión de Aviones")
@@ -46,6 +45,7 @@ public class AircraftController {
                     @Content(schema = @Schema(implementation = Aircraft.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
             }, description = "El avion fue guardado exitosamente"),
             @ApiResponse(responseCode = "400", description = "La petición es inválida"),
+            @ApiResponse(responseCode = "409", description = "Duplicado"),
             @ApiResponse(responseCode = "500", description = "Error interno al procesar la respuesta")})
     public ResponseEntity<StandardResponse<Aircraft>> save(@Valid @RequestBody Aircraft aircraft) {
         return ResponseEntity.ok(new StandardResponse<>(StandardResponse.StatusStandardResponse.OK,
@@ -60,6 +60,7 @@ public class AircraftController {
                     @Content(schema = @Schema(implementation = List.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
             }, description = "Los aviones fueron consultados exitosamente"),
             @ApiResponse(responseCode = "400", description = "La petición es inválida"),
+            @ApiResponse(responseCode = "409", description = "Duplicado"),
             @ApiResponse(responseCode = "500", description = "Error interno al procesar la respuesta")})
     public ResponseEntity<StandardResponse<List<Aircraft>>> findAll() {
         return ResponseEntity.ok(new StandardResponse<>(StandardResponse.StatusStandardResponse.OK,

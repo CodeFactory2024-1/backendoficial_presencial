@@ -4,6 +4,7 @@ import co.udea.airline.api.utils.common.StandardResponse;
 import co.udea.airline.api.utils.exception.BusinessException;
 import co.udea.airline.api.utils.exception.DataNotFoundException;
 import co.udea.airline.api.utils.exception.DataDuplicatedException;
+import co.udea.airline.api.utils.exception.NotAvailableSeatsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -16,6 +17,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(BusinessException.class)
     protected ResponseEntity<?> handleBusinessException(BusinessException ex) {
         return new ResponseEntity<>(new StandardResponse<>(StandardResponse.StatusStandardResponse.ERROR, ex.getMessage()), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(NotAvailableSeatsException.class)
+    protected ResponseEntity<?> handleNotAvailableSeatsException(NotAvailableSeatsException ex) {
+        return new ResponseEntity<>(new StandardResponse<>(StandardResponse.StatusStandardResponse.OK, ex.getMessage()), HttpStatus.NO_CONTENT);
     }
 
     @ExceptionHandler(DataNotFoundException.class)

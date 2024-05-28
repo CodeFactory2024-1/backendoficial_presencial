@@ -5,6 +5,7 @@ import co.udea.airline.api.model.jpa.model.vehicles.Aircraft;
 import co.udea.airline.api.utils.exception.BusinessException;
 import co.udea.airline.api.utils.common.Messages;
 import co.udea.airline.api.model.jpa.repository.vehicles.AircraftRepository;
+import co.udea.airline.api.utils.exception.DataDuplicatedException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,7 @@ public class AircraftService {
     public Aircraft save(Aircraft aircraft) {
         Optional<Aircraft> vehicleOptional = vehicleRepository.findByName(aircraft.getName());
         if (vehicleOptional.isPresent()) {
-            throw new BusinessException(String.format(messages.get("vehicle.save.duplicate.name"), aircraft.getName()));
+            throw new DataDuplicatedException(String.format(messages.get("vehicle.save.duplicate.name"), aircraft.getName()));
         }
         return vehicleRepository.save(aircraft);
     }
