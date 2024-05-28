@@ -6,6 +6,7 @@ import co.udea.airline.api.model.jpa.model.flightbmodel.DTO.FlightDTO;
 import co.udea.airline.api.model.jpa.repository.flightbrepository.IFlightDetailsProjection;
 import co.udea.airline.api.model.jpa.repository.flightbrepository.IFlightProjection;
 import co.udea.airline.api.services.flightsservices.FlightServices;
+import co.udea.airline.api.services.bookingservices.BookingService;
 import co.udea.airline.api.model.jpa.model.flightbmodel.Flight;
 
 
@@ -16,8 +17,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,8 +32,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@PreAuthorize("hasRole('ADMIN')")
-@SecurityRequirement(name = "JWT")
+//@PreAuthorize("hasRole('ADMIN')")
+//@SecurityRequirement(name = "JWT")
 @RequestMapping("/v1/flights")
 @Tag(name = "Flight Management", description = "Flight management operations")
 public class FlightManagementController {
@@ -39,6 +43,9 @@ public class FlightManagementController {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private BookingService bookingService;
 
     @GetMapping("/searchFlights")
     @Operation(summary = "Search all flights with all information")
@@ -82,7 +89,7 @@ public class FlightManagementController {
     }, description = "List of flights")
     @ApiResponse(responseCode = "400", description = "Invalid")
     @ApiResponse(responseCode = "500", description = "Internal error")
-    public ResponseEntity<FlightDTO> searchFlightById(@RequestParam String flightNumber) {
+    public ResponseEntity<FlightDTO> searchFlightById(@PathVariable String flightNumber) {
         Flight flight = flightService.getFlightByFlightNumber(flightNumber);
         if (flight == null) {
             throw new DataNotFoundException("Flight with ID: " + flightNumber + " not found");
@@ -118,17 +125,33 @@ public class FlightManagementController {
     }, description = "Flight deleted successfully")
     @ApiResponse(responseCode = "400", description = "Invalid")
     @ApiResponse(responseCode = "500", description = "Internal error")
-    public void deleteFlight(@PathVariable Long id) {
+    public String deleteFlight(@PathVariable Long id) {
+
+        if (bookingService.flightHasBookings(id)) {
+                return "Flight has bookings";
+            }
+
         flightService.deleteFlight(id);
+        // if (deleteFlight == null) {
+        //     throw new DataNotFoundException("Flight with ID: " + id + " not found");
+        // }
+
+        // return ResponseEntity.ok(modelMapper.map(deleteFlight, FlightDTO.class));
+        return "The flight has been deleted successfully.";
     }
 
+    @PutMapping("/update/{flightNumber}")
+     public ResponseEntity<FlightDTO> updateFlight(@PathVariable String flightNumber,
+        @Valid @RequestBody FlightDTO flight) {
+        Flight flightRes = modelMapper.map(flight, Flight.class);
+        flightRes = flightService.updateFlight(flightNumber, flightRes);
+        if (flightRes == null) {
+            throw new DataNotFoundException("Flight with flight number: " + flightNumber + " not found");
+        }
+        FlightDTO flightResDTO = modelMapper.map(flightRes, FlightDTO.class);
 
-
-
-
-    @PutMapping("/update")
-    public Flight updateFlight(@RequestBody Flight flight) {
-        return flightService.updateFlight(flight);
+        return new ResponseEntity<FlightDTO>(flightResDTO, HttpStatus.CREATED);
     }
+
 
 }

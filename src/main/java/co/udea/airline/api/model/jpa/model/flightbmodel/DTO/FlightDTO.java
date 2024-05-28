@@ -65,7 +65,7 @@ public class FlightDTO {
      * origin and destination airports, departure and arrival dates for each scale.
      */
     @NotNull(message = "The flight must have at least one scale.")
-    @Schema(description = "The scales of the flight, the first scale is the origin and the last scale is the destination",requiredMode = Schema.RequiredMode.REQUIRED, required = true, example = "[{ \"airplaneModel\": { \"id\": \"A320-200\" }, \"originAirport\": { \"id\": \"BOG\" }, \"destinationAirport\": { \"id\": \"MDE\" }, \"departureDate\": \"2024-12-30 23:59:59\", \"arrivalDate\": \"2024-12-31 23:59:59\" }]")
+    @Schema(description = "The scales of the flight, the first scale is the origin and the last scale is the destination",requiredMode = Schema.RequiredMode.REQUIRED, required = true, example = "[{ \"airplaneModel\": { \"id\": \"A320-200\" }, \"originAirport\": { \"id\": \"BOG\" }, \"destinationAirport\": { \"id\": \"AEP\" }, \"departureDate\": \"2024-12-30 23:59:59\", \"arrivalDate\": \"2024-12-31 23:59:59\" }]")
     @Size(min = 1, max = 10, message = "The scales must be between 1 and 10 scales.")
     private List<ScaleDTO> scales;
 

@@ -46,6 +46,5 @@ public class Flight {
 
 
     @Column(name = "flight_type")
-    private String flightType;
-
+    private String flightType;   
 }

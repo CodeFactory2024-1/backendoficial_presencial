@@ -54,6 +54,31 @@ public class ScaleServices {
         }
     }
 
+    public Scale updateScale(Scale scale) {
+        Scale updatedScale = scaleRepository.findById(scale.getId()).orElse(null);
+
+        if (updatedScale == null) {
+            return saveScale(scale);
+        }
+
+        Airport originRes = airportRespository.findByIATA(scale.getOriginAirport().getId());
+        Airport destinationRes = airportRespository.findByIATA(scale.getDestinationAirport().getId());
+        AirplaneModel airplaneModelRes = airplaneRepository.findById(scale.getAirplaneModel().getId()).get();
+
+        updatedScale.setOriginAirport(originRes);
+        updatedScale.setDestinationAirport(destinationRes);
+        updatedScale.setAirplaneModel(airplaneModelRes);
+        updatedScale.setArrivalDate(scale.getArrivalDate());
+        updatedScale.setDepartureDate(scale.getDepartureDate());
+
+        scaleRepository.save(updatedScale);
+        return updatedScale;
+    }
+
+    public void deleteScaleById(Long id) {
+        scaleRepository.deleteById(id);
+    }
+
     private void validateTimes(Scale scale) {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime departureTime = scale.getDepartureDate();
