@@ -32,7 +32,8 @@ public class BookingController {
     }
 
     @PostMapping("/booking")
-    public void saveBooking(@RequestBody Booking booking) {
+    public Long saveBooking(@RequestBody Booking booking) {
         bookingService.saveOrUpdate(booking);
+        return booking.getBookingId();
     }
 }
