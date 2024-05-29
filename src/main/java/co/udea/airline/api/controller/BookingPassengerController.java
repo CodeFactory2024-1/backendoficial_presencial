@@ -23,14 +23,15 @@ public class BookingPassengerController {
 
     @Autowired
     private BookingPassengerService bookingPassengerService;
-
+    @PreAuthorize("hasAuthority('save:booking')")
     @GetMapping("/bookingsPassengers")
-    public List<Booking_Passenger> getBookingsPassengers() {
+    public List<Booking_Passenger> getBookingsPassengers(@AuthenticationPrincipal Jwt jwt) {
         return bookingPassengerService.getBookingsPassengers();
     }
 
+    @PreAuthorize("hasAuthority('save:booking')")
     @GetMapping("/{booking_passenger_id}")
-    public Optional<Booking_Passenger> getBookingPassengerById(@PathVariable Long booking_passenger_id) {
+    public Optional<Booking_Passenger> getBookingPassengerById(@AuthenticationPrincipal Jwt jwt,@PathVariable Long booking_passenger_id) {
         return bookingPassengerService.getBookingPassenger(booking_passenger_id);
     }
     @PreAuthorize("hasAuthority('save:booking')")
@@ -38,14 +39,15 @@ public class BookingPassengerController {
     public void saveFlight(@AuthenticationPrincipal Jwt jwt, @RequestBody Booking_Passenger bookingPassenger) {
         bookingPassengerService.saveOrUpdate(bookingPassenger);
     }
-
+    @PreAuthorize("hasAuthority('save:booking')")
     @GetMapping("/findBookingsByPassenger/{passengerId}")
-    public List<Booking> getBookingPassengersByPassengerId(@PathVariable Long passengerId) {
+    public List<Booking> getBookingPassengersByPassengerId(@AuthenticationPrincipal Jwt jwt,@PathVariable Long passengerId) {
         return bookingPassengerService.getBookingPassengersByPassengerId(passengerId);
     }
 
+    @PreAuthorize("hasAuthority('save:booking')")
     @GetMapping("/findPassengersByBooking/{bookingId}")
-    public List<Passenger> getBookingPassengersByBookingId(@PathVariable Long bookingId) {
+    public List<Passenger> getBookingPassengersByBookingId(@AuthenticationPrincipal Jwt jwt,@PathVariable Long bookingId) {
         return bookingPassengerService.getBookingPassengersByBookingId(bookingId);
     }
 

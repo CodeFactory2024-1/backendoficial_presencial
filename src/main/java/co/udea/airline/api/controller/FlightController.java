@@ -21,13 +21,15 @@ public class FlightController {
     @Autowired
     private FlightService flightService;
 
+    @PreAuthorize("hasAuthority('save:booking')")
     @GetMapping("/flights")
-    public List<Flight> getFlights() {
+    public List<Flight> getFlights(@AuthenticationPrincipal Jwt jwt) {
         return flightService.getFlights();
     }
 
+    @PreAuthorize("hasAuthority('save:booking')")
     @GetMapping("/{flightId}")
-    public Optional<Flight> getFlightById(@PathVariable Long flightId) {
+    public Optional<Flight> getFlightById(@AuthenticationPrincipal Jwt jwt,@PathVariable Long flightId) {
         return flightService.getFlight(flightId);
     }
     @PreAuthorize("hasAuthority('save:booking')")
@@ -36,8 +38,10 @@ public class FlightController {
         flightService.saveOrUpdate(flight);
     }
 
-    /*@DeleteMapping("/{flightId}")
-    public void deleteFlight(@PathVariable Long flightId){
+    /*
+    @PreAuthorize("hasAuthority('save:booking')")
+    @DeleteMapping("/{flightId}")
+    public void deleteFlight(@AuthenticationPrincipal Jwt jwt,@PathVariable Long flightId){
         flightService.delete(flightId);
     }*/
 }

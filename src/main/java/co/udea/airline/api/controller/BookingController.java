@@ -20,18 +20,21 @@ public class BookingController {
     @Autowired
     private BookingService bookingService;
 
+    @PreAuthorize("hasAuthority('save:booking')")
     @GetMapping("/bookings")
-    public List<Booking> getBookings() {
+    public List<Booking> getBookings(@AuthenticationPrincipal Jwt jwt) {
         return bookingService.getBookings();
     }
 
+    @PreAuthorize("hasAuthority('save:booking')")
     @GetMapping("/{bookingId}")
-    public Optional<Booking> getBookingById(@PathVariable Long bookingId) {
+    public Optional<Booking> getBookingById(@AuthenticationPrincipal Jwt jwt,@PathVariable Long bookingId) {
         return bookingService.getBooking(bookingId);
     }
 
+    @PreAuthorize("hasAuthority('save:booking')")
     @GetMapping("/searchBookingByFlightId/{flightId}")
-    public List<Booking> getBookingByFlightId(@PathVariable Long flightId) {
+    public List<Booking> getBookingByFlightId(@AuthenticationPrincipal Jwt jwt,@PathVariable Long flightId) {
         return bookingService.getBookingByFlightId(flightId);
     }
     @PreAuthorize("hasAuthority('save:booking')")
