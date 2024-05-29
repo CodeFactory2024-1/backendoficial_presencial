@@ -14,10 +14,8 @@ public class Passenger {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PASSENGER_ID")
     private Long passengerId;
-
+    
     @Column(name = "PERSON_ID")
     private Long personId;
 
-    @Column(name = "BOOKING_ID")
-    private Long bookingId;
 }

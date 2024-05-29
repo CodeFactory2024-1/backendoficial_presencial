@@ -1,10 +1,17 @@
-package co.udea.airline.api.utils.filter;
+package co.udea.airline.api.utils.config;
 
 import java.io.IOException;
+import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
+import java.security.interfaces.RSAPublicKey;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
 import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -12,8 +19,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtException;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Component;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import jakarta.servlet.FilterChain;
@@ -24,14 +33,31 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * Class for intercepting request and validating the 'Authorization' header to
- * set the SecurityContext appropiately
+ * set the SecurityContext appropriately
  */
 @Component
 @Slf4j
 public class JWTTokenFilter extends OncePerRequestFilter {
 
-    @Autowired
-    JwtDecoder jwtDecoder;
+    private final JwtDecoder jwtDecoder;
+
+    /**
+     * Configures the {@link #jwtDecoder} based on a provided RSA public key
+     */
+    public JWTTokenFilter(@Value("${airline-api.jwt.rsa-pub-key:}") Resource publicKeyFile)
+            throws NoSuchAlgorithmException, IOException, InvalidKeySpecException {
+
+        byte[] keyBytesPub = FileCopyUtils.copyToByteArray(publicKeyFile.getInputStream());
+        X509EncodedKeySpec specPub = new X509EncodedKeySpec(keyBytesPub);
+
+        KeyFactory kf = KeyFactory.getInstance("RSA");
+        RSAPublicKey publicKey = (RSAPublicKey) kf.generatePublic(specPub);
+
+        jwtDecoder = NimbusJwtDecoder
+                .withPublicKey(publicKey)
+                .build();
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
@@ -48,10 +74,9 @@ public class JWTTokenFilter extends OncePerRequestFilter {
                 Jwt jwt;
                 Authentication auth;
 
-                    jwt = jwtDecoder.decode(tokenValue);
-                    if((Instant.now().isAfter(jwt.getExpiresAt())))
-                        throw new JwtException("Invalid JWT");
-
+                jwt = jwtDecoder.decode(tokenValue);
+                if ((Instant.now().isAfter(jwt.getExpiresAt())))
+                    throw new JwtException("Invalid JWT");
 
                 auth = new JwtAuthenticationToken(jwt, getAuthorities(jwt));
                 SecurityContextHolder.getContext().setAuthentication(auth);

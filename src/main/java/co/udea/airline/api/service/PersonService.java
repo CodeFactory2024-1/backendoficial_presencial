@@ -20,14 +20,15 @@ public class PersonService {
         return personRepository.findById(id);
     }
 
-    public void saveOrUpdate(Person person){
+   public void saveOrUpdate(Person person){
         personRepository.save(person);
     }
 
-   /* public void delete(Long id){
+    public void delete(Long id){
         personRepository.deleteById(id);
-    }*/
-   public Optional<Person> getPersonByIdNumber(String idNumber) {
+    } 
+    
+    public Optional<Person> getPersonByIdNumber(String idNumber) {
        return personRepository.findByidNumber(idNumber);
    }
 }

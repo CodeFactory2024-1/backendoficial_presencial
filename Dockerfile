@@ -1,17 +1,20 @@
-# Utiliza una imagen base de OpenJDK 20
-FROM openjdk:20-jdk-slim
+FROM maven:3.9.6-amazoncorretto-17 AS build
 
-# Establece el directorio de trabajo en /app
 WORKDIR /app
 
-# Copia el archivo JAR de tu proyecto Spring Boot al contenedor
-COPY target/airline-api-0.0.1-SNAPSHOT.jar app.jar
+COPY ./ /app
 
-# Expone el puerto 8080 que utiliza Spring Boot
+RUN mvn clean package
+
+FROM amazoncorretto:17-alpine-jdk
+
+WORKDIR /app
+
+COPY --from=build /app/target/*.jar /app/app.jar
+
 EXPOSE 8009
 
-# Comando para ejecutar la aplicación Spring Boot
-CMD ["java", "-jar", "app.jar"]
+CMD [ "java", "-jar", "app.jar" ]
 
 
 

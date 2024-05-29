@@ -1,7 +1,10 @@
 package co.udea.airline.api.controller;
 
+import co.udea.airline.api.model.jpa.model.Booking;
 import co.udea.airline.api.model.jpa.model.Passenger;
+import co.udea.airline.api.service.BookingService;
 import co.udea.airline.api.service.PassengerService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,6 +22,7 @@ import java.util.Optional;
 public class PassengerController {
     @Autowired
     private PassengerService passengerService;
+    private BookingService bookingService;
 
     @PreAuthorize("hasAuthority('save:booking')")
     @GetMapping("/passengers")
@@ -31,27 +35,29 @@ public class PassengerController {
     public Optional<Passenger> getPassengerById(@AuthenticationPrincipal Jwt jwt,@PathVariable Long passengerId) {
         return passengerService.getPassenger(passengerId);
     }
-    @PreAuthorize("hasAuthority('save:booking')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/passenger")
-    public void savePassenger(@AuthenticationPrincipal Jwt jwt,@RequestBody Passenger passenger) {
+    @SecurityRequirement(name = "JWT")
+    public void savePassenger(@RequestBody Passenger passenger) {
         passengerService.saveOrUpdate(passenger);
     }
 
    /*
-   @PreAuthorize("hasAuthority('save:booking')")
+   @PreAuthorize("hasRole('ADMIN')")
    @DeleteMapping("/{passengerId}")
-    public void deletePassenger(@AuthenticationPrincipal Jwt jwt,@PathVariable Long passengerId){
+   @SecurityRequirement(name = "JWT")
+    public void deletePassenger(@PathVariable Long passengerId){
         passengerService.delete(passengerId);
     }*/
 
-    @PreAuthorize("hasAuthority('save:booking')")
+    /*@PreAuthorize("hasAuthority('save:booking')")
     @GetMapping("/booking/{bookingId}")
     public List<Passenger> getPassengerByBookingId(@AuthenticationPrincipal Jwt jwt,@PathVariable Long bookingId) {
-        return passengerService.findByBookingId(bookingId);
-    }
-    @PreAuthorize("hasAuthority('save:booking')")
+        return bookingService.findById(bookingId);
+    }*/
+    /*@PreAuthorize("hasAuthority('save:booking')")
     @GetMapping("/person/{personId}")
     public List<Passenger> getPassengerByPersonId(@AuthenticationPrincipal Jwt jwt,@PathVariable Long personId) {
-        return passengerService.findByPersonId(personId);
-    }
+        return passengerService.findById(personId);}
+    */
 }

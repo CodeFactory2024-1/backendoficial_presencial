@@ -14,12 +14,14 @@ public class AirlineApiApplication {
     public static void main(String[] args) {
         SpringApplication.run(AirlineApiApplication.class, args);
     }
-     final String securitySchemeName = "JWT";
+
+    final String securitySchemeName = "JWT";
+
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI().info(new Info()
                 .title("RESERVATIONS SITAS")
-                .description("Messi")).components(
+                .description("ResevaB")).components(
                         new Components()
                                 .addSecuritySchemes(securitySchemeName,
                                         new SecurityScheme()

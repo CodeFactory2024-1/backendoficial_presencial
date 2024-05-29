@@ -42,6 +42,7 @@ public class PersonController {
         personService.delete(personId);
     }*/
    @PreAuthorize("hasAuthority('save:booking')")
+
    @GetMapping("documentId/{idNumber}")
    public Optional<Person> getPersonByIdNumber(@AuthenticationPrincipal Jwt jwt, @PathVariable String idNumber) {
        return personService.getPersonByIdNumber(idNumber);

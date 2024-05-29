@@ -25,15 +25,7 @@ public class PassengerService {
         passengerRepository.save(passenger);
     }
 
-   /* public void delete(Long id){
-        passengerRepository.deleteById(id);
-    }*/
-
-    public List<Passenger> findByBookingId(Long bookingId) {
-        return passengerRepository.findBybookingId(bookingId);
-    }
-
-    public List<Passenger> findByPersonId(Long personId) {
-        return passengerRepository.findBybookingId(personId);
+   public void delete(Long passengerId){
+        passengerRepository.deleteById(passengerId);
     }
 }
