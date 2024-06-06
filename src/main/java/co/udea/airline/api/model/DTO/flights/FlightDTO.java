@@ -11,6 +11,11 @@ import jakarta.validation.constraints.*;
 
 import lombok.Data;
 
+/**
+ * Represents a flight data transfer object (DTO).
+ * This class contains information about a flight, such as its id, flight
+ * number, base price, tax percent, surcharge, flight type, and scales.
+ */
 @Data
 public class FlightDTO extends RepresentationModel<FlightDTO> {
 

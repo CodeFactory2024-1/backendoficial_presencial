@@ -13,6 +13,20 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Represents an airplane model.
+ * 
+ * This class is used to store information about an airplane model, including
+ * its ID, family, capacity, cargo capacity, volume capacity, and associated
+ * scales.
+ * 
+ * @param id             The ID of the airplane model.
+ * @param family         The family of the airplane model.
+ * @param capacity       The capacity of the airplane model.
+ * @param cargoCapacity  The cargo capacity of the airplane model.
+ * @param volumeCapacity The volume capacity of the airplane model.
+ * @param scales         The set of scales associated with the airplane model.
+ */
 @Getter
 @Setter
 @RequiredArgsConstructor

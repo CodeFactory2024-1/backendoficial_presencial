@@ -10,11 +10,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * This class represents the API controller for the airline API.
+ * It handles requests related to the API endpoints.
+ */
 @RestController
 @RequestMapping("/api/v1")
 public class ApiController {
-  // HATEOAS --> flights, airplane-models, airports
-
   @Autowired
   private FlightController flightController;
 
@@ -24,8 +26,10 @@ public class ApiController {
   @Autowired
   private AirportController airportController;
 
-  /*
-   * Return HATEOAS links for the API
+  /**
+   * Retrieves the API links.
+   *
+   * @return The API links as an Object.
    */
   @GetMapping("")
   public Object getApiLinks() {

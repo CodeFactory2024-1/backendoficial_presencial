@@ -13,6 +13,10 @@ import lombok.Setter;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Represents an airport data transfer object (DTO).
+ * This class contains information about an airport.
+ */
 @Getter
 @Setter
 @RequiredArgsConstructor

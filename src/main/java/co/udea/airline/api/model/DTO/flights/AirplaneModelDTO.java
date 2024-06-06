@@ -7,11 +7,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Data Transfer Object for Airplane Model.
+ * Represents the model of an airplane with its properties.
+ */
 @Schema(name = "AirplaneModelDTO", description = "Data Transfer Object for Airplane Model")
 @Data
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class AirplaneModelDTO extends RepresentationModel<AirplaneModelDTO>{
+public class AirplaneModelDTO extends RepresentationModel<AirplaneModelDTO> {
     @NotEmpty
     private String id;
 

@@ -13,6 +13,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * This class represents the service layer for managing flights.
+ * It provides methods for saving, retrieving, updating, and deleting flights.
+ */
 @Service
 public class FlightService {
 

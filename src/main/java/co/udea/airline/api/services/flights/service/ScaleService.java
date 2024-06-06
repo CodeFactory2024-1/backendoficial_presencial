@@ -9,6 +9,10 @@ import co.udea.airline.api.model.jpa.repository.flights.IScaleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * This class represents a service for managing scales in an airline system.
+ * It provides methods for saving, deleting, and updating scales.
+ */
 @Service
 public class ScaleService {
     @Autowired
@@ -39,6 +43,9 @@ public class ScaleService {
         scaleRepository.deleteById(id);
     }
 
+    /**
+     * Represents a scale in a flight itinerary.
+     */
     public Scale updateScale(Scale scale) {
         Scale updatedScale = scaleRepository.findById(scale.getId()).orElse(null);
 

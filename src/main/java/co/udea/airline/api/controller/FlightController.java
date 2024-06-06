@@ -33,6 +33,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import java.util.stream.Collectors;
 
+/**
+ * This class represents the controller for managing flights in the airline API.
+ * It handles CRUD operations for flights.
+ */
 @RestController
 @RequestMapping("/api/v1/flights")
 @CrossOrigin(origins = "*")
@@ -48,6 +52,13 @@ public class FlightController {
     @Autowired
     private BookingService bookingService;
 
+    /**
+     * Create a new flight
+     * 
+     * @param flight
+     * 
+     * @return ResponseEntity<FlightDTO>
+     */
     @PostMapping("")
     @Operation(summary = "Create a new flight", description = "Create a new flight")
     @ApiResponses(value = {
@@ -63,6 +74,11 @@ public class FlightController {
         return new ResponseEntity<FlightDTO>(flightResDTO, HttpStatus.CREATED);
     }
 
+    /**
+     * Get allflights from the database
+     * 
+     * @return ResponseEntity<List<FlightDTO>>
+     */
     @Operation(summary = "Get all flights", description = "Get basic information of all flights")
     @GetMapping("")
     public ResponseEntity<List<FlightDTO>> getAllFlights() {
@@ -76,6 +92,13 @@ public class FlightController {
         return ResponseEntity.ok(flightDTOs);
     }
 
+    /**
+     * Get a flight by id
+     * 
+     * @param id
+     * 
+     * @return ResponseEntity<FlightDTO>
+     */
     @Operation(summary = "Get a flight by id", description = "Returns only one flight by id")
     @GetMapping("/{id}")
     public ResponseEntity<FlightDTO> getFlightById(@PathVariable long id) {
@@ -91,6 +114,13 @@ public class FlightController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Search a flight by number. This column is unique
+     * 
+     * @param flightNumber
+     * 
+     * @return ResponseEntity<FlightDTO>
+     */
     @Operation(summary = "Get a flight with filters", description = "Returns only one flight for given filters")
     @GetMapping("/filter")
     public ResponseEntity<FlightDTO> getFlightByNumber(@RequestParam String flightNumber) {
@@ -106,6 +136,15 @@ public class FlightController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Update a flight by its number
+     * 
+     * @param flightNumber
+     * 
+     * @param flight
+     * 
+     * @return ResponseEntity<FlightDTO>
+     */
     @Operation(summary = "Update flight by flightNumber", description = "Update flight by its number")
     @PutMapping("/{flightNumber}")
     @AuthRequired()
@@ -123,6 +162,14 @@ public class FlightController {
         return new ResponseEntity<FlightDTO>(flightResDTO, HttpStatus.CREATED);
     }
 
+    /**
+     * Deletes a flight by its flight number.
+     *
+     * @param flightNumber The flight number of the flight to be deleted.
+     * @return The ResponseEntity containing the deleted flight as a FlightDTO.
+     * @throws DataNotFoundException if the flight with the specified flight number
+     *                               is not found.
+     */
     @Operation(summary = "Delete flight by flight number", description = "Delete flight by flight number")
     @DeleteMapping("/{flightNumber}")
     @AuthRequired()
@@ -136,6 +183,13 @@ public class FlightController {
         return ResponseEntity.ok(modelMapper.map(deletedFlight, FlightDTO.class));
     }
 
+    /**
+     * Check if a flight has bookings
+     * 
+     * @param flightId
+     * 
+     * @return ResponseEntity<Boolean>
+     */
     @GetMapping("/has-bookings/{flightId}")
     public ResponseEntity<Boolean> flightHasBookings(@PathVariable Long flightId) {
         return ResponseEntity.ok(bookingService.flightHasBookings(flightId));
