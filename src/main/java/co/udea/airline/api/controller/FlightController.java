@@ -77,7 +77,7 @@ public class FlightController {
 
     @Operation(summary = "Get a flight by id", description = "Returns only one flight by id")
     @GetMapping("/{id}")
-    public ResponseEntity<FlightDTO> getMethodNameById(@PathVariable long id) {
+    public ResponseEntity<FlightDTO> getFlightById(@PathVariable long id) {
         Flight flight = flightService.getFlightById(id);
         if (flight == null) {
             throw new DataNotFoundException("Flight with ID: " + id + " not found");
@@ -87,7 +87,7 @@ public class FlightController {
 
     @Operation(summary = "Get a flight with filters", description = "Returns only one flight for given filters")
     @GetMapping("/filter")
-    public ResponseEntity<FlightDTO> getByFlightNumber(@RequestParam String flightNumber) {
+    public ResponseEntity<FlightDTO> getFlightByNumber(@RequestParam String flightNumber) {
         Flight flight = flightService.getFlightByFlightNumber(flightNumber);
         if (flight == null) {
             throw new DataNotFoundException("Flight with flight number: " + flightNumber + " not found");
