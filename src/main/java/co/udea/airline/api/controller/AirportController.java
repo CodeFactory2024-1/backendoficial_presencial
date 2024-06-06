@@ -18,6 +18,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
+/**
+ * This class is a controller that handles HTTP requests related to airports.
+ * It provides endpoints to retrieve information about airports, countries, and
+ * cities.
+ */
 @RestController
 @RequestMapping("/api/v1/airports")
 @CrossOrigin(origins = "*")
@@ -29,6 +34,11 @@ public class AirportController {
   @Autowired
   ModelMapper modelMapper;
 
+  /**
+   * Retrieves a list of all airports.
+   *
+   * @return A list of AirportDTO objects representing the airports.
+   */
   @GetMapping("")
   public List<AirportDTO> getAirports() {
     List<Airport> airports = airportService.getAllAirports();
@@ -41,6 +51,13 @@ public class AirportController {
     return response;
   }
 
+  /**
+   * Retrieves an AirportDTO object by its ID.
+   *
+   * @param id The ID of the airport to retrieve.
+   * @return The AirportDTO object representing the airport with the specified ID.
+   * @throws DataNotFoundException If no airport is found with the specified ID.
+   */
   @GetMapping("/{id}")
   public AirportDTO getAirportById(@PathVariable String id) {
     Airport airport = airportService.getAirportById(id);
@@ -54,12 +71,24 @@ public class AirportController {
     return aiportRestDTO;
   }
 
+  /**
+   * Retrieves a list of countries where airports are located.
+   *
+   * @return a list of country names
+   */
   @GetMapping("/countries")
   public List<String> getAirportCountries() {
 
     return airportService.getAllCountries();
   }
 
+  /**
+   * Retrieves a list of airports in a country based on the country ID.
+   *
+   * @param countryId The ID of the country.
+   * @return A list of AirportDTO objects representing the airports in the
+   *         country.
+   */
   @GetMapping("/countries/{countryId}")
   public List<AirportDTO> getAirportCountryById(@PathVariable String countryId) {
     List<Airport> airports = airportService.getAirportsByCountry(countryId);
@@ -71,12 +100,24 @@ public class AirportController {
     return response;
   }
 
+  /**
+   * Retrieves a list of cities in a country based on the given country ID.
+   *
+   * @param countryId the ID of the country
+   * @return a list of cities in the country
+   */
   @GetMapping("/countries/{countryId}/cities")
   public List<String> getAirportCountryCities(@PathVariable String countryId) {
 
     return airportService.getCitiesByCountry(countryId);
   }
 
+  /**
+   * Retrieves a list of airports in a specific city by its ID.
+   *
+   * @param cityId The ID of the city.
+   * @return A list of AirportDTO objects representing the airports in the city.
+   */
   @GetMapping("/cities/{cityId}")
   public List<AirportDTO> getAirportsCountryCityById(@PathVariable String cityId) {
     List<Airport> airports = airportService.getAirportsByCity(cityId);

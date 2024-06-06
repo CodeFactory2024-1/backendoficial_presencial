@@ -6,10 +6,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Represents an airport data transfer object (DTO).
+ * This class contains information about an airport.
+ */
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class AirportDTO extends RepresentationModel<AirportDTO>{
+public class AirportDTO extends RepresentationModel<AirportDTO> {
     @NotEmpty
     private String id;
 

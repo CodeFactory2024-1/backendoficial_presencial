@@ -15,6 +15,10 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Represents an flight data transfer object (DTO).
+ * This class contains information about an flight.
+ */
 @Getter
 @Setter
 @RequiredArgsConstructor

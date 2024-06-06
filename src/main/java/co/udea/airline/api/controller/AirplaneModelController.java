@@ -23,6 +23,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
+/**
+ * This class is a controller for managing airplane models in the API.
+ * It handles requests related to airplane models and provides endpoints
+ * to retrieve information about airplane models.
+ */
 @RestController
 @RequestMapping("/api/v1/airplane-models")
 @CrossOrigin(origins = "*", methods = { RequestMethod.GET })
@@ -34,6 +39,12 @@ public class AirplaneModelController {
   @Autowired
   ModelMapper modelMapper;
 
+  /**
+   * Retrieves information of all airplane models.
+   *
+   * @return A list of {@link AirplaneModelDTO} objects representing the airplane
+   *         models.
+   */
   @Operation(summary = "Get all airplane models", description = "Get information of all airplane models")
   @GetMapping("")
   public List<AirplaneModelDTO> getAirplaneModels() {
@@ -49,6 +60,11 @@ public class AirplaneModelController {
     return response;
   }
 
+  /**
+   * Represents an airplane model data transfer object (DTO).
+   * This class is used to transfer data related to an airplane model between the
+   * controller and the client.
+   */
   @GetMapping("/{id}")
   @Operation(summary = "Get an Airplane model", description = "Get information of a airplane model by ID")
   @ApiResponses(value = {
@@ -68,12 +84,24 @@ public class AirplaneModelController {
     return response;
   }
 
+  /**
+   * Retrieves all names of airplane model families.
+   *
+   * @return a list of strings representing the names of airplane model families
+   */
   @GetMapping("/families")
   @Operation(summary = "Get all airplane model families", description = "Get all names of airplane model families")
   public List<String> getAirplaneModelFamilies() {
     return airplaneModelService.getAirplaneModelFamilies();
   }
 
+  /**
+   * Retrieves a list of airplane models that belong to a specific family.
+   *
+   * @param familyId The ID of the family.
+   * @return A list of {@link AirplaneModelDTO} objects representing the airplane
+   *         models.
+   */
   @GetMapping("/families/{familyId}")
   @Operation(summary = "Get all airplane models by family", description = "Get information of all airplane models that belong to a family")
   public List<AirplaneModelDTO> getAirplaneModelFamilyById(@PathVariable String familyId) {
