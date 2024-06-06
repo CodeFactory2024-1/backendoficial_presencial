@@ -2,6 +2,8 @@ package co.udea.airline.api.model.DTO.flights;
 
 import java.util.List;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import co.udea.airline.api.utils.common.FlightTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
@@ -10,7 +12,7 @@ import jakarta.validation.constraints.*;
 import lombok.Data;
 
 @Data
-public class FlightDTO {
+public class FlightDTO extends RepresentationModel<FlightDTO> {
 
     @Schema(description = "The flight id auto-generated", example = "1", requiredMode = RequiredMode.NOT_REQUIRED)
     private long id;

@@ -21,6 +21,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+
 @RestController
 @RequestMapping("/api/v1/airplane-models")
 @CrossOrigin(origins = "*", methods = { RequestMethod.GET })
@@ -36,8 +38,15 @@ public class AirplaneModelController {
   @GetMapping("")
   public List<AirplaneModelDTO> getAirplaneModels() {
     List<AirplaneModel> airplaneModels = airplaneModelService.getAllAirplaneModels();
-    return airplaneModels.stream().map(airplaneModel -> modelMapper.map(airplaneModel, AirplaneModelDTO.class))
+
+    List<AirplaneModelDTO> response = airplaneModels.stream()
+        .map(airplaneModel -> modelMapper.map(airplaneModel, AirplaneModelDTO.class))
         .collect(Collectors.toList());
+
+    response.forEach(airplaneModel -> airplaneModel.add(
+        linkTo(methodOn(AirplaneModelController.class).getAirplaneModelById(airplaneModel.getId())).withSelfRel()));
+
+    return response;
   }
 
   @GetMapping("/{id}")
@@ -53,7 +62,10 @@ public class AirplaneModelController {
       throw new DataNotFoundException("Airplane model with ID: " + id + " not found");
     }
 
-    return modelMapper.map(airplaneModel, AirplaneModelDTO.class);
+    AirplaneModelDTO response = modelMapper.map(airplaneModel, AirplaneModelDTO.class);
+    response.add(linkTo(methodOn(AirplaneModelController.class).getAirplaneModelById(id)).withSelfRel());
+
+    return response;
   }
 
   @GetMapping("/families")
@@ -66,7 +78,14 @@ public class AirplaneModelController {
   @Operation(summary = "Get all airplane models by family", description = "Get information of all airplane models that belong to a family")
   public List<AirplaneModelDTO> getAirplaneModelFamilyById(@PathVariable String familyId) {
     List<AirplaneModel> airplaneModels = airplaneModelService.getAirplaneModelsByFamily(familyId);
-    return airplaneModels.stream().map(airplaneModel -> modelMapper.map(airplaneModel, AirplaneModelDTO.class))
+
+    List<AirplaneModelDTO> response = airplaneModels.stream()
+        .map(airplaneModel -> modelMapper.map(airplaneModel, AirplaneModelDTO.class))
         .collect(Collectors.toList());
+
+    response.forEach(airplaneModel -> airplaneModel.add(
+        linkTo(methodOn(AirplaneModelController.class).getAirplaneModelById(airplaneModel.getId())).withSelfRel()));
+
+    return response;
   }
 }

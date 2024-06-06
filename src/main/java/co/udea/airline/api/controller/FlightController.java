@@ -11,7 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.tags.Tag;
-
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.modelmapper.ModelMapper;
@@ -55,10 +55,10 @@ public class FlightController {
     })
     @AuthRequired()
     public ResponseEntity<FlightDTO> createFlight(@Valid @RequestBody FlightDTO flight) {
-        // TODO: Add standard response
         Flight flightRes = modelMapper.map(flight, Flight.class);
         flightRes = flightService.saveFlight(flightRes);
         FlightDTO flightResDTO = modelMapper.map(flightRes, FlightDTO.class);
+        flightResDTO.add(linkTo(methodOn(FlightController.class).getFlightById(flightRes.getId())).withSelfRel());
 
         return new ResponseEntity<FlightDTO>(flightResDTO, HttpStatus.CREATED);
     }
@@ -66,13 +66,14 @@ public class FlightController {
     @Operation(summary = "Get all flights", description = "Get basic information of all flights")
     @GetMapping("")
     public ResponseEntity<List<FlightDTO>> getAllFlights() {
-        // TODO: Add standard response
         List<Flight> Flight = flightService.getAllFlights();
 
-        List<FlightDTO> FlightDTOs = Flight.stream().map(f -> modelMapper.map(f, FlightDTO.class))
+        List<FlightDTO> flightDTOs = Flight.stream().map(f -> modelMapper.map(f, FlightDTO.class))
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok(FlightDTOs);
+        flightDTOs.forEach(f -> f.add(linkTo(methodOn(FlightController.class).getFlightById(f.getId())).withSelfRel()));
+
+        return ResponseEntity.ok(flightDTOs);
     }
 
     @Operation(summary = "Get a flight by id", description = "Returns only one flight by id")
@@ -82,7 +83,12 @@ public class FlightController {
         if (flight == null) {
             throw new DataNotFoundException("Flight with ID: " + id + " not found");
         }
-        return ResponseEntity.ok(modelMapper.map(flight, FlightDTO.class));
+
+        FlightDTO response = modelMapper.map(flight, FlightDTO.class);
+
+        response.add(linkTo(methodOn(FlightController.class).getFlightById(id)).withSelfRel());
+
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "Get a flight with filters", description = "Returns only one flight for given filters")
@@ -93,7 +99,11 @@ public class FlightController {
             throw new DataNotFoundException("Flight with flight number: " + flightNumber + " not found");
         }
 
-        return ResponseEntity.ok(modelMapper.map(flight, FlightDTO.class));
+        FlightDTO response = modelMapper.map(flight, FlightDTO.class);
+
+        response.add(linkTo(methodOn(FlightController.class).getFlightById(flight.getId())).withSelfRel());
+
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "Update flight by flightNumber", description = "Update flight by its number")
@@ -107,6 +117,8 @@ public class FlightController {
             throw new DataNotFoundException("Flight with flight number: " + flightNumber + " not found");
         }
         FlightDTO flightResDTO = modelMapper.map(flightRes, FlightDTO.class);
+
+        flightResDTO.add(linkTo(methodOn(FlightController.class).getFlightById(flightRes.getId())).withSelfRel());
 
         return new ResponseEntity<FlightDTO>(flightResDTO, HttpStatus.CREATED);
     }

@@ -16,6 +16,8 @@ import co.udea.airline.api.services.flights.service.AirportService;
 import co.udea.airline.api.utils.exception.DataNotFoundException;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+
 @RestController
 @RequestMapping("/api/v1/airports")
 @CrossOrigin(origins = "*")
@@ -31,7 +33,12 @@ public class AirportController {
   public List<AirportDTO> getAirports() {
     List<Airport> airports = airportService.getAllAirports();
 
-    return airports.stream().map(airport -> modelMapper.map(airport, AirportDTO.class)).toList();
+    List<AirportDTO> response = airports.stream().map(airport -> modelMapper.map(airport, AirportDTO.class))
+        .toList();
+    response.forEach(airport -> airport
+        .add(linkTo(methodOn(AirportController.class).getAirportById(airport.getId())).withSelfRel()));
+
+    return response;
   }
 
   @GetMapping("/{id}")
@@ -41,12 +48,15 @@ public class AirportController {
     if (airport == null) {
       throw new DataNotFoundException("Airport with ID: " + id + " not found");
     }
+    AirportDTO aiportRestDTO = modelMapper.map(airport, AirportDTO.class);
+    aiportRestDTO.add(linkTo(methodOn(AirportController.class).getAirportById(id)).withSelfRel());
 
-    return modelMapper.map(airport, AirportDTO.class);
+    return aiportRestDTO;
   }
 
   @GetMapping("/countries")
   public List<String> getAirportCountries() {
+
     return airportService.getAllCountries();
   }
 
@@ -54,11 +64,16 @@ public class AirportController {
   public List<AirportDTO> getAirportCountryById(@PathVariable String countryId) {
     List<Airport> airports = airportService.getAirportsByCountry(countryId);
 
-    return airports.stream().map(airport -> modelMapper.map(airport, AirportDTO.class)).toList();
+    List<AirportDTO> response = airports.stream().map(airport -> modelMapper.map(airport, AirportDTO.class)).toList();
+
+    response.forEach(airport -> airport
+        .add(linkTo(methodOn(AirportController.class).getAirportById(airport.getId())).withSelfRel()));
+    return response;
   }
 
   @GetMapping("/countries/{countryId}/cities")
   public List<String> getAirportCountryCities(@PathVariable String countryId) {
+
     return airportService.getCitiesByCountry(countryId);
   }
 
@@ -66,6 +81,11 @@ public class AirportController {
   public List<AirportDTO> getAirportsCountryCityById(@PathVariable String cityId) {
     List<Airport> airports = airportService.getAirportsByCity(cityId);
 
-    return airports.stream().map(airport -> modelMapper.map(airport, AirportDTO.class)).toList();
+    List<AirportDTO> response = airports.stream().map(airport -> modelMapper.map(airport, AirportDTO.class)).toList();
+    response.forEach(
+        airport -> airport
+            .add(linkTo(methodOn(AirportController.class).getAirportById(airport.getId())).withSelfRel()));
+
+    return response;
   }
 }

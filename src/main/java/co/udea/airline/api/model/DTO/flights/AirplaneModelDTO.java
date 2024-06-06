@@ -1,5 +1,6 @@
 package co.udea.airline.api.model.DTO.flights;
 
+import org.springframework.hateoas.RepresentationModel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
@@ -10,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 @Data
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class AirplaneModelDTO {
+public class AirplaneModelDTO extends RepresentationModel<AirplaneModelDTO>{
     @NotEmpty
     private String id;
 
